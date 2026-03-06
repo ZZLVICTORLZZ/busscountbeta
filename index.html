@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v6.8</title>
+    <title>BusCount BETA - v6.9</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -35,7 +35,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CORTESÍAS 6.8</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REPORTE TOTAL 6.9</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -58,8 +58,8 @@
             </div>
             
             <div style="margin-top:15px; border-top: 1px solid #444; padding-top:15px;">
-                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (PASAJES GRATIS)</label>
-                <input type="text" id="c-nombre" placeholder="Nombre de la persona" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
+                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">CORTESÍAS</label>
+                <input type="text" id="c-nombre" placeholder="Nombre" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
                 <button class="btn btn-gris" style="color:var(--p); padding: 10px; font-size: 0.9rem;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
 
@@ -80,7 +80,7 @@
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
             <h2 style="color:var(--p); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen de Cuenta</h2>
-            <div style="color:#00e5ff; font-size:1.1rem;">Total de Vueltas: $<span id="t-bruto">0</span></div>
+            <div style="color:#00e5ff; font-size:1.1rem;">Total Bruto: $<span id="t-bruto">0</span></div>
             <div style="color:var(--red); font-size:1.1rem; margin-top: 5px;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
             <hr style="border: 0.5px solid #333; margin: 15px 0;">
             <div id="t-neto" style="font-size: 3rem; color:var(--p); font-weight:bold; margin-top: 5px;">$0</div>
@@ -145,13 +145,11 @@
         function finalizar() {
             var m = parseInt(document.getElementById('t-v').innerText);
             var d = document.getElementById('sel-d').value;
-            
             var c14 = parseInt(document.getElementById('i14').value) || 0;
             var c55 = parseInt(document.getElementById('i55').value) || 0;
             var c47 = parseInt(document.getElementById('i47').value) || 0;
             var c37 = parseInt(document.getElementById('i37').value) || 0;
             
-            // Pasajeros: Fijos + Libres + Cortesías
             var tPax = c14 + c55 + c47 + c37 + cortesiasActuales.length;
             libresActuales.forEach(function(l) { tPax += l.c; });
 
@@ -168,7 +166,6 @@
 
             localStorage.setItem('beta_vh', JSON.stringify(hist));
             numV++; localStorage.setItem('beta_vn', numV);
-            
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             libresActuales = []; cortesiasActuales = [];
             document.getElementById('log-ex').innerText = "";
@@ -207,21 +204,29 @@
             render();
         }
 
-        function reset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
+        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
             if (hist.length === 0) return alert("No hay datos.");
-            var mensaje = "REPORTE DE CUENTA - BRUTO DETALLADO%0A";
+            var mensaje = "REPORTE DE CUENTA COMPLETO%0A";
             mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
                 mensaje += ""+ v.n + "ª " + v.d + "%0A";
-                // Desglose de cortesías si existen
-                if(v.det.cors && v.det.cors.length > 0) {
-                    v.det.cors.forEach(function(c) {
-                        mensaje += "• Cortesía: " + c + "%0A";
-                    });
+                // Desglose de boletos PAGADOS
+                if(v.det.p14 > 0) mensaje += "• " + v.det.p14 + " de $14%0A";
+                if(v.det.p55 > 0) mensaje += "• " + v.det.p55 + " de $55%0A";
+                if(v.det.p47 > 0) mensaje += "• " + v.det.p47 + " de $47%0A";
+                if(v.det.p37 > 0) mensaje += "• " + v.det.p37 + " de $37%0A";
+                // Cobros libres
+                if(v.det.libres && v.det.libres.length > 0) {
+                    v.det.libres.forEach(function(l) { mensaje += "• " + l.c + " de $" + l.p + " (Libre)%0A"; });
                 }
-                mensaje += "Pax: " + v.p + " | Subtotal: $" + v.m + "%0A%0A";
+                // Cortesías
+                if(v.det.cors && v.det.cors.length > 0) {
+                    v.det.cors.forEach(function(c) { mensaje += "• Cortesía: " + c + "%0A"; });
+                }
+                mensaje += "Total Pasaje: " + v.p + "%0A";
+                mensaje += "Subtotal: $" + v.m + "%0A%0A";
             });
             mensaje += "----------------------------%0A";
             mensaje += "TOTAL BRUTO: $" + totalBrutoGlobal + "%0A";
@@ -231,3 +236,4 @@
     </script>
 </body>
 </html>
+
