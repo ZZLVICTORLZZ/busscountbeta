@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - Corte de Caja</title>
+    <title>BusCount BETA - v6.3</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -20,17 +20,21 @@
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid label { color: var(--p); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
         input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
-        select { background: #222; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; }
+        
+        /* Estilo para los gastos */
+        .gasto-item { text-align: left; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .gasto-item label { color: var(--red); font-size: 0.9rem; margin-bottom: 2px; }
+        .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.2rem !important; padding: 8px !important; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CORTE DE CAJA AL FINAL</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REPORTE LIMPIO 6.3</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
             <h2 id="txt-v" style="color:var(--p); margin:0; font-size: 1.3rem;">1ª MEDIA VUELTA</h2>
-            <select id="sel-d" style="margin-top:10px;">
+            <select id="sel-d" style="background: #222; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px;">
                 <option value="INDIOS VERDES">INDIOS VERDES</option>
                 <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
                 <option value="REYES">REYES</option>
@@ -64,21 +68,39 @@
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
             <h2 style="color:var(--p); margin-bottom:5px;">BALANCE DEL DÍA</h2>
-            <div style="color:#888; font-size:0.9rem;">Bruto: $<span id="t-bruto">0</span></div>
             <div id="t-neto" style="font-size: 2.5rem; color:var(--p); font-weight:bold;">$0</div>
-            <div style="color:var(--red); font-size:0.9rem;">Gastos: -$<span id="t-gastos-label">0</span></div>
+            <div style="color:#888; font-size:0.9rem;">Bruto (en Reporte): $<span id="t-bruto">0</span></div>
+            <div style="color:var(--red); font-size:0.9rem;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
         </div>
 
         <div class="tarjeta">
-            <label style="color: var(--red); font-size: 1rem; font-weight: bold;">ANOTAR GASTOS TOTALES</label>
-            <p style="font-size: 0.7rem; color: #666; margin: 2px 0 10px 0;">(Diesel, Casetas, Comida, etc.)</p>
-            <input type="number" id="input-gastos" oninput="calcularBalance()" placeholder="$ 0.00" style="border-color: var(--red); color: var(--red); width: 90%;">
+            <h3 style="color: var(--red); margin: 0 0 15px 0;">DESGLOSE DE GASTOS</h3>
+            
+            <div class="gasto-item">
+                <label>DIESEL / GASOLINA</label>
+                <input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0.00">
+            </div>
+            
+            <div class="gasto-item">
+                <label>CASETAS / PEAJES</label>
+                <input type="number" class="input-gasto" id="g-casetas" oninput="calcularBalance()" placeholder="0.00">
+            </div>
+
+            <div class="gasto-item">
+                <label>COMIDA / DESAYUNO</label>
+                <input type="number" class="input-gasto" id="g-comida" oninput="calcularBalance()" placeholder="0.00">
+            </div>
+
+            <div class="gasto-item">
+                <label>OTROS / VARIOS</label>
+                <input type="number" class="input-gasto" id="g-otros" oninput="calcularBalance()" placeholder="0.00">
+            </div>
         </div>
 
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 200px; overflow-y: auto;"></div>
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 150px; overflow-y: auto;"></div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
-        <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE AL DUEÑO</button>
+        <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE POR WHATSAPP</button>
         <button class="btn btn-rojo" onclick="reset()">BORRAR TODO EL DÍA</button>
     </div>
 
@@ -114,31 +136,24 @@
         function finalizar() {
             var m = parseInt(document.getElementById('t-v').innerText);
             var d = document.getElementById('sel-d').value;
-            var c14 = parseInt(document.getElementById('i14').value) || 0;
-            var c55 = parseInt(document.getElementById('i55').value) || 0;
-            var c47 = parseInt(document.getElementById('i47').value) || 0;
-            var c37 = parseInt(document.getElementById('i37').value) || 0;
-
             if (m === 0 && !confirm("¿Guardar en $0?")) return;
-
-            hist.push({
-                n: numV, d: d, m: m,
-                det: { p14: c14, p55: c55, p47: c47, p37: c37, libres: [...libresActuales] }
-            });
-
+            hist.push({ n: numV, d: d, m: m });
             localStorage.setItem('beta_vh', JSON.stringify(hist));
             numV++; localStorage.setItem('beta_vn', numV);
-            
-            document.getElementById('i14').value=""; document.getElementById('i55').value="";
-            document.getElementById('i47').value=""; document.getElementById('i37').value="";
+            document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             libresActuales = []; document.getElementById('log-ex').innerText = "";
             irA('p-lib');
         }
 
         function calcularBalance() {
-            var gastos = parseFloat(document.getElementById('input-gastos').value) || 0;
-            document.getElementById('t-gastos-label').innerText = gastos;
-            document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - gastos);
+            var g1 = parseFloat(document.getElementById('g-diesel').value) || 0;
+            var g2 = parseFloat(document.getElementById('g-casetas').value) || 0;
+            var g3 = parseFloat(document.getElementById('g-comida').value) || 0;
+            var g4 = parseFloat(document.getElementById('g-otros').value) || 0;
+            
+            var sumaGastos = g1 + g2 + g3 + g4;
+            document.getElementById('t-gastos-label').innerText = sumaGastos;
+            document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - sumaGastos);
         }
 
         function render() {
@@ -149,7 +164,7 @@
                      '<span><b>' + v.n + 'ª</b> ' + v.d + '</span><span><b>$' + v.m + '</b></span></div>';
                 totalBrutoGlobal += v.m;
             });
-            document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin datos registrados</p>";
+            document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin registros</p>";
             document.getElementById('t-bruto').innerText = totalBrutoGlobal;
             calcularBalance();
             sumar();
@@ -162,22 +177,18 @@
             render();
         }
 
-        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
+        function reset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
             if (hist.length === 0) return alert("No hay datos.");
-            var gastos = document.getElementById('input-gastos').value || 0;
-            var neto = totalBrutoGlobal - gastos;
-
-            var mensaje = "CORTE DE CAJA - BUSCOUNT%0A";
+            // REPORTE LIMPIO: Solo cuenta bruta
+            var mensaje = "REPORTE DE CUENTA - BRUTO%0A";
             mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
                 mensaje += v.n + "ª " + v.d + ": $" + v.m + "%0A";
             });
             mensaje += "----------------------------%0A";
             mensaje += "TOTAL BRUTO: $" + totalBrutoGlobal + "%0A";
-            mensaje += "GASTOS: -$" + gastos + "%0A";
-            mensaje += "ENTREGA LIMPIA: $" + neto + "%0A";
             mensaje += "----------------------------";
             window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
