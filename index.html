@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v6.4</title>
+    <title>BusCount BETA - v6.5</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -23,14 +23,14 @@
         input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
         .gasto-item { text-align: left; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        .gasto-item label { color: var(--red); font-size: 0.9rem; margin-bottom: 2px; }
+        .gasto-item label { color: var(--red); font-size: 0.9rem; margin-bottom: 2px; font-weight: bold; }
         .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.2rem !important; padding: 8px !important; }
         .fila-v { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1.1rem; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REVISIÓN 6.4 (ORDENADO)</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REVISIÓN 6.5 (GASTOS FINALES)</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -46,10 +46,10 @@
 
         <div class="tarjeta">
             <div class="grid">
-                <div><label>$14</label><input type="number" id="i14" oninput="sumar()" placeholder="0"></div>
-                <div><label>$55</label><input type="number" id="i55" oninput="sumar()" placeholder="0"></div>
-                <div><label>$47</label><input type="number" id="i47" oninput="sumar()" placeholder="0"></div>
-                <div><label>$37</label><input type="number" id="i37" oninput="sumar()" placeholder="0"></div>
+                <div><label>$14</label><input type="number" id="i14" oninput="sumar()"></div>
+                <div><label>$55</label><input type="number" id="i55" oninput="sumar()"></div>
+                <div><label>$47</label><input type="number" id="i47" oninput="sumar()"></div>
+                <div><label>$37</label><input type="number" id="i37" oninput="sumar()"></div>
             </div>
             
             <div style="margin-top:15px; border-top: 1px solid #333; padding-top:15px;">
@@ -75,29 +75,34 @@
         </div>
 
         <h3 style="color: var(--p); font-size: 1rem; margin: 15px 0 5px 0;">VUELTAS REGISTRADAS</h3>
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 250px; overflow-y: auto;"></div>
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 200px; overflow-y: auto;"></div>
 
         <div class="tarjeta">
-            <h3 style="color: var(--red); margin: 0 0 15px 0;">DESGLOSE DE GASTOS</h3>
+            <h3 style="color: var(--red); margin: 0 0 15px 0;">CORTE DE GASTOS</h3>
             
             <div class="gasto-item">
-                <label>DIESEL / GASOLINA</label>
+                <label>DIESEL</label>
                 <input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0.00">
             </div>
             
             <div class="gasto-item">
-                <label>CASETAS / PEAJES</label>
-                <input type="number" class="input-gasto" id="g-casetas" oninput="calcularBalance()" placeholder="0.00">
+                <label>CASETA</label>
+                <input type="number" class="input-gasto" id="g-caseta" oninput="calcularBalance()" placeholder="0.00">
             </div>
 
             <div class="gasto-item">
-                <label>COMIDA / DESAYUNO</label>
-                <input type="number" class="input-gasto" id="g-comida" oninput="calcularBalance()" placeholder="0.00">
+                <label>DESPACHADORES</label>
+                <input type="number" class="input-gasto" id="g-despachadores" oninput="calcularBalance()" placeholder="0.00">
             </div>
 
             <div class="gasto-item">
-                <label>OTROS / VARIOS</label>
-                <input type="number" class="input-gasto" id="g-otros" oninput="calcularBalance()" placeholder="0.00">
+                <label>PENSIÓN</label>
+                <input type="number" class="input-gasto" id="g-pension" oninput="calcularBalance()" placeholder="0.00">
+            </div>
+
+            <div class="gasto-item">
+                <label>SUELDO</label>
+                <input type="number" class="input-gasto" id="g-sueldo" oninput="calcularBalance()" placeholder="0.00">
             </div>
         </div>
         
@@ -149,10 +154,12 @@
 
         function calcularBalance() {
             var g1 = parseFloat(document.getElementById('g-diesel').value) || 0;
-            var g2 = parseFloat(document.getElementById('g-casetas').value) || 0;
-            var g3 = parseFloat(document.getElementById('g-comida').value) || 0;
-            var g4 = parseFloat(document.getElementById('g-otros').value) || 0;
-            var sumaGastos = g1 + g2 + g3 + g4;
+            var g2 = parseFloat(document.getElementById('g-caseta').value) || 0;
+            var g3 = parseFloat(document.getElementById('g-despachadores').value) || 0;
+            var g4 = parseFloat(document.getElementById('g-pension').value) || 0;
+            var g5 = parseFloat(document.getElementById('g-sueldo').value) || 0;
+            
+            var sumaGastos = g1 + g2 + g3 + g4 + g5;
             document.getElementById('t-gastos-label').innerText = sumaGastos;
             document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - sumaGastos);
         }
@@ -194,3 +201,4 @@
     </script>
 </body>
 </html>
+
