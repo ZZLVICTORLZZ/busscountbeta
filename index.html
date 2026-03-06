@@ -1,20 +1,20 @@
 
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v7.1</title>
+    <title>BusCount BETA - v7.2</title>
     <style>
-        /* COLORES ACTUALIZADOS */
         :root { 
-            --p: #00acc1;    /* Turquesa más opaco */
+            --p: #00acc1; 
             --bg: #000; 
             --c: #1a1a1a; 
             --wa: #25d366; 
-            --red: #e57373;  /* Rojo un poco más suave */
-            --g: #66bb6a;    /* Verde para el Balance */
+            --red: #e57373; 
+            --g: #66bb6a;
         }
         
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -32,9 +32,10 @@
         .grid label { color: var(--p); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
         input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
-        .gasto-item { text-align: left; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        .gasto-item label { color: var(--red); font-size: 0.9rem; margin-bottom: 2px; font-weight: bold; }
-        .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.2rem !important; padding: 8px !important; }
+        /* AJUSTE COMPACTO PARA GASTOS */
+        .gasto-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
+        .gasto-item label { color: var(--red); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
+        .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.1rem !important; padding: 6px !important; width: 100px !important; text-align: right !important; margin: 0 !important; }
         
         .fila-v { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1rem; align-items: center; }
         .v-monto { font-weight: bold; color: var(--p); }
@@ -43,7 +44,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - DISEÑO v7.1</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - GASTOS COMPACTOS 7.2</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -90,22 +91,22 @@
             <h2 style="color:var(--p); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen de Cuenta</h2>
             <div style="color:#aaa; font-size:1rem;">Total Bruto: $<span id="t-bruto">0</span></div>
             <div style="color:var(--red); font-size:1rem; margin-top: 5px;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
-            <hr style="border: 0.5px solid #333; margin: 15px 0;">
-            
+            <hr style="border: 0.5px solid #333; margin: 10px 0;">
             <div style="color:var(--g); font-size:0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Balance Real (Efectivo)</div>
-            <div id="t-neto" style="font-size: 3.2rem; color:var(--g); font-weight:bold; margin-top: 5px;">$0</div>
+            <div id="t-neto" style="font-size: 3rem; color:var(--g); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
-        <h3 style="color: var(--p); font-size: 1rem; margin: 15px 0 5px 0;">VUELTAS REGISTRADAS</h3>
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 180px; overflow-y: auto;"></div>
+        <h3 style="color: var(--p); font-size: 1rem; margin: 10px 0 5px 0;">VUELTAS REGISTRADAS</h3>
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 150px; overflow-y: auto;"></div>
 
         <div class="tarjeta">
-            <h3 style="color: var(--red); margin: 0 0 15px 0;">CORTE DE GASTOS</h3>
-            <div class="gasto-item"><label>DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0.00"></div>
-            <div class="gasto-item"><label>CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="calcularBalance()" placeholder="0.00"></div>
-            <div class="gasto-item"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="calcularBalance()" placeholder="0.00"></div>
-            <div class="gasto-item"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="calcularBalance()" placeholder="0.00"></div>
-            <div class="gasto-item"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="calcularBalance()" placeholder="0.00"></div>
+            <h3 style="color: var(--red); margin: 0 0 10px 0; font-size: 1rem;">CORTE DE GASTOS</h3>
+            
+            <div class="gasto-item"><label>DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0"></div>
+            <div class="gasto-item"><label>CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="calcularBalance()" placeholder="0"></div>
+            <div class="gasto-item"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="calcularBalance()" placeholder="0"></div>
+            <div class="gasto-item"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="calcularBalance()" placeholder="0"></div>
+            <div class="gasto-item"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="calcularBalance()" placeholder="0"></div>
         </div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
