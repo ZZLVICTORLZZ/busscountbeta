@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v7.4</title>
+    <title>BusCount BETA - v7.5</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -21,12 +19,13 @@
         .activa { display: block !important; }
         .tarjeta { background: var(--gris); padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px; }
         
-        /* BOTONES MEDIANOS */
         .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
         .btn-turquesa { background: var(--turquesa); color: #000; }
         .btn-wa { background: var(--verde_wa); color: #000; }
         .btn-rojo { background: #b71c1c; color: #fff; }
         .btn-gris { background: #333; color: #fff; }
+        /* Estilo para el nuevo botón de cálculo */
+        .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -34,7 +33,6 @@
         
         input { background: #000; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
-        /* GASTOS COMPACTOS */
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 100px !important; text-align: right !important; margin: 0 !important; }
@@ -46,7 +44,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - ESPAÑOL v7.4</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CÁLCULO DE ENTREGA v7.5</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -108,11 +106,26 @@
             <div class="gasto-fila"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="actualizarBalance()" placeholder="0"></div>
             <div class="gasto-fila"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="actualizarBalance()" placeholder="0"></div>
             <div class="gasto-fila"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
+            
+            <button class="btn btn-calculo" onclick="irA('p-calc')">CALCULAR EFECTIVO A ENTREGAR</button>
         </div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
         <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE POR WHATSAPP</button>
         <button class="btn btn-rojo" onclick="borrarTodo()">BORRAR TODO EL DÍA</button>
+    </div>
+
+    <div id="p-calc" class="pantalla">
+        <div class="tarjeta">
+            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Calculadora de Entrega</h2>
+            <p style="color: #888; font-size: 0.8rem;">(Aquí configuraremos las opciones que me expliques)</p>
+        </div>
+
+        <div id="opciones-calculo" class="tarjeta">
+            <p style="color: var(--turquesa);">Esperando instrucciones...</p>
+        </div>
+
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL RESUMEN</button>
     </div>
 
     <script>
@@ -162,9 +175,7 @@
             var b37 = parseInt(document.getElementById('bol37').value) || 0;
             var tPasajeros = b14 + b55 + b47 + b37 + listaCortesias.length;
             listaExtras.forEach(function(e) { tPasajeros += e.c; });
-
             if (m === 0 && listaCortesias.length === 0 && !confirm("¿Guardar en $0?")) return;
-
             historial.push({ n: nVuelta, d: d, m: m, p: tPasajeros, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
@@ -200,8 +211,9 @@
         function irA(id) {
             document.getElementById('p-reg').classList.remove('activa');
             document.getElementById('p-lib').classList.remove('activa');
+            document.getElementById('p-calc').classList.remove('activa');
             document.getElementById(id).classList.add('activa');
-            dibujarHistorial();
+            if(id === 'p-lib') dibujarHistorial();
         }
 
         function borrarTodo() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
@@ -233,7 +245,3 @@
     </script>
 </body>
 </html>
-
-
-
-
