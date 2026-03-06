@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v6.3</title>
+    <title>BusCount BETA - v6.4</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -21,15 +21,15 @@
         .grid label { color: var(--p); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
         input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
-        /* Estilo para los gastos */
         .gasto-item { text-align: left; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         .gasto-item label { color: var(--red); font-size: 0.9rem; margin-bottom: 2px; }
         .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.2rem !important; padding: 8px !important; }
+        .fila-v { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1.1rem; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REPORTE LIMPIO 6.3</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REVISIÓN 6.4 (ORDENADO)</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -45,10 +45,10 @@
 
         <div class="tarjeta">
             <div class="grid">
-                <div><label>$14</label><input type="number" id="i14" oninput="sumar()"></div>
-                <div><label>$55</label><input type="number" id="i55" oninput="sumar()"></div>
-                <div><label>$47</label><input type="number" id="i47" oninput="sumar()"></div>
-                <div><label>$37</label><input type="number" id="i37" oninput="sumar()"></div>
+                <div><label>$14</label><input type="number" id="i14" oninput="sumar()" placeholder="0"></div>
+                <div><label>$55</label><input type="number" id="i55" oninput="sumar()" placeholder="0"></div>
+                <div><label>$47</label><input type="number" id="i47" oninput="sumar()" placeholder="0"></div>
+                <div><label>$37</label><input type="number" id="i37" oninput="sumar()" placeholder="0"></div>
             </div>
             
             <div style="margin-top:15px; border-top: 1px solid #333; padding-top:15px;">
@@ -73,6 +73,9 @@
             <div style="color:var(--red); font-size:0.9rem;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
         </div>
 
+        <h3 style="color: var(--p); font-size: 1rem; margin: 15px 0 5px 0;">VUELTAS REGISTRADAS</h3>
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 250px; overflow-y: auto;"></div>
+
         <div class="tarjeta">
             <h3 style="color: var(--red); margin: 0 0 15px 0;">DESGLOSE DE GASTOS</h3>
             
@@ -96,8 +99,6 @@
                 <input type="number" class="input-gasto" id="g-otros" oninput="calcularBalance()" placeholder="0.00">
             </div>
         </div>
-
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 150px; overflow-y: auto;"></div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
         <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE POR WHATSAPP</button>
@@ -150,7 +151,6 @@
             var g2 = parseFloat(document.getElementById('g-casetas').value) || 0;
             var g3 = parseFloat(document.getElementById('g-comida').value) || 0;
             var g4 = parseFloat(document.getElementById('g-otros').value) || 0;
-            
             var sumaGastos = g1 + g2 + g3 + g4;
             document.getElementById('t-gastos-label').innerText = sumaGastos;
             document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - sumaGastos);
@@ -160,8 +160,7 @@
             document.getElementById('txt-v').innerText = numV + "ª MEDIA VUELTA";
             var h = ""; totalBrutoGlobal = 0;
             hist.forEach(function(v) {
-                h += '<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #333;">' +
-                     '<span><b>' + v.n + 'ª</b> ' + v.d + '</span><span><b>$' + v.m + '</b></span></div>';
+                h += '<div class="fila-v"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span><b>$' + v.m + '</b></span></div>';
                 totalBrutoGlobal += v.m;
             });
             document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin registros</p>";
@@ -177,11 +176,10 @@
             render();
         }
 
-        function reset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
+        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
             if (hist.length === 0) return alert("No hay datos.");
-            // REPORTE LIMPIO: Solo cuenta bruta
             var mensaje = "REPORTE DE CUENTA - BRUTO%0A";
             mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
