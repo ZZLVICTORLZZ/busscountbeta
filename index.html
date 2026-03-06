@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - Gastos</title>
+    <title>BusCount BETA - Corte de Caja</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -14,16 +14,18 @@
         .btn-turquesa { background: var(--p); color: #000; }
         .btn-wa { background: var(--wa); color: #000; }
         .btn-rojo { background: var(--red); color: #fff; }
+        .btn-gris { background: #333; color: #fff; }
+
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--p); margin: 5px 0; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid label { color: var(--p); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
-        input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.9rem; text-align: center; border-radius: 8px; font-weight: bold; }
+        input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
         select { background: #222; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--red); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - PRUEBA DE GASTOS</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CORTE DE CAJA AL FINAL</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -39,44 +41,52 @@
 
         <div class="tarjeta">
             <div class="grid">
-                <div><label>$14</label><input type="number" id="i14" oninput="sumar()" placeholder="0"></div>
-                <div><label>$55</label><input type="number" id="i55" oninput="sumar()" placeholder="0"></div>
-                <div><label>$47</label><input type="number" id="i47" oninput="sumar()" placeholder="0"></div>
-                <div><label>$37</label><input type="number" id="i37" oninput="sumar()" placeholder="0"></div>
+                <div><label>$14</label><input type="number" id="i14" oninput="sumar()"></div>
+                <div><label>$55</label><input type="number" id="i55" oninput="sumar()"></div>
+                <div><label>$47</label><input type="number" id="i47" oninput="sumar()"></div>
+                <div><label>$37</label><input type="number" id="i37" oninput="sumar()"></div>
             </div>
             
             <div style="margin-top:15px; border-top: 1px solid #333; padding-top:15px;">
-                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">COBRO LIBRE / GASTO</label>
-                <div class="grid">
-                    <input type="number" id="l-p" placeholder="$ Precio" style="font-size: 1.5rem;">
-                    <input type="number" id="l-c" placeholder="Cant." style="font-size: 1.5rem;">
+                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">COBRO LIBRE / EXTRA</label>
+                <div class="grid" style="margin-top:5px;">
+                    <input type="number" id="l-p" placeholder="$" style="font-size: 1.5rem;">
+                    <input type="number" id="l-c" placeholder="#" style="font-size: 1.5rem;">
                 </div>
-                <div class="grid">
-                    <button class="btn btn-turquesa" style="padding: 12px; font-size: 0.9rem;" onclick="agregarLibre(1)">+ EXTRA</button>
-                    <button class="btn btn-rojo" style="padding: 12px; font-size: 0.9rem;" onclick="agregarLibre(-1)">- GASTO</button>
-                </div>
+                <button class="btn btn-gris" style="color:var(--p); padding: 12px; font-size: 0.9rem;" onclick="agregarLibre()">+ AGREGAR EXTRA</button>
             </div>
         </div>
 
         <button class="btn btn-turquesa" onclick="finalizar()">FINALIZAR VUELTA</button>
-        <button class="btn btn-gris" style="background:#333; color:#fff;" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
+        <button class="btn btn-gris" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
     </div>
 
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--p);">GANANCIA LIMPIA</h2>
-            <div id="t-dia" style="font-size: 2.5rem; color:var(--p); font-weight:bold;">$0</div>
+            <h2 style="color:var(--p); margin-bottom:5px;">BALANCE DEL DÍA</h2>
+            <div style="color:#888; font-size:0.9rem;">Bruto: $<span id="t-bruto">0</span></div>
+            <div id="t-neto" style="font-size: 2.5rem; color:var(--p); font-weight:bold;">$0</div>
+            <div style="color:var(--red); font-size:0.9rem;">Gastos: -$<span id="t-gastos-label">0</span></div>
         </div>
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left;"></div>
+
+        <div class="tarjeta">
+            <label style="color: var(--red); font-size: 1rem; font-weight: bold;">ANOTAR GASTOS TOTALES</label>
+            <p style="font-size: 0.7rem; color: #666; margin: 2px 0 10px 0;">(Diesel, Casetas, Comida, etc.)</p>
+            <input type="number" id="input-gastos" oninput="calcularBalance()" placeholder="$ 0.00" style="border-color: var(--red); color: var(--red); width: 90%;">
+        </div>
+
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 200px; overflow-y: auto;"></div>
+        
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
-        <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE</button>
-        <button class="btn btn-rojo" onclick="reset()">BORRAR TODO</button>
+        <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE AL DUEÑO</button>
+        <button class="btn btn-rojo" onclick="reset()">BORRAR TODO EL DÍA</button>
     </div>
 
     <script>
-        var numV = parseInt(localStorage.getItem('beta_v_n')) || 1;
-        var hist = JSON.parse(localStorage.getItem('beta_v_h')) || [];
-        var movsLibres = [];
+        var numV = parseInt(localStorage.getItem('beta_vn')) || 1;
+        var hist = JSON.parse(localStorage.getItem('beta_vh')) || [];
+        var libresActuales = [];
+        var totalBrutoGlobal = 0;
 
         function iniciarApp() { render(); }
 
@@ -86,16 +96,16 @@
                         (document.getElementById('i47').value || 0) * 47 +
                         (document.getElementById('i37').value || 0) * 37;
             var totalLibres = 0;
-            movsLibres.forEach(function(l) { totalLibres += (l.p * l.c * l.m); });
+            libresActuales.forEach(function(l) { totalLibres += (l.p * l.c); });
             document.getElementById('t-v').innerText = (fijos + totalLibres);
         }
 
-        function agregarLibre(mult) {
+        function agregarLibre() {
             var p = parseFloat(document.getElementById('l-p').value) || 0;
             var c = parseInt(document.getElementById('l-c').value) || 0;
             if (p > 0 && c > 0) {
-                movsLibres.push({p: p, c: c, m: mult});
-                document.getElementById('log-ex').innerText = (mult > 0 ? "Extra: +$" : "Gasto: -$") + (p*c);
+                libresActuales.push({p: p, c: c});
+                document.getElementById('log-ex').innerText = "Extra: +$" + (p*c);
                 document.getElementById('l-p').value = ""; document.getElementById('l-c').value = "";
                 sumar();
             }
@@ -113,28 +123,35 @@
 
             hist.push({
                 n: numV, d: d, m: m,
-                det: { p14: c14, p55: c55, p47: c47, p37: c37, movs: [...movsLibres] }
+                det: { p14: c14, p55: c55, p47: c47, p37: c37, libres: [...libresActuales] }
             });
 
-            localStorage.setItem('beta_v_h', JSON.stringify(hist));
-            numV++; localStorage.setItem('beta_v_n', numV);
+            localStorage.setItem('beta_vh', JSON.stringify(hist));
+            numV++; localStorage.setItem('beta_vn', numV);
             
             document.getElementById('i14').value=""; document.getElementById('i55').value="";
             document.getElementById('i47').value=""; document.getElementById('i37').value="";
-            movsLibres = []; document.getElementById('log-ex').innerText = "";
+            libresActuales = []; document.getElementById('log-ex').innerText = "";
             irA('p-lib');
+        }
+
+        function calcularBalance() {
+            var gastos = parseFloat(document.getElementById('input-gastos').value) || 0;
+            document.getElementById('t-gastos-label').innerText = gastos;
+            document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - gastos);
         }
 
         function render() {
             document.getElementById('txt-v').innerText = numV + "ª MEDIA VUELTA";
-            var h = ""; var total = 0;
+            var h = ""; totalBrutoGlobal = 0;
             hist.forEach(function(v) {
                 h += '<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #333;">' +
                      '<span><b>' + v.n + 'ª</b> ' + v.d + '</span><span><b>$' + v.m + '</b></span></div>';
-                total += v.m;
+                totalBrutoGlobal += v.m;
             });
-            document.getElementById('lista').innerHTML = h || "<p style='padding:15px;'>Sin datos</p>";
-            document.getElementById('t-dia').innerText = "$" + total;
+            document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin datos registrados</p>";
+            document.getElementById('t-bruto').innerText = totalBrutoGlobal;
+            calcularBalance();
             sumar();
         }
 
@@ -145,21 +162,25 @@
             render();
         }
 
-        function reset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
+        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
-            var mensaje = "REPORTE BETA - GASTOS INCLUIDOS%0A";
+            if (hist.length === 0) return alert("No hay datos.");
+            var gastos = document.getElementById('input-gastos').value || 0;
+            var neto = totalBrutoGlobal - gastos;
+
+            var mensaje = "CORTE DE CAJA - BUSCOUNT%0A";
+            mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
-                mensaje += ""+ v.n + "ª " + v.d + "%0A";
-                v.det.movs.forEach(function(l) {
-                    mensaje += (l.m > 0 ? "• Extra: $" : "• Gasto: -$") + (l.p * l.c) + "%0A";
-                });
-                mensaje += "Subtotal: $" + v.m + "%0A%0A";
+                mensaje += v.n + "ª " + v.d + ": $" + v.m + "%0A";
             });
-            mensaje += "TOTAL LIMPIO: " + document.getElementById('t-dia').innerText + "";
+            mensaje += "----------------------------%0A";
+            mensaje += "TOTAL BRUTO: $" + totalBrutoGlobal + "%0A";
+            mensaje += "GASTOS: -$" + gastos + "%0A";
+            mensaje += "ENTREGA LIMPIA: $" + neto + "%0A";
+            mensaje += "----------------------------";
             window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
     </script>
 </body>
 </html>
-
