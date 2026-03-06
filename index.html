@@ -1,234 +1,239 @@
 
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v7.2</title>
+    <title>BusCount BETA - v7.4</title>
     <style>
         :root { 
-            --p: #00acc1; 
-            --bg: #000; 
-            --c: #1a1a1a; 
-            --wa: #25d366; 
-            --red: #e57373; 
-            --g: #66bb6a;
+            --turquesa: #00acc1; 
+            --fondo: #000; 
+            --gris: #1a1a1a; 
+            --verde_wa: #25d366; 
+            --rojo_suave: #e57373; 
+            --verde_balance: #66bb6a;
         }
         
-        body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
+        body { background: var(--fondo); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
         .pantalla { display: none; }
         .activa { display: block !important; }
-        .tarjeta { background: var(--c); padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px; }
-        .btn { border: none; padding: 18px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1.1rem; cursor: pointer; }
-        .btn-turquesa { background: var(--p); color: #000; }
-        .btn-wa { background: var(--wa); color: #000; }
+        .tarjeta { background: var(--gris); padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px; }
+        
+        /* BOTONES MEDIANOS */
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
+        .btn-turquesa { background: var(--turquesa); color: #000; }
+        .btn-wa { background: var(--verde_wa); color: #000; }
         .btn-rojo { background: #b71c1c; color: #fff; }
         .btn-gris { background: #333; color: #fff; }
 
-        .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--p); margin: 5px 0; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .grid label { color: var(--p); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
-        input { background: #000; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
+        .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
+        .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
         
-        /* AJUSTE COMPACTO PARA GASTOS */
-        .gasto-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
-        .gasto-item label { color: var(--red); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
-        .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.1rem !important; padding: 6px !important; width: 100px !important; text-align: right !important; margin: 0 !important; }
+        input { background: #000; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
-        .fila-v { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1rem; align-items: center; }
-        .v-monto { font-weight: bold; color: var(--p); }
-        .v-pax { color: #888; font-size: 0.85rem; margin-right: 10px; }
+        /* GASTOS COMPACTOS */
+        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
+        .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
+        .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 100px !important; text-align: right !important; margin: 0 !important; }
+        
+        .fila-historial { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1rem; align-items: center; }
+        .monto-texto { font-weight: bold; color: var(--turquesa); }
+        .pasajeros-texto { color: #888; font-size: 0.85rem; margin-right: 10px; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - GASTOS COMPACTOS 7.2</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - ESPAÑOL v7.4</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
-            <h2 id="txt-v" style="color:var(--p); margin:0; font-size: 1.3rem;">1ª MEDIA VUELTA</h2>
-            <select id="sel-d" style="background: #222; color: var(--p); border: 1px solid var(--p); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px;">
+            <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0; font-size: 1.3rem;">1ª MEDIA VUELTA</h2>
+            <select id="destino" style="background: #222; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px;">
                 <option value="INDIOS VERDES">INDIOS VERDES</option>
                 <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
                 <option value="REYES">REYES</option>
             </select>
-            <div class="monto-vuelta">$<span id="t-v">0</span></div>
-            <div id="log-ex" style="font-size: 0.8rem; color: var(--p); height: 1.2rem;"></div>
+            <div class="monto-vuelta">$<span id="total-vuelta">0</span></div>
+            <div id="aviso-extra" style="font-size: 0.8rem; color: var(--turquesa); height: 1.2rem;"></div>
         </div>
 
         <div class="tarjeta">
-            <div class="grid">
-                <div><label>$14</label><input type="number" id="i14" oninput="sumar()" placeholder="0"></div>
-                <div><label>$55</label><input type="number" id="i55" oninput="sumar()" placeholder="0"></div>
-                <div><label>$47</label><input type="number" id="i47" oninput="sumar()" placeholder="0"></div>
-                <div><label>$37</label><input type="number" id="i37" oninput="sumar()" placeholder="0"></div>
+            <div class="cuadricula">
+                <div><label>$14</label><input type="number" id="bol14" oninput="sumar()" placeholder="0"></div>
+                <div><label>$55</label><input type="number" id="bol55" oninput="sumar()" placeholder="0"></div>
+                <div><label>$47</label><input type="number" id="bol47" oninput="sumar()" placeholder="0"></div>
+                <div><label>$37</label><input type="number" id="bol37" oninput="sumar()" placeholder="0"></div>
             </div>
             
             <div style="margin-top:15px; border-top: 1px solid #444; padding-top:15px;">
-                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (GRATIS)</label>
-                <input type="text" id="c-nombre" placeholder="NOMBRE" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
-                <button class="btn btn-gris" style="color:var(--p); padding: 10px; font-size: 0.9rem;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
+                <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (GRATIS)</label>
+                <input type="text" id="nombre-cortesia" placeholder="NOMBRE" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
+                <button class="btn btn-gris" style="color:var(--turquesa); padding: 10px; font-size: 0.9rem;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
 
             <div style="margin-top:15px; border-top: 1px solid #333; padding-top:15px;">
-                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">COBRO LIBRE / EXTRA</label>
-                <div class="grid" style="margin-top:5px;">
-                    <input type="number" id="l-p" placeholder="$" style="font-size: 1.5rem;">
-                    <input type="number" id="l-c" placeholder="#" style="font-size: 1.5rem;">
+                <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">COBRO LIBRE / EXTRA</label>
+                <div class="cuadricula" style="margin-top:5px;">
+                    <input type="number" id="extra-precio" placeholder="$" style="font-size: 1.5rem;">
+                    <input type="number" id="extra-cantidad" placeholder="#" style="font-size: 1.5rem;">
                 </div>
-                <button class="btn btn-gris" style="color:var(--p); padding: 12px; font-size: 0.9rem;" onclick="agregarLibre()">+ AGREGAR EXTRA</button>
+                <button class="btn btn-gris" style="color:var(--turquesa); padding: 12px; font-size: 0.9rem;" onclick="agregarExtra()">+ AGREGAR EXTRA</button>
             </div>
         </div>
 
-        <button class="btn btn-turquesa" onclick="finalizar()">FINALIZAR VUELTA</button>
+        <button class="btn btn-turquesa" onclick="finalizarVuelta()">FINALIZAR VUELTA</button>
         <button class="btn btn-gris" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
     </div>
 
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--p); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen de Cuenta</h2>
-            <div style="color:#aaa; font-size:1rem;">Total Bruto: $<span id="t-bruto">0</span></div>
-            <div style="color:var(--red); font-size:1rem; margin-top: 5px;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
+            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen de Cuenta</h2>
+            <div style="color:#aaa; font-size:1rem;">Total Bruto: $<span id="bruto-total">0</span></div>
+            <div style="color:var(--rojo_suave); font-size:1rem; margin-top: 5px;">Gastos Totales: -$<span id="gastos-etiqueta">0</span></div>
             <hr style="border: 0.5px solid #333; margin: 10px 0;">
-            <div style="color:var(--g); font-size:0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Balance Real (Efectivo)</div>
-            <div id="t-neto" style="font-size: 3rem; color:var(--g); font-weight:bold; margin-top: 5px;">$0</div>
+            <div style="color:var(--verde_balance); font-size:0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Balance Real (Efectivo)</div>
+            <div id="neto-total" style="font-size: 3rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
-        <h3 style="color: var(--p); font-size: 1rem; margin: 10px 0 5px 0;">VUELTAS REGISTRADAS</h3>
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 150px; overflow-y: auto;"></div>
+        <h3 style="color: var(--turquesa); font-size: 1rem; margin: 15px 0 5px 0;">VUELTAS REGISTRADAS</h3>
+        <div id="lista-vueltas" class="tarjeta" style="padding:0; text-align:left; max-height: 150px; overflow-y: auto;"></div>
 
         <div class="tarjeta">
-            <h3 style="color: var(--red); margin: 0 0 10px 0; font-size: 1rem;">CORTE DE GASTOS</h3>
-            
-            <div class="gasto-item"><label>DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0"></div>
-            <div class="gasto-item"><label>CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="calcularBalance()" placeholder="0"></div>
-            <div class="gasto-item"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="calcularBalance()" placeholder="0"></div>
-            <div class="gasto-item"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="calcularBalance()" placeholder="0"></div>
-            <div class="gasto-item"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="calcularBalance()" placeholder="0"></div>
+            <h3 style="color: var(--rojo_suave); margin: 0 0 10px 0; font-size: 1rem;">CORTE DE GASTOS</h3>
+            <div class="gasto-fila"><label>DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
         </div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
         <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ ENVIAR REPORTE POR WHATSAPP</button>
-        <button class="btn btn-rojo" onclick="reset()">BORRAR TODO EL DÍA</button>
+        <button class="btn btn-rojo" onclick="borrarTodo()">BORRAR TODO EL DÍA</button>
     </div>
 
     <script>
-        var numV = parseInt(localStorage.getItem('beta_vn')) || 1;
-        var hist = JSON.parse(localStorage.getItem('beta_vh')) || [];
-        var libresActuales = [];
-        var cortesiasActuales = [];
-        var totalBrutoGlobal = 0;
+        var nVuelta = parseInt(localStorage.getItem('b_nv')) || 1;
+        var historial = JSON.parse(localStorage.getItem('b_hist')) || [];
+        var listaExtras = [];
+        var listaCortesias = [];
+        var brutoGlobal = 0;
 
-        function iniciarApp() { render(); }
+        function iniciarApp() { dibujarHistorial(); }
 
         function sumar() {
-            var fijos = (document.getElementById('i14').value || 0) * 14 +
-                        (document.getElementById('i55').value || 0) * 55 +
-                        (document.getElementById('i47').value || 0) * 47 +
-                        (document.getElementById('i37').value || 0) * 37;
-            var tLib = 0; libresActuales.forEach(function(l){ tLib += (l.p * l.c); });
-            document.getElementById('t-v').innerText = (fijos + tLib);
+            var fijos = (document.getElementById('bol14').value || 0) * 14 +
+                        (document.getElementById('bol55').value || 0) * 55 +
+                        (document.getElementById('bol47').value || 0) * 47 +
+                        (document.getElementById('bol37').value || 0) * 37;
+            var ext = 0; listaExtras.forEach(function(e){ ext += (e.p * e.c); });
+            document.getElementById('total-vuelta').innerText = (fijos + ext);
         }
 
-        function agregarLibre() {
-            var p = parseFloat(document.getElementById('l-p').value) || 0;
-            var c = parseInt(document.getElementById('l-c').value) || 0;
+        function agregarExtra() {
+            var p = parseFloat(document.getElementById('extra-precio').value) || 0;
+            var c = parseInt(document.getElementById('extra-cantidad').value) || 0;
             if (p > 0 && c > 0) {
-                libresActuales.push({p: p, c: c});
-                document.getElementById('log-ex').innerText = "Agregado: $" + (p*c);
-                document.getElementById('l-p').value = ""; document.getElementById('l-c').value = "";
+                listaExtras.push({p: p, c: c});
+                document.getElementById('aviso-extra').innerText = "Agregado: $" + (p*c);
+                document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = "";
                 sumar();
             }
         }
 
         function agregarCortesia() {
-            var nom = document.getElementById('c-nombre').value.trim();
+            var nom = document.getElementById('nombre-cortesia').value.trim();
             if (nom !== "") {
-                cortesiasActuales.push(nom.toUpperCase());
-                document.getElementById('log-ex').innerText = "Cortesía: " + nom.toUpperCase();
-                document.getElementById('c-nombre').value = "";
+                listaCortesias.push(nom.toUpperCase());
+                document.getElementById('aviso-extra').innerText = "Cortesía: " + nom.toUpperCase();
+                document.getElementById('nombre-cortesia').value = "";
             }
         }
 
-        function finalizar() {
-            var m = parseInt(document.getElementById('t-v').innerText);
-            var d = document.getElementById('sel-d').value;
-            var c14 = parseInt(document.getElementById('i14').value) || 0;
-            var c55 = parseInt(document.getElementById('i55').value) || 0;
-            var c47 = parseInt(document.getElementById('i47').value) || 0;
-            var c37 = parseInt(document.getElementById('i37').value) || 0;
-            var tPax = c14 + c55 + c47 + c37 + cortesiasActuales.length;
-            libresActuales.forEach(function(l) { tPax += l.c; });
-            if (m === 0 && cortesiasActuales.length === 0 && !confirm("¿Guardar en $0?")) return;
-            hist.push({ n: numV, d: d, m: m, p: tPax, det: { p14: c14, p55: c55, p47: c47, p37: c37, lib: [...libresActuales], cor: [...cortesiasActuales] } });
-            localStorage.setItem('beta_vh', JSON.stringify(hist));
-            numV++; localStorage.setItem('beta_vn', numV);
+        function finalizarVuelta() {
+            var m = parseInt(document.getElementById('total-vuelta').innerText);
+            var d = document.getElementById('destino').value;
+            var b14 = parseInt(document.getElementById('bol14').value) || 0;
+            var b55 = parseInt(document.getElementById('bol55').value) || 0;
+            var b47 = parseInt(document.getElementById('bol47').value) || 0;
+            var b37 = parseInt(document.getElementById('bol37').value) || 0;
+            var tPasajeros = b14 + b55 + b47 + b37 + listaCortesias.length;
+            listaExtras.forEach(function(e) { tPasajeros += e.c; });
+
+            if (m === 0 && listaCortesias.length === 0 && !confirm("¿Guardar en $0?")) return;
+
+            historial.push({ n: nVuelta, d: d, m: m, p: tPasajeros, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
+            localStorage.setItem('b_hist', JSON.stringify(historial));
+            nVuelta++; localStorage.setItem('b_nv', nVuelta);
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
-            libresActuales = []; cortesiasActuales = [];
-            document.getElementById('log-ex').innerText = "";
+            listaExtras = []; listaCortesias = [];
+            document.getElementById('aviso-extra').innerText = "";
             irA('p-lib');
         }
 
-        function calcularBalance() {
+        function actualizarBalance() {
             var g = (parseFloat(document.getElementById('g-diesel').value) || 0) +
                     (parseFloat(document.getElementById('g-caseta').value) || 0) +
                     (parseFloat(document.getElementById('g-despachadores').value) || 0) +
                     (parseFloat(document.getElementById('g-pension').value) || 0) +
                     (parseFloat(document.getElementById('g-sueldo').value) || 0);
-            document.getElementById('t-gastos-label').innerText = g;
-            document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - g);
+            document.getElementById('gastos-etiqueta').innerText = g;
+            document.getElementById('neto-total').innerText = "$" + (brutoGlobal - g);
         }
 
-        function render() {
-            document.getElementById('txt-v').innerText = numV + "ª MEDIA VUELTA";
-            var h = ""; totalBrutoGlobal = 0;
-            hist.forEach(function(v) {
-                h += '<div class="fila-v"><span><b>' + v.n + 'ª</b> ' + v.d + '</span>' +
-                     '<span class="v-monto"><span class="v-pax">' + v.p + ' pax</span> $' + v.m + '</span></div>';
-                totalBrutoGlobal += v.m;
+        function dibujarHistorial() {
+            document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
+            var h = ""; brutoGlobal = 0;
+            historial.forEach(function(v) {
+                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span>' +
+                     '<span class="monto-texto"><span class="pasajeros-texto">' + v.p + ' pasajeros</span> $' + v.m + '</span></div>';
+                brutoGlobal += v.m;
             });
-            document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin registros</p>";
-            document.getElementById('t-bruto').innerText = totalBrutoGlobal;
-            calcularBalance(); sumar();
+            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin registros</p>";
+            document.getElementById('bruto-total').innerText = brutoGlobal;
+            actualizarBalance(); sumar();
         }
 
         function irA(id) {
             document.getElementById('p-reg').classList.remove('activa');
             document.getElementById('p-lib').classList.remove('activa');
             document.getElementById(id).classList.add('activa');
-            render();
+            dibujarHistorial();
         }
 
-        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
+        function borrarTodo() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
-            if (hist.length === 0) return alert("No hay datos.");
+            if (historial.length === 0) return alert("No hay datos.");
             var mensaje = "REPORTE DE CUENTA - BRUTO%0A";
             mensaje += "----------------------------%0A";
-            hist.forEach(function(v) {
+            historial.forEach(function(v) {
                 mensaje += ""+ v.n + "ª " + v.d + "%0A";
-                if(v.det.p14 > 0) mensaje += "• " + v.det.p14 + " de $14%0A";
-                if(v.det.p55 > 0) mensaje += "• " + v.det.p55 + " de $55%0A";
-                if(v.det.p47 > 0) mensaje += "• " + v.det.p47 + " de $47%0A";
-                if(v.det.p37 > 0) mensaje += "• " + v.det.p37 + " de $37%0A";
-                if(v.det.lib && v.det.lib.length > 0) {
-                    v.det.lib.forEach(function(l) { mensaje += "• " + l.c + " de $" + l.p + " (Extra)%0A"; });
+                if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
+                if(v.det.b55 > 0) mensaje += "• " + v.det.b55 + " de $55%0A";
+                if(v.det.b47 > 0) mensaje += "• " + v.det.b47 + " de $47%0A";
+                if(v.det.b37 > 0) mensaje += "• " + v.det.b37 + " de $37%0A";
+                if(v.det.ext && v.det.ext.length > 0) {
+                    v.det.ext.forEach(function(e) { mensaje += "• " + e.c + " de $" + e.p + " (Extra)%0A"; });
                 }
                 if(v.det.cor && v.det.cor.length > 0) {
                     v.det.cor.forEach(function(c) { mensaje += "• Cortesía: " + c + "%0A"; });
                 }
-                mensaje += "Pax: " + v.p + " | Subtotal: $" + v.m + "%0A%0A";
+                mensaje += "Total Pasajeros: " + v.p + "%0A";
+                mensaje += "Subtotal: $" + v.m + "%0A%0A";
             });
             mensaje += "----------------------------%0A";
-            mensaje += "TOTAL BRUTO: $" + totalBrutoGlobal + "%0A";
+            mensaje += "TOTAL BRUTO: $" + brutoGlobal + "%0A";
             mensaje += "----------------------------";
             window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
     </script>
 </body>
 </html>
+
 
 
 
