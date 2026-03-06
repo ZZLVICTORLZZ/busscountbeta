@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v6.9</title>
+    <title>BusCount BETA - v7.0</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -35,7 +35,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REPORTE TOTAL 6.9</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REPORTE TOTAL 7.0</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -58,8 +58,8 @@
             </div>
             
             <div style="margin-top:15px; border-top: 1px solid #444; padding-top:15px;">
-                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">CORTESÍAS</label>
-                <input type="text" id="c-nombre" placeholder="Nombre" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
+                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (GRATIS)</label>
+                <input type="text" id="c-nombre" placeholder="NOMBRE" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
                 <button class="btn btn-gris" style="color:var(--p); padding: 10px; font-size: 0.9rem;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
 
@@ -117,9 +117,8 @@
                         (document.getElementById('i55').value || 0) * 55 +
                         (document.getElementById('i47').value || 0) * 47 +
                         (document.getElementById('i37').value || 0) * 37;
-            var totalLibres = 0;
-            libresActuales.forEach(function(l) { totalLibres += (l.p * l.c); });
-            document.getElementById('t-v').innerText = (fijos + totalLibres);
+            var tLib = 0; libresActuales.forEach(function(l){ tLib += (l.p * l.c); });
+            document.getElementById('t-v').innerText = (fijos + tLib);
         }
 
         function agregarLibre() {
@@ -127,7 +126,7 @@
             var c = parseInt(document.getElementById('l-c').value) || 0;
             if (p > 0 && c > 0) {
                 libresActuales.push({p: p, c: c});
-                document.getElementById('log-ex').innerText = "Extra: +$" + (p*c);
+                document.getElementById('log-ex').innerText = "Agregado: $" + (p*c);
                 document.getElementById('l-p').value = ""; document.getElementById('l-c').value = "";
                 sumar();
             }
@@ -159,8 +158,8 @@
                 n: numV, d: d, m: m, p: tPax, 
                 det: { 
                     p14: c14, p55: c55, p47: c47, p37: c37, 
-                    libres: [...libresActuales],
-                    cors: [...cortesiasActuales] 
+                    lib: [...libresActuales],
+                    cor: [...cortesiasActuales] 
                 } 
             });
 
@@ -186,10 +185,8 @@
             document.getElementById('txt-v').innerText = numV + "ª MEDIA VUELTA";
             var h = ""; totalBrutoGlobal = 0;
             hist.forEach(function(v) {
-                h += '<div class="fila-v">' +
-                     '<span><b>' + v.n + 'ª</b> ' + v.d + '</span>' +
-                     '<span class="v-monto"><span class="v-pax">' + v.p + ' pax</span> $' + v.m + '</span>' +
-                     '</div>';
+                h += '<div class="fila-v"><span><b>' + v.n + 'ª</b> ' + v.d + '</span>' +
+                     '<span class="v-monto"><span class="v-pax">' + v.p + ' pax</span> $' + v.m + '</span></div>';
                 totalBrutoGlobal += v.m;
             });
             document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin registros</p>";
@@ -208,25 +205,28 @@
 
         function enviarWhatsApp() {
             if (hist.length === 0) return alert("No hay datos.");
-            var mensaje = "REPORTE DE CUENTA COMPLETO%0A";
+            var mensaje = "REPORTE DE CUENTA - BRUTO%0A";
             mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
                 mensaje += ""+ v.n + "ª " + v.d + "%0A";
-                // Desglose de boletos PAGADOS
+                // 1. Desglose Fijos
                 if(v.det.p14 > 0) mensaje += "• " + v.det.p14 + " de $14%0A";
                 if(v.det.p55 > 0) mensaje += "• " + v.det.p55 + " de $55%0A";
                 if(v.det.p47 > 0) mensaje += "• " + v.det.p47 + " de $47%0A";
                 if(v.det.p37 > 0) mensaje += "• " + v.det.p37 + " de $37%0A";
-                // Cobros libres
-                if(v.det.libres && v.det.libres.length > 0) {
-                    v.det.libres.forEach(function(l) { mensaje += "• " + l.c + " de $" + l.p + " (Libre)%0A"; });
+                
+                // 2. DESGLOSE COBRO LIBRE (CORREGIDO)
+                if(v.det.lib && v.det.lib.length > 0) {
+                    v.det.lib.forEach(function(l) { 
+                        mensaje += "• " + l.c + " de $" + l.p + " (Extra)%0A"; 
+                    });
                 }
-                // Cortesías
-                if(v.det.cors && v.det.cors.length > 0) {
-                    v.det.cors.forEach(function(c) { mensaje += "• Cortesía: " + c + "%0A"; });
+                
+                // 3. Cortesías
+                if(v.det.cor && v.det.cor.length > 0) {
+                    v.det.cor.forEach(function(c) { mensaje += "• Cortesía: " + c + "%0A"; });
                 }
-                mensaje += "Total Pasaje: " + v.p + "%0A";
-                mensaje += "Subtotal: $" + v.m + "%0A%0A";
+                mensaje += "Pax: " + v.p + " | Subtotal: $" + v.m + "%0A%0A";
             });
             mensaje += "----------------------------%0A";
             mensaje += "TOTAL BRUTO: $" + totalBrutoGlobal + "%0A";
