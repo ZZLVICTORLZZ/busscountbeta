@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v7.5</title>
+    <title>BusCount BETA - v7.6</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -24,14 +24,21 @@
         .btn-wa { background: var(--verde_wa); color: #000; }
         .btn-rojo { background: #b71c1c; color: #fff; }
         .btn-gris { background: #333; color: #fff; }
-        /* Estilo para el nuevo botón de cálculo */
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
+
+        /* ESTILO PARA EL CHECKLIST */
+        .lista-chequeo { text-align: left; margin-top: 10px; }
+        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #222; }
+        .opcion-chequeo label { font-size: 1rem; font-weight: bold; color: #ccc; flex: 1; }
+        
+        /* El interruptor (Checkbox) */
+        input[type="checkbox"] { width: 25px; height: 25px; accent-color: var(--turquesa); cursor: pointer; }
+        input[type="checkbox"]:checked + label { color: var(--turquesa); }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
-        
-        input { background: #000; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.8rem; text-align: center; border-radius: 8px; font-weight: bold; }
+        input[type="number"], input[type="text"] { background: #000; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
@@ -44,7 +51,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CÁLCULO DE ENTREGA v7.5</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CHECKLIST v7.6</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -68,15 +75,15 @@
             
             <div style="margin-top:15px; border-top: 1px solid #444; padding-top:15px;">
                 <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (GRATIS)</label>
-                <input type="text" id="nombre-cortesia" placeholder="NOMBRE" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
+                <input type="text" id="nombre-cortesia" placeholder="NOMBRE" style="width: 90%; margin-top: 5px; text-transform: uppercase;">
                 <button class="btn btn-gris" style="color:var(--turquesa); padding: 10px; font-size: 0.9rem;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
 
             <div style="margin-top:15px; border-top: 1px solid #333; padding-top:15px;">
                 <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">COBRO LIBRE / EXTRA</label>
                 <div class="cuadricula" style="margin-top:5px;">
-                    <input type="number" id="extra-precio" placeholder="$" style="font-size: 1.5rem;">
-                    <input type="number" id="extra-cantidad" placeholder="#" style="font-size: 1.5rem;">
+                    <input type="number" id="extra-precio" placeholder="$">
+                    <input type="number" id="extra-cantidad" placeholder="#">
                 </div>
                 <button class="btn btn-gris" style="color:var(--turquesa); padding: 12px; font-size: 0.9rem;" onclick="agregarExtra()">+ AGREGAR EXTRA</button>
             </div>
@@ -117,12 +124,21 @@
 
     <div id="p-calc" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Calculadora de Entrega</h2>
-            <p style="color: #888; font-size: 0.8rem;">(Aquí configuraremos las opciones que me expliques)</p>
+            <h2 style="color:var(--turquesa); margin-bottom:5px; font-size: 1.1rem; text-transform: uppercase;">CONCEPTOS DE ENTREGA</h2>
+            <p style="color: #888; font-size: 0.75rem;">Selecciona los cobros aplicados</p>
         </div>
 
-        <div id="opciones-calculo" class="tarjeta">
-            <p style="color: var(--turquesa);">Esperando instrucciones...</p>
+        <div class="tarjeta lista-chequeo">
+            <div class="opcion-chequeo"><label>MUTUALIDAD</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>SEGURIDAD</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>OPERACIÓN</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>DIESEL</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>COBRO</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>PENSIÓN</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>FIANZA</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>BASES</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>TAG</label><input type="checkbox"></div>
+            <div class="opcion-chequeo"><label>VALE DE DIESEL</label><input type="checkbox"></div>
         </div>
 
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL RESUMEN</button>
@@ -138,12 +154,12 @@
         function iniciarApp() { dibujarHistorial(); }
 
         function sumar() {
-            var fijos = (document.getElementById('bol14').value || 0) * 14 +
-                        (document.getElementById('bol55').value || 0) * 55 +
-                        (document.getElementById('bol47').value || 0) * 47 +
-                        (document.getElementById('bol37').value || 0) * 37;
-            var ext = 0; listaExtras.forEach(function(e){ ext += (e.p * e.c); });
-            document.getElementById('total-vuelta').innerText = (fijos + ext);
+            var f = (document.getElementById('bol14').value || 0) * 14 +
+                    (document.getElementById('bol55').value || 0) * 55 +
+                    (document.getElementById('bol47').value || 0) * 47 +
+                    (document.getElementById('bol37').value || 0) * 37;
+            var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
+            document.getElementById('total-vuelta').innerText = (f + e);
         }
 
         function agregarExtra() {
@@ -158,10 +174,10 @@
         }
 
         function agregarCortesia() {
-            var nom = document.getElementById('nombre-cortesia').value.trim();
-            if (nom !== "") {
-                listaCortesias.push(nom.toUpperCase());
-                document.getElementById('aviso-extra').innerText = "Cortesía: " + nom.toUpperCase();
+            var n = document.getElementById('nombre-cortesia').value.trim();
+            if (n !== "") {
+                listaCortesias.push(n.toUpperCase());
+                document.getElementById('aviso-extra').innerText = "Cortesía: " + n.toUpperCase();
                 document.getElementById('nombre-cortesia').value = "";
             }
         }
@@ -173,10 +189,10 @@
             var b55 = parseInt(document.getElementById('bol55').value) || 0;
             var b47 = parseInt(document.getElementById('bol47').value) || 0;
             var b37 = parseInt(document.getElementById('bol37').value) || 0;
-            var tPasajeros = b14 + b55 + b47 + b37 + listaCortesias.length;
-            listaExtras.forEach(function(e) { tPasajeros += e.c; });
+            var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
+            listaExtras.forEach(function(e) { tPas += e.c; });
             if (m === 0 && listaCortesias.length === 0 && !confirm("¿Guardar en $0?")) return;
-            historial.push({ n: nVuelta, d: d, m: m, p: tPasajeros, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
+            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
@@ -209,9 +225,7 @@
         }
 
         function irA(id) {
-            document.getElementById('p-reg').classList.remove('activa');
-            document.getElementById('p-lib').classList.remove('activa');
-            document.getElementById('p-calc').classList.remove('activa');
+            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
             if(id === 'p-lib') dibujarHistorial();
         }
