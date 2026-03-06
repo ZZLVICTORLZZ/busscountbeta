@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v6.7</title>
+    <title>BusCount BETA - v6.8</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -28,16 +28,14 @@
         .gasto-item label { color: var(--red); font-size: 0.9rem; margin-bottom: 2px; font-weight: bold; }
         .input-gasto { border-color: var(--red) !important; color: var(--red) !important; font-size: 1.2rem !important; padding: 8px !important; }
         
-        /* Ajuste para que quepa el pax y el dinero */
         .fila-v { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1rem; align-items: center; }
-        .v-info { text-align: left; }
-        .v-monto { text-align: right; font-weight: bold; color: var(--p); }
+        .v-monto { font-weight: bold; color: var(--p); }
         .v-pax { color: #888; font-size: 0.85rem; margin-right: 10px; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - PASAJEROS POR VUELTA 6.7</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - CORTESÍAS 6.8</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -59,6 +57,12 @@
                 <div><label>$37</label><input type="number" id="i37" oninput="sumar()" placeholder="0"></div>
             </div>
             
+            <div style="margin-top:15px; border-top: 1px solid #444; padding-top:15px;">
+                <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (PASAJES GRATIS)</label>
+                <input type="text" id="c-nombre" placeholder="Nombre de la persona" style="font-size: 1.2rem; width: 90%; margin-top: 5px; text-transform: uppercase;">
+                <button class="btn btn-gris" style="color:var(--p); padding: 10px; font-size: 0.9rem;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
+            </div>
+
             <div style="margin-top:15px; border-top: 1px solid #333; padding-top:15px;">
                 <label style="color: var(--p); font-size: 0.9rem; font-weight: bold;">COBRO LIBRE / EXTRA</label>
                 <div class="grid" style="margin-top:5px;">
@@ -79,12 +83,11 @@
             <div style="color:#00e5ff; font-size:1.1rem;">Total de Vueltas: $<span id="t-bruto">0</span></div>
             <div style="color:var(--red); font-size:1.1rem; margin-top: 5px;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
             <hr style="border: 0.5px solid #333; margin: 15px 0;">
-            <div style="color:#aaa; font-size:0.9rem; text-transform: uppercase; letter-spacing: 1px;">Balance Real (Efectivo)</div>
             <div id="t-neto" style="font-size: 3rem; color:var(--p); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
         <h3 style="color: var(--p); font-size: 1rem; margin: 15px 0 5px 0;">VUELTAS REGISTRADAS</h3>
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 220px; overflow-y: auto;"></div>
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 200px; overflow-y: auto;"></div>
 
         <div class="tarjeta">
             <h3 style="color: var(--red); margin: 0 0 15px 0;">CORTE DE GASTOS</h3>
@@ -104,6 +107,7 @@
         var numV = parseInt(localStorage.getItem('beta_vn')) || 1;
         var hist = JSON.parse(localStorage.getItem('beta_vh')) || [];
         var libresActuales = [];
+        var cortesiasActuales = [];
         var totalBrutoGlobal = 0;
 
         function iniciarApp() { render(); }
@@ -129,38 +133,56 @@
             }
         }
 
+        function agregarCortesia() {
+            var nom = document.getElementById('c-nombre').value.trim();
+            if (nom !== "") {
+                cortesiasActuales.push(nom.toUpperCase());
+                document.getElementById('log-ex').innerText = "Cortesía: " + nom.toUpperCase();
+                document.getElementById('c-nombre').value = "";
+            }
+        }
+
         function finalizar() {
             var m = parseInt(document.getElementById('t-v').innerText);
             var d = document.getElementById('sel-d').value;
             
-            // Calcular pasajeros totales de esta vuelta
             var c14 = parseInt(document.getElementById('i14').value) || 0;
             var c55 = parseInt(document.getElementById('i55').value) || 0;
             var c47 = parseInt(document.getElementById('i47').value) || 0;
             var c37 = parseInt(document.getElementById('i37').value) || 0;
-            var tPax = c14 + c55 + c47 + c37;
+            
+            // Pasajeros: Fijos + Libres + Cortesías
+            var tPax = c14 + c55 + c47 + c37 + cortesiasActuales.length;
             libresActuales.forEach(function(l) { tPax += l.c; });
 
-            if (m === 0 && !confirm("¿Guardar en $0?")) return;
+            if (m === 0 && cortesiasActuales.length === 0 && !confirm("¿Guardar en $0?")) return;
 
-            hist.push({ n: numV, d: d, m: m, p: tPax }); // Guardamos 'p' de pasajeros
+            hist.push({ 
+                n: numV, d: d, m: m, p: tPax, 
+                det: { 
+                    p14: c14, p55: c55, p47: c47, p37: c37, 
+                    libres: [...libresActuales],
+                    cors: [...cortesiasActuales] 
+                } 
+            });
+
             localStorage.setItem('beta_vh', JSON.stringify(hist));
             numV++; localStorage.setItem('beta_vn', numV);
             
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
-            libresActuales = []; document.getElementById('log-ex').innerText = "";
+            libresActuales = []; cortesiasActuales = [];
+            document.getElementById('log-ex').innerText = "";
             irA('p-lib');
         }
 
         function calcularBalance() {
-            var g1 = parseFloat(document.getElementById('g-diesel').value) || 0;
-            var g2 = parseFloat(document.getElementById('g-caseta').value) || 0;
-            var g3 = parseFloat(document.getElementById('g-despachadores').value) || 0;
-            var g4 = parseFloat(document.getElementById('g-pension').value) || 0;
-            var g5 = parseFloat(document.getElementById('g-sueldo').value) || 0;
-            var sumaGastos = g1 + g2 + g3 + g4 + g5;
-            document.getElementById('t-gastos-label').innerText = sumaGastos;
-            document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - sumaGastos);
+            var g = (parseFloat(document.getElementById('g-diesel').value) || 0) +
+                    (parseFloat(document.getElementById('g-caseta').value) || 0) +
+                    (parseFloat(document.getElementById('g-despachadores').value) || 0) +
+                    (parseFloat(document.getElementById('g-pension').value) || 0) +
+                    (parseFloat(document.getElementById('g-sueldo').value) || 0);
+            document.getElementById('t-gastos-label').innerText = g;
+            document.getElementById('t-neto').innerText = "$" + (totalBrutoGlobal - g);
         }
 
         function render() {
@@ -168,15 +190,14 @@
             var h = ""; totalBrutoGlobal = 0;
             hist.forEach(function(v) {
                 h += '<div class="fila-v">' +
-                     '<span class="v-info"><b>' + v.n + 'ª</b> ' + v.d + '</span>' +
-                     '<span class="v-monto"><span class="v-pax">' + (v.p || 0) + ' pax</span> $' + v.m + '</span>' +
+                     '<span><b>' + v.n + 'ª</b> ' + v.d + '</span>' +
+                     '<span class="v-monto"><span class="v-pax">' + v.p + ' pax</span> $' + v.m + '</span>' +
                      '</div>';
                 totalBrutoGlobal += v.m;
             });
             document.getElementById('lista').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin registros</p>";
             document.getElementById('t-bruto').innerText = totalBrutoGlobal;
-            calcularBalance();
-            sumar();
+            calcularBalance(); sumar();
         }
 
         function irA(id) {
@@ -186,14 +207,21 @@
             render();
         }
 
-        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
+        function reset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
             if (hist.length === 0) return alert("No hay datos.");
-            var mensaje = "REPORTE DE CUENTA - BRUTO%0A";
+            var mensaje = "REPORTE DE CUENTA - BRUTO DETALLADO%0A";
             mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
-                mensaje += v.n + "ª " + v.d + ": $" + v.m + "%0A";
+                mensaje += ""+ v.n + "ª " + v.d + "%0A";
+                // Desglose de cortesías si existen
+                if(v.det.cors && v.det.cors.length > 0) {
+                    v.det.cors.forEach(function(c) {
+                        mensaje += "• Cortesía: " + c + "%0A";
+                    });
+                }
+                mensaje += "Pax: " + v.p + " | Subtotal: $" + v.m + "%0A%0A";
             });
             mensaje += "----------------------------%0A";
             mensaje += "TOTAL BRUTO: $" + totalBrutoGlobal + "%0A";
