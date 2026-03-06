@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v6.5</title>
+    <title>BusCount BETA - v6.6</title>
     <style>
         :root { --p: #00e5ff; --bg: #000; --c: #1a1a1a; --wa: #25d366; --red: #ff5252; }
         body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
@@ -30,7 +30,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REVISIÓN 6.5 (GASTOS FINALES)</div>
+    <div style="background: var(--p); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - BALANCE FINAL 6.6</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -68,42 +68,29 @@
 
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--p); margin-bottom:5px;">BALANCE DEL DÍA</h2>
-            <div id="t-neto" style="font-size: 2.5rem; color:var(--p); font-weight:bold;">$0</div>
-            <div style="color:#888; font-size:0.9rem;">Bruto (en Reporte): $<span id="t-bruto">0</span></div>
-            <div style="color:var(--red); font-size:0.9rem;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
+            <h2 style="color:var(--p); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen de Cuenta</h2>
+            
+            <div style="color:#00e5ff; font-size:1.1rem;">Total de Vueltas: $<span id="t-bruto">0</span></div>
+            
+            <div style="color:var(--red); font-size:1.1rem; margin-top: 5px;">Gastos Totales: -$<span id="t-gastos-label">0</span></div>
+            
+            <hr style="border: 0.5px solid #333; margin: 15px 0;">
+            
+            <div style="color:#aaa; font-size:0.9rem; text-transform: uppercase; letter-spacing: 1px;">Balance Real (Efectivo)</div>
+            <div id="t-neto" style="font-size: 3rem; color:var(--p); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
         <h3 style="color: var(--p); font-size: 1rem; margin: 15px 0 5px 0;">VUELTAS REGISTRADAS</h3>
-        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 200px; overflow-y: auto;"></div>
+        <div id="lista" class="tarjeta" style="padding:0; text-align:left; max-height: 180px; overflow-y: auto;"></div>
 
         <div class="tarjeta">
             <h3 style="color: var(--red); margin: 0 0 15px 0;">CORTE DE GASTOS</h3>
             
-            <div class="gasto-item">
-                <label>DIESEL</label>
-                <input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0.00">
-            </div>
-            
-            <div class="gasto-item">
-                <label>CASETA</label>
-                <input type="number" class="input-gasto" id="g-caseta" oninput="calcularBalance()" placeholder="0.00">
-            </div>
-
-            <div class="gasto-item">
-                <label>DESPACHADORES</label>
-                <input type="number" class="input-gasto" id="g-despachadores" oninput="calcularBalance()" placeholder="0.00">
-            </div>
-
-            <div class="gasto-item">
-                <label>PENSIÓN</label>
-                <input type="number" class="input-gasto" id="g-pension" oninput="calcularBalance()" placeholder="0.00">
-            </div>
-
-            <div class="gasto-item">
-                <label>SUELDO</label>
-                <input type="number" class="input-gasto" id="g-sueldo" oninput="calcularBalance()" placeholder="0.00">
-            </div>
+            <div class="gasto-item"><label>DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="calcularBalance()" placeholder="0.00"></div>
+            <div class="gasto-item"><label>CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="calcularBalance()" placeholder="0.00"></div>
+            <div class="gasto-item"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="calcularBalance()" placeholder="0.00"></div>
+            <div class="gasto-item"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="calcularBalance()" placeholder="0.00"></div>
+            <div class="gasto-item"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="calcularBalance()" placeholder="0.00"></div>
         </div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
@@ -184,10 +171,11 @@
             render();
         }
 
-        function reset() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
+        function reset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
 
         function enviarWhatsApp() {
             if (hist.length === 0) return alert("No hay datos.");
+            // REPORTE BRUTO SEGÚN LO SOLICITADO
             var mensaje = "REPORTE DE CUENTA - BRUTO%0A";
             mensaje += "----------------------------%0A";
             hist.forEach(function(v) {
