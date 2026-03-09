@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v8.2</title>
+    <title>BusCount BETA - v8.3</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -31,18 +31,8 @@
         .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: #ccc; flex: 1; text-align: left; }
         .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
-        /* CUADRITOS IGUALES A GASTOS PERO MÁS DELGADOS */
-        .input-variable { 
-            width: 70px !important; 
-            background: #000; 
-            border: 1px solid var(--turquesa); 
-            color: var(--turquesa); 
-            padding: 6px !important; 
-            border-radius: 6px; 
-            text-align: right !important; 
-            font-weight: bold; 
-            font-size: 1rem !important; 
-        }
+        /* CUADRITOS MANUALES */
+        .input-variable { width: 70px !important; background: #000; border: 1px solid var(--turquesa); color: var(--turquesa); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
@@ -61,7 +51,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - DISEÑO UNIFICADO v8.2</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - REPORTE COMPLETO v8.3</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -105,6 +95,8 @@
             <div style="color:#aaa; font-size:0.9rem;">Total Bruto: $<span id="bruto-total">0</span></div>
             <div style="color:var(--rojo_suave); font-size:0.9rem; margin-top: 5px;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
             <hr style="border: 0.5px solid #333; margin: 8px 0;">
+            
+            <div style="color:var(--verde_balance); font-size:1rem; font-weight: bold; text-transform: uppercase;">Total de Cuenta</div>
             <div id="neto-total" style="font-size: 2.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
         </div>
 
@@ -237,10 +229,53 @@
 
         function borrarTodo() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
 
+        // CAMBIO AQUÍ: FUNCIÓN WHATSAPP ACTUALIZADA CON GASTOS Y TOTAL
         function enviarWhatsApp() {
-            var mensaje = "*REPORTE DE CUENTA*%0A";
-            historial.forEach(function(v) { mensaje += "*"+ v.n + "ª " + v.d + "*: $" + v.m + " (" + v.p + " pas)%0A"; });
-            mensaje += "*TOTAL BRUTO: $" + brutoGlobal + "*";
+            if (historial.length === 0) return alert("No hay datos registrados.");
+            
+            var d_diesel = parseFloat(document.getElementById('g-diesel').value) || 0;
+            var d_caseta = parseFloat(document.getElementById('g-caseta').value) || 0;
+            var d_desp = parseFloat(document.getElementById('g-despachadores').value) || 0;
+            var d_pen = parseFloat(document.getElementById('g-pension').value) || 0;
+            var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0;
+            var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue;
+
+            var mensaje = "*REPORTE DE CUENTA COMPLETO*%0A";
+            mensaje += "----------------------------%0A";
+            
+            historial.forEach(function(v) {
+                mensaje += "*"+ v.n + "ª " + v.d + "*%0A";
+                if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
+                if(v.det.b55 > 0) mensaje += "• " + v.det.b55 + " de $55%0A";
+                if(v.det.b47 > 0) mensaje += "• " + v.det.b47 + " de $47%0A";
+                if(v.det.b37 > 0) mensaje += "• " + v.det.b37 + " de $37%0A";
+                if(v.det.ext && v.det.ext.length > 0) {
+                    v.det.ext.forEach(function(e) { mensaje += "• " + e.c + " de $" + e.p + " (Extra)%0A"; });
+                }
+                if(v.det.cor && v.det.cor.length > 0) {
+                    v.det.cor.forEach(function(c) { mensaje += "• Cortesía: " + c + "%0A"; });
+                }
+                mensaje += "Pasajeros: " + v.p + " | Subtotal: $" + v.m + "%0A%0A";
+            });
+            
+            mensaje += "----------------------------%0A";
+            mensaje += "*TOTAL BRUTO:* $" + brutoGlobal + "%0A";
+            mensaje += "----------------------------%0A";
+            
+            if (totalGastos > 0) {
+                mensaje += "*GASTOS DE RUTA*%0A";
+                if(d_diesel > 0) mensaje += "• Diesel: $" + d_diesel + "%0A";
+                if(d_caseta > 0) mensaje += "• Caseta: $" + d_caseta + "%0A";
+                if(d_desp > 0) mensaje += "• Despachadores: $" + d_desp + "%0A";
+                if(d_pen > 0) mensaje += "• Pensión: $" + d_pen + "%0A";
+                if(d_sue > 0) mensaje += "• Sueldo: $" + d_sue + "%0A";
+                mensaje += "*Total Gastos:* -$" + totalGastos + "%0A";
+                mensaje += "----------------------------%0A";
+            }
+            
+            var totalCuenta = brutoGlobal - totalGastos;
+            mensaje += "*TOTAL DE CUENTA: $" + totalCuenta + "*";
+            
             window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
     </script>
