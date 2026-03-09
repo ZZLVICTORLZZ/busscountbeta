@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v9.2</title>
+    <title>BusCount BETA - v9.3</title>
     <style>
         :root { 
             /* MODO CLARO (CHAMPAÑA Y PASTEL) */
@@ -103,7 +103,7 @@
     <div id="contenedor-avisos"></div>
 
     <div class="top-bar">
-        <span>MODO BETA v9.2</span>
+        <span>MODO BETA v9.3</span>
         <span class="toggle-tema" id="icono-tema" onclick="cambiarTema()">🌙</span>
     </div>
 
@@ -197,7 +197,7 @@
             <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
-        <button class="btn btn-wa" style="margin-bottom: 10px;" onclick="enviarWhatsAppLiquidacion()">✅ ENVIAR CORTE A RECAUDACIÓN</button>
+        <button class="btn btn-wa" style="margin-bottom: 10px;" onclick="enviarWhatsAppLiquidacion()">✅ ENVIAR POR WHATSAPP</button>
 
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
@@ -208,7 +208,6 @@
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
 
         function iniciarApp() { 
-            // Cargar el tema guardado
             var temaGuardado = localStorage.getItem('b_theme');
             if(temaGuardado === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
@@ -217,7 +216,6 @@
             dibujarHistorial(); 
         }
 
-        // FUNCIÓN PARA EL MODO OSCURO
         function cambiarTema() {
             var actual = document.body.getAttribute('data-theme');
             if (actual === 'dark') {
@@ -353,7 +351,6 @@
 
         function borrarTodo() { if (confirm("¿Borrar todo el día?")) { localStorage.clear(); location.reload(); } }
 
-        // WHATSAPP 1: REPORTE GENERAL
         function enviarWhatsApp() {
             if (historial.length === 0) return alert("No hay datos registrados.");
             
@@ -404,15 +401,13 @@
             window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
 
-        // WHATSAPP 2: CORTE DE CAJA EXCLUSIVO
         function enviarWhatsAppLiquidacion() {
             var ajuste = 0;
-            var mensaje = "*CORTE DE CAJA - RECAUDACIÓN*%0A";
+            var mensaje = "*BALANCE DE ENTREGA*%0A";
             mensaje += "----------------------------%0A";
             mensaje += "Balance de Ruta: *$" + netoRuta + "*%0A";
             mensaje += "----------------------------%0A";
             
-            // Sumas
             if(document.getElementById('c-mut').checked) { ajuste += 20; mensaje += "• Mutualidad: +$20%0A"; }
             if(document.getElementById('c-seg').checked) { ajuste += 20; mensaje += "• Seguridad: +$20%0A"; }
             if(document.getElementById('c-opd').checked) { ajuste += 50; mensaje += "• Operación Diesel: +$50%0A"; }
@@ -430,7 +425,6 @@
             var vdi = parseFloat(document.getElementById('v-vdi').value) || 0;
             if(document.getElementById('c-vdi').checked && vdi > 0) { ajuste += vdi; mensaje += "• Vale Diesel: +$" + vdi + "%0A"; }
             
-            // Restas
             var restaBoletos = 0;
             var bol = parseFloat(document.getElementById('v-bol').value) || 0;
             if(document.getElementById('c-bol').checked && bol > 0) { 
@@ -449,4 +443,3 @@
     </script>
 </body>
 </html>
-
