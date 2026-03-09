@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v7.7</title>
+    <title>BusCount BETA - v7.8</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -26,12 +26,14 @@
         .btn-gris { background: #333; color: #fff; }
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
 
-        /* CHECKLIST Y VARIABLES */
+        /* CHECKLIST COMPACTO */
         .lista-chequeo { text-align: left; }
-        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
-        .opcion-chequeo label { font-size: 0.9rem; font-weight: bold; color: #ccc; flex: 1; }
-        .check-box { width: 22px; height: 22px; accent-color: var(--turquesa); margin-right: 10px; }
-        .input-variable { width: 70px; background: #000; border: 1px solid #444; color: var(--turquesa); padding: 5px; border-radius: 5px; text-align: center; font-weight: bold; }
+        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; }
+        .opcion-chequeo label { font-size: 0.85rem; font-weight: bold; color: #ccc; flex: 1; }
+        .check-box { width: 20px; height: 20px; accent-color: var(--turquesa); margin-right: 10px; }
+        
+        /* CASILLAS MANUALES MÁS CHICAS */
+        .input-variable { width: 60px; background: #000; border: 1px solid #444; color: var(--turquesa); padding: 4px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 1rem; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -40,7 +42,7 @@
         
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
-        .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 100px !important; text-align: right !important; margin: 0 !important; }
+        .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 90px !important; text-align: right !important; margin: 0 !important; }
         
         .fila-historial { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #333; font-size: 1rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
@@ -49,7 +51,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - LIQUIDACIÓN v7.7</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - AJUSTE MANUAL v7.8</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -125,10 +127,10 @@
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN ($40)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA ($100)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
             
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-cob" onchange="recalcularLiquidacion()"><label>COBRO</label><input type="number" class="input-variable" id="v-cob" oninput="recalcularLiquidacion()" placeholder="$"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="$"></div>
+            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="$"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="$"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="$"></div>
@@ -187,9 +189,9 @@
             if(document.getElementById('c-seg').checked) descuento += 20;
             if(document.getElementById('c-opd').checked) descuento += 50;
             if(document.getElementById('c-pen').checked) descuento += 40;
-            if(document.getElementById('c-fia').checked) descuento += 100;
             
-            if(document.getElementById('c-cob').checked) descuento += (parseFloat(document.getElementById('v-cob').value) || 0);
+            // MANUALES
+            if(document.getElementById('c-fia').checked) descuento += (parseFloat(document.getElementById('v-fia').value) || 0);
             if(document.getElementById('c-bas').checked) descuento += (parseFloat(document.getElementById('v-bas').value) || 0);
             if(document.getElementById('c-tag').checked) descuento += (parseFloat(document.getElementById('v-tag').value) || 0);
             if(document.getElementById('c-vdi').checked) descuento += (parseFloat(document.getElementById('v-vdi').value) || 0);
@@ -226,3 +228,4 @@
     </script>
 </body>
 </html>
+
