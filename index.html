@@ -51,7 +51,7 @@
         .btn-turquesa { background: var(--btn_turquesa); }
         .btn-wa { background: var(--verde_btn); }
         .btn-verde { background: var(--verde_btn); }
-        .btn-rojo { background: var(--rojo_btn); }
+        .btn-rojo { background: var(--rojo_btn); color: white; }
         .btn-gris { background: var(--borde_lineas); } 
         .btn-naranja { background: var(--naranja); color: white; }
         
@@ -61,7 +61,6 @@
         .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
         .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
-        /* CASILLAS ALARGADAS: pasaron de 70px a 100px */
         .input-variable { width: 100px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; transition: background 0.3s, color 0.3s; }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
@@ -75,7 +74,6 @@
 
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
-        /* CASILLAS ALARGADAS: pasaron de 85px a 110px */
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 110px !important; text-align: right !important; margin: 0 !important; }
         
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
@@ -93,11 +91,15 @@
         
         .tarjeta-dia { text-align: left; padding: 12px; border-bottom: 1px solid var(--borde_lineas); color: var(--azul_historial); }
         .tarjeta-dia:last-child { border-bottom: none; }
-        .dia-fecha { font-size: 1.1rem; font-weight: bold; color: var(--azul_historial); margin-bottom: 4px; }
+        .dia-fecha { font-size: 1.1rem; font-weight: bold; color: var(--azul_historial); }
         .dia-datos { font-size: 0.85rem; color: var(--azul_historial); }
         .dia-total { font-size: 1.2rem; font-weight: bold; color: var(--azul_historial); text-align: right; }
         
         .btn-chico { padding: 6px 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); }
+        
+        /* BOTÓN DE BASURA MINIMALISTA ROJO */
+        .btn-basura { background: transparent; border: none; color: var(--rojo_suave); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s; }
+        .btn-basura:active { background: rgba(227, 136, 136, 0.2); }
     </style>
 </head>
 <body onload="iniciarApp()">
@@ -142,8 +144,8 @@
         
         <div class="tarjeta">
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="bol55" oninput="v2(this); sumar()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $50</label><input type="number" class="input-variable" id="bol50" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $47</label><input type="number" class="input-variable" id="bol47" oninput="v2(this); sumar()" placeholder="0"></div>
-            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $42</label><input type="number" class="input-variable" id="bol42" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $37</label><input type="number" class="input-variable" id="bol37" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="bol35" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="bol14" oninput="v2(this); sumar()" placeholder="0"></div>
@@ -159,8 +161,8 @@
             <div class="opcion-chequeo">
                 <label style="color: var(--turquesa); font-size: 0.9rem;">EXTRA</label>
                 <div style="display:flex; gap:5px; align-items:center;">
-                    <input type="number" id="extra-precio" placeholder="$" style="width: 60px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
-                    <input type="number" id="extra-cantidad" placeholder="#" style="width: 50px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
+                    <input type="number" id="extra-precio" placeholder="$ Monto" style="width: 80px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
+                    <input type="number" id="extra-cantidad" placeholder="# Cant" style="width: 70px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
                     <button class="btn-chico" onclick="agregarExtra()">+</button>
                 </div>
             </div>
@@ -233,6 +235,9 @@
 
     <div id="p-hist" class="pantalla">
         <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Historial de 7 Días</h2></div>
+        
+        <button class="btn btn-rojo" style="margin-bottom: 10px;" onclick="borrarTodoHistorial()">BORRAR TODO EL HISTORIAL</button>
+        
         <div class="tarjeta" id="contenedor-dias" style="padding: 0;"></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
@@ -256,6 +261,7 @@
             dibujarHistorial(); 
         }
 
+        // VALIDACIÓN DE 2 CIFRAS
         function v2(input) { if (input.value.length > 2) input.value = input.value.slice(0, 2); }
 
         function cambiarTema() {
@@ -280,11 +286,11 @@
             setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
         }
 
-        // LÓGICA DE SUMA ACTUALIZADA PARA INCLUIR $42 Y $35
+        // SUMA CON BOLETOS ACTUALIZADOS ($50 en lugar de $42)
         function sumar() {
             var f = (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
+                    (parseInt(document.getElementById('bol50').value) || 0) * 50 + 
                     (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
-                    (parseInt(document.getElementById('bol42').value) || 0) * 42 + 
                     (parseInt(document.getElementById('bol37').value) || 0) * 37 + 
                     (parseInt(document.getElementById('bol35').value) || 0) * 35 + 
                     (parseInt(document.getElementById('bol14').value) || 0) * 14;
@@ -318,13 +324,13 @@
             var d = document.getElementById('destino').value;
             
             var b55 = parseInt(document.getElementById('bol55').value) || 0;
+            var b50 = parseInt(document.getElementById('bol50').value) || 0;
             var b47 = parseInt(document.getElementById('bol47').value) || 0;
-            var b42 = parseInt(document.getElementById('bol42').value) || 0;
             var b37 = parseInt(document.getElementById('bol37').value) || 0;
             var b35 = parseInt(document.getElementById('bol35').value) || 0;
             var b14 = parseInt(document.getElementById('bol14').value) || 0;
             
-            var tPas = b55 + b47 + b42 + b37 + b35 + b14 + listaCortesias.length;
+            var tPas = b55 + b50 + b47 + b37 + b35 + b14 + listaCortesias.length;
             listaExtras.forEach(function(e) { tPas += e.c; });
             
             if (m === 0 && tPas === 0) {
@@ -336,7 +342,7 @@
             document.getElementById('cierre-monto').innerText = "$" + m;
             document.getElementById('pantalla-cierre').style.display = 'flex';
             
-            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b55: b55, b47: b47, b42: b42, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] } });
+            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b55: b55, b50: b50, b47: b47, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
@@ -396,7 +402,7 @@
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
             historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pasajeros - $' + v.m + '</span></div>';
+                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' Pax - $' + v.m + '</span></div>';
                 brutoGlobal += v.m;
             });
             document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas</p>";
@@ -404,22 +410,50 @@
             actualizarBalance();
         }
 
+        // DIBUJA EL HISTORIAL CON EL BOTE DE BASURA
         function dibujarHistorialDias() {
             var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             var html = "";
             if (histDias.length === 0) {
                 html = "<p style='padding:15px; color:var(--texto_claro);'>No hay días guardados aún.</p>";
             } else {
-                histDias.slice().reverse().forEach(function(d) {
+                // Se recorre de reversa para mostrar el más nuevo primero, pero pasando el índice original a la función de borrado
+                for(var i = histDias.length - 1; i >= 0; i--) {
+                    var d = histDias[i];
                     html += '<div class="tarjeta-dia">';
+                    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">';
                     html += '<div class="dia-fecha">' + d.f + '</div>';
-                    html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+                    // ICONO DE BASURA MINIMALISTA ROJO
+                    html += '<button class="btn-basura" onclick="borrarDiaIndividual(' + i + ')"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>';
+                    html += '</div>';
+                    html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
                     html += '<div class="dia-datos">' + d.pax + ' Pax | Bruto: $' + d.b + '<br>Gastos: -$' + d.g + '</div>';
                     html += '<div class="dia-total">$' + d.n + '</div>';
                     html += '</div></div>';
-                });
+                }
             }
             document.getElementById('contenedor-dias').innerHTML = html;
+        }
+
+        // FUNCIÓN PARA BORRAR UN DÍA INDIVIDUAL
+        function borrarDiaIndividual(index) {
+            if(confirm("¿Estás seguro de que deseas borrar esta cuenta del historial?")) {
+                var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
+                histDias.splice(index, 1);
+                localStorage.setItem('b_hist_dias', JSON.stringify(histDias));
+                dibujarHistorialDias();
+            }
+        }
+
+        // FUNCIÓN PARA BORRAR TODO EL HISTORIAL
+        function borrarTodoHistorial() {
+            var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
+            if(histDias.length === 0) return alert("El historial ya está vacío.");
+            
+            if(confirm("ATENCIÓN: ¿Estás seguro de borrar TODO el historial de la semana? Esto no se puede deshacer.")) {
+                localStorage.removeItem('b_hist_dias');
+                dibujarHistorialDias();
+            }
         }
 
         function irA(id) {
@@ -463,6 +497,7 @@
             } 
         }
 
+        // WHATSAPP CON BOLETO DE $50
         function enviarWhatsApp() {
             if (historial.length === 0) return alert("No hay datos registrados.");
             
@@ -480,10 +515,9 @@
             
             historial.forEach(function(v) {
                 mensaje += "*"+ v.n + "ª " + v.d + "*%0A";
-                // REPORTE WHATSAPP ACTUALIZADO PARA $42 Y $35
                 if(v.det.b55 > 0) mensaje += "• " + v.det.b55 + " de $55%0A";
+                if(v.det.b50 && v.det.b50 > 0) mensaje += "• " + v.det.b50 + " de $50%0A";
                 if(v.det.b47 > 0) mensaje += "• " + v.det.b47 + " de $47%0A";
-                if(v.det.b42 && v.det.b42 > 0) mensaje += "• " + v.det.b42 + " de $42%0A";
                 if(v.det.b37 > 0) mensaje += "• " + v.det.b37 + " de $37%0A";
                 if(v.det.b35 && v.det.b35 > 0) mensaje += "• " + v.det.b35 + " de $35%0A";
                 if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
