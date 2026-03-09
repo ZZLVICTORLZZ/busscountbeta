@@ -76,13 +76,13 @@
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 110px !important; text-align: right !important; margin: 0 !important; }
         
-        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
+        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: none; font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
 
         #contenedor-avisos { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
         .aviso { background: var(--verde_btn); color: var(--texto); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 1; transition: opacity 0.5s ease; text-align: center; border: 1px solid var(--verde_balance); }
 
-        #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 15vh; align-items: center; text-align: center; }
+        #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 10vh; align-items: center; text-align: center; overflow-y: auto; }
         
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
 
@@ -97,7 +97,6 @@
         
         .btn-chico { padding: 6px 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); }
         
-        /* BOTÓN DE BASURA MINIMALISTA ROJO */
         .btn-basura { background: transparent; border: none; color: var(--rojo_suave); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s; }
         .btn-basura:active { background: rgba(227, 136, 136, 0.2); }
     </style>
@@ -115,8 +114,9 @@
     <div id="pantalla-cierre">
         <div style="color: var(--rojo_suave); font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; margin-bottom: 15px;">CIERRE</div>
         <div id="cierre-vuelta" style="color: var(--turquesa); font-size: 2.5rem; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;"></div>
-        <div id="cierre-dir" style="color: var(--texto_claro); font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 40px; text-transform: uppercase;"></div>
+        <div id="cierre-dir" style="color: var(--texto_claro); font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 30px; text-transform: uppercase;"></div>
         <div id="cierre-monto" style="color: var(--verde_balance); font-size: 5rem; font-weight: bold;"></div>
+        <div id="cierre-desglose" style="color: var(--texto_claro); font-size: 1.2rem; margin-top: 20px; line-height: 1.6; font-weight: bold;"></div>
     </div>
 
     <div id="contenedor-avisos"></div>
@@ -238,7 +238,7 @@
         
         <button class="btn btn-rojo" style="margin-bottom: 10px;" onclick="borrarTodoHistorial()">BORRAR TODO EL HISTORIAL</button>
         
-        <div class="tarjeta" id="contenedor-dias" style="padding: 0;"></div>
+        <div class="tarjeta" id="contenedor-dias" style="padding: 0; background:transparent; box-shadow:none;"></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
 
@@ -261,7 +261,6 @@
             dibujarHistorial(); 
         }
 
-        // VALIDACIÓN DE 2 CIFRAS
         function v2(input) { if (input.value.length > 2) input.value = input.value.slice(0, 2); }
 
         function cambiarTema() {
@@ -286,7 +285,6 @@
             setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
         }
 
-        // SUMA CON BOLETOS ACTUALIZADOS ($50 en lugar de $42)
         function sumar() {
             var f = (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
                     (parseInt(document.getElementById('bol50').value) || 0) * 50 + 
@@ -319,6 +317,25 @@
             }
         }
 
+        // FUNCION PARA GENERAR EL TEXTO DEL DESGLOSE (Para pantalla de cierre, libro e historial)
+        function generarTextoDesglose(det) {
+            if (!det) return "Sin detalle guardado";
+            var txt = [];
+            if (det.b55 > 0) txt.push(det.b55 + " de $55");
+            if (det.b50 > 0) txt.push(det.b50 + " de $50");
+            if (det.b47 > 0) txt.push(det.b47 + " de $47");
+            if (det.b37 > 0) txt.push(det.b37 + " de $37");
+            if (det.b35 > 0) txt.push(det.b35 + " de $35");
+            if (det.b14 > 0) txt.push(det.b14 + " de $14");
+            if (det.ext && det.ext.length > 0) {
+                det.ext.forEach(function(e) { txt.push(e.c + " extra(s) de $" + e.p); });
+            }
+            if (det.cor && det.cor.length > 0) {
+                txt.push(det.cor.length + " Cortesía(s)");
+            }
+            return txt.length > 0 ? txt.join('<br>') : "Vuelta Vacía";
+        }
+
         function finalizarVuelta() {
             var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
             var d = document.getElementById('destino').value;
@@ -337,12 +354,18 @@
                 if (!confirm("¿Está seguro de cerrar esta vuelta vacía?")) return;
             }
 
+            var detalleObj = { b55: b55, b50: b50, b47: b47, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] };
+
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             document.getElementById('cierre-dir').innerText = d;
             document.getElementById('cierre-monto').innerText = "$" + m;
+            
+            // SE IMPRIME EL DESGLOSE EN LA PANTALLA DE CIERRE
+            document.getElementById('cierre-desglose').innerHTML = generarTextoDesglose(detalleObj);
+            
             document.getElementById('pantalla-cierre').style.display = 'flex';
             
-            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b55: b55, b50: b50, b47: b47, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] } });
+            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: detalleObj });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
@@ -354,7 +377,7 @@
             setTimeout(function() {
                 document.getElementById('pantalla-cierre').style.display = 'none';
                 irA('p-lib');
-            }, 2000);
+            }, 3000); // Le di 1 seg extra para que puedan leer el desglose
         }
 
         function actualizarBalance() {
@@ -401,8 +424,18 @@
         function dibujarHistorial() {
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
-            historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' Pax - $' + v.m + '</span></div>';
+            historial.forEach(function(v, index) {
+                h += '<div style="border-bottom: 1px solid var(--borde_lineas); padding: 10px 0;">';
+                h += '<div class="fila-historial" style="padding: 0;">';
+                h += '<span><b>' + v.n + 'ª</b> ' + v.d + '</span>';
+                h += '<div style="display:flex; align-items:center; gap:10px;">';
+                h += '<span class="monto-texto">' + v.p + ' Pax - $' + v.m + '</span>';
+                // ICONO DE LUPA
+                h += '<span onclick="document.getElementById(\'det-v-'+index+'\').style.display = document.getElementById(\'det-v-'+index+'\').style.display === \'none\' ? \'block\' : \'none\'" style="cursor:pointer;"><svg viewBox="0 0 24 24" width="20" height="20" fill="var(--turquesa)"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 12.01 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 12.01 14 9.5 14z"/></svg></span>';
+                h += '</div></div>';
+                // CAJA DE DESGLOSE OCULTA
+                h += '<div id="det-v-'+index+'" style="display:none; text-align:left; font-size:0.85rem; color:var(--texto_claro); margin-top:8px;">' + generarTextoDesglose(v.det) + '</div>';
+                h += '</div>';
                 brutoGlobal += v.m;
             });
             document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas</p>";
@@ -410,32 +443,46 @@
             actualizarBalance();
         }
 
-        // DIBUJA EL HISTORIAL CON EL BOTE DE BASURA
         function dibujarHistorialDias() {
             var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             var html = "";
             if (histDias.length === 0) {
                 html = "<p style='padding:15px; color:var(--texto_claro);'>No hay días guardados aún.</p>";
             } else {
-                // Se recorre de reversa para mostrar el más nuevo primero, pero pasando el índice original a la función de borrado
                 for(var i = histDias.length - 1; i >= 0; i--) {
                     var d = histDias[i];
-                    html += '<div class="tarjeta-dia">';
-                    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">';
-                    html += '<div class="dia-fecha">' + d.f + '</div>';
-                    // ICONO DE BASURA MINIMALISTA ROJO
+                    html += '<div class="tarjeta" style="text-align: left; padding: 12px; margin-bottom: 10px;">';
+                    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">';
+                    html += '<div class="dia-fecha" style="display:flex; align-items:center; gap:8px;">' + d.f;
+                    // LUPA DEL HISTORIAL
+                    html += '<span onclick="document.getElementById(\'det-dia-'+i+'\').style.display = document.getElementById(\'det-dia-'+i+'\').style.display === \'none\' ? \'block\' : \'none\'" style="cursor:pointer;"><svg viewBox="0 0 24 24" width="20" height="20" fill="var(--turquesa)"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 12.01 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 12.01 14 9.5 14z"/></svg></span>';
+                    html += '</div>';
+                    // BOTE DE BASURA ROJO
                     html += '<button class="btn-basura" onclick="borrarDiaIndividual(' + i + ')"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>';
                     html += '</div>';
+                    
                     html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
                     html += '<div class="dia-datos">' + d.pax + ' Pax | Bruto: $' + d.b + '<br>Gastos: -$' + d.g + '</div>';
                     html += '<div class="dia-total">$' + d.n + '</div>';
-                    html += '</div></div>';
+                    html += '</div>';
+                    
+                    // DESGLOSE DE TODAS LAS VUELTAS DE ESE DÍA
+                    html += '<div id="det-dia-'+i+'" style="display:none; margin-top:12px; padding-top:10px; border-top:1px dashed var(--borde_lineas); font-size:0.85rem; color:var(--texto_claro);">';
+                    if(d.vueltas && d.vueltas.length > 0) {
+                        d.vueltas.forEach(function(vu) {
+                            html += '<div style="margin-bottom:10px;"><b>' + vu.n + 'ª ' + vu.d + ' ($' + vu.m + '):</b><br>' + generarTextoDesglose(vu.det) + '</div>';
+                        });
+                    } else {
+                        html += '<i>Detalle no disponible para esta cuenta antigua.</i>';
+                    }
+                    html += '</div>';
+                    html += '</div>';
                 }
             }
             document.getElementById('contenedor-dias').innerHTML = html;
         }
 
-        // FUNCIÓN PARA BORRAR UN DÍA INDIVIDUAL
+        // FUNCIÓN BORRAR DÍA INDIVIDUAL
         function borrarDiaIndividual(index) {
             if(confirm("¿Estás seguro de que deseas borrar esta cuenta del historial?")) {
                 var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
@@ -445,12 +492,12 @@
             }
         }
 
-        // FUNCIÓN PARA BORRAR TODO EL HISTORIAL
+        // FUNCIÓN BORRAR TODO EL HISTORIAL
         function borrarTodoHistorial() {
             var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             if(histDias.length === 0) return alert("El historial ya está vacío.");
             
-            if(confirm("ATENCIÓN: ¿Estás seguro de borrar TODO el historial de la semana? Esto no se puede deshacer.")) {
+            if(confirm("ATENCIÓN: ¿Estás seguro de borrar TODO el historial? Esto no se puede deshacer.")) {
                 localStorage.removeItem('b_hist_dias');
                 dibujarHistorialDias();
             }
@@ -483,7 +530,8 @@
                 var fechaActual = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
                 
                 var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
-                histDias.push({ f: fechaActual, pax: tPas, b: brutoGlobal, g: g, n: totalCuenta });
+                // SE GUARDA EL HISTORIAL DE VUELTAS COMPLETO AQUÍ PARA PODER VERLO DESPUÉS
+                histDias.push({ f: fechaActual, pax: tPas, b: brutoGlobal, g: g, n: totalCuenta, vueltas: [...historial] });
                 
                 if (histDias.length > 7) histDias.shift();
 
@@ -497,7 +545,6 @@
             } 
         }
 
-        // WHATSAPP CON BOLETO DE $50
         function enviarWhatsApp() {
             if (historial.length === 0) return alert("No hay datos registrados.");
             
