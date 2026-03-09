@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v8.1</title>
+    <title>BusCount BETA - v8.2</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -26,17 +26,29 @@
         .btn-gris { background: #333; color: #fff; }
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
 
-        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #222; }
-        .opcion-chequeo label { font-size: 0.75rem; font-weight: bold; color: #ccc; flex: 1; text-align: left; }
-        .check-box { width: 16px; height: 16px; accent-color: var(--turquesa); margin-right: 10px; }
+        /* LISTA DE CONCEPTOS LIQUIDACIÓN */
+        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; }
+        .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: #ccc; flex: 1; text-align: left; }
+        .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
-        /* CASILLAS MANUALES EXTRA DELGADAS */
-        .input-variable { width: 38px; height: 16px; background: #000; border: 1px solid #444; color: var(--turquesa); padding: 1px; border-radius: 3px; text-align: center; font-weight: bold; font-size: 0.8rem; }
+        /* CUADRITOS IGUALES A GASTOS PERO MÁS DELGADOS */
+        .input-variable { 
+            width: 70px !important; 
+            background: #000; 
+            border: 1px solid var(--turquesa); 
+            color: var(--turquesa); 
+            padding: 6px !important; 
+            border-radius: 6px; 
+            text-align: right !important; 
+            font-weight: bold; 
+            font-size: 1rem !important; 
+        }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
+        
         input[type="number"], input[type="text"] { background: #000; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
@@ -49,7 +61,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - LÓGICA CORREGIDA v8.1</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - DISEÑO UNIFICADO v8.2</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -124,15 +136,15 @@
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
             
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="$"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="$"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="$"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="$"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
             
             <div class="opcion-chequeo" style="border-top: 1px solid #444; margin-top: 5px; padding-top: 5px;">
                 <input type="checkbox" class="check-box" id="c-bol" onchange="recalcularLiquidacion()">
                 <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label>
-                <input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="$">
+                <input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
             </div>
         </div>
 
@@ -141,7 +153,7 @@
             <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
-        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR</button>
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL RESUMEN</button>
     </div>
 
     <script>
@@ -190,7 +202,6 @@
 
         function recalcularLiquidacion() {
             var ajuste = 0;
-            // ESTOS SUMAN (+)
             if(document.getElementById('c-mut').checked) ajuste += 20;
             if(document.getElementById('c-seg').checked) ajuste += 20;
             if(document.getElementById('c-opd').checked) ajuste += 50;
@@ -200,7 +211,6 @@
             if(document.getElementById('c-tag').checked) ajuste += (parseFloat(document.getElementById('v-tag').value) || 0);
             if(document.getElementById('c-vdi').checked) ajuste += (parseFloat(document.getElementById('v-vdi').value) || 0);
             
-            // ESTE RESTA (-)
             var restaBoletos = 0;
             if(document.getElementById('c-bol').checked) restaBoletos = (parseFloat(document.getElementById('v-bol').value) || 0);
             
@@ -211,7 +221,7 @@
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
             historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pas. - $' + v.m + '</span></div>';
+                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pasajeros - $' + v.m + '</span></div>';
                 brutoGlobal += v.m;
             });
             document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas</p>";
@@ -236,3 +246,4 @@
     </script>
 </body>
 </html>
+
