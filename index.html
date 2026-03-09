@@ -110,7 +110,7 @@
             <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" class="luna-turquesa"/>
             <path d="M 25 55 L 85 45 L 87 48 L 27 58 Z" class="logo-bruja"/> <polygon points="45,47 62,20 68,45" class="logo-bruja"/> <circle cx="68" cy="40" r="5" class="logo-bruja"/> <path d="M 50 47 L 75 45 L 68 65 L 55 65 Z" class="logo-bruja"/> </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">Sistema de Recaudación v1.0</div>
+        <div style="font-size: 0.85rem; color: var(--texto_claro); margin-top: 5px; opacity: 0.7;">PROYECTO APOLO 11 v1.0</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -148,10 +148,10 @@
         </div>
         <div class="tarjeta">
             <div class="cuadricula">
-                <div><label>$14</label><input type="number" id="bol14" oninput="sumar()"></div>
-                <div><label>$55</label><input type="number" id="bol55" oninput="sumar()"></div>
-                <div><label>$47</label><input type="number" id="bol47" oninput="sumar()"></div>
-                <div><label>$37</label><input type="number" id="bol37" oninput="sumar()"></div>
+                <div><label>$14</label><input type="number" id="bol14" oninput="v2(this); sumar();"></div>
+                <div><label>$55</label><input type="number" id="bol55" oninput="v2(this); sumar();"></div>
+                <div><label>$47</label><input type="number" id="bol47" oninput="v2(this); sumar();"></div>
+                <div><label>$37</label><input type="number" id="bol37" oninput="v2(this); sumar();"></div>
             </div>
             <div style="margin-top:10px; border-top: 1px solid var(--borde_lineas); padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">CORTESÍAS</label>
@@ -252,7 +252,6 @@
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
 
         function iniciarApp() { 
-            // Manejar Splash Screen
             setTimeout(function() {
                 var splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
@@ -265,6 +264,13 @@
                 document.getElementById('icono-tema').innerText = '☀️';
             }
             dibujarHistorial(); 
+        }
+
+        // FUNCIÓN DE VALIDACIÓN: Máximo 2 cifras
+        function v2(input) {
+            if (input.value.length > 2) {
+                input.value = input.value.slice(0, 2);
+            }
         }
 
         function cambiarTema() {
@@ -400,7 +406,6 @@
             if (histDias.length === 0) {
                 html = "<p style='padding:15px; color:var(--texto_claro);'>No hay días guardados aún.</p>";
             } else {
-                // Invertimos para ver el más reciente arriba
                 histDias.slice().reverse().forEach(function(d) {
                     html += '<div class="tarjeta-dia">';
                     html += '<div class="dia-fecha">' + d.f + '</div>';
@@ -420,14 +425,12 @@
             if(id === 'p-hist') dibujarHistorialDias();
         }
 
-        // FUNCIÓN CERRAR DÍA Y GUARDAR (HISTORIAL DE 7 DÍAS)
         function borrarYGuardarDia() { 
             if (historial.length === 0) {
                 alert("No hay datos para guardar.");
                 return;
             }
             if (confirm("¿Terminar el día?\nEsto guardará tu resumen en el historial y limpiará la cuenta para empezar mañana.")) { 
-                // Calcular totales
                 var g = (parseFloat(document.getElementById('g-diesel').value) || 0) + (parseFloat(document.getElementById('g-caseta').value) || 0) + (parseFloat(document.getElementById('g-despachadores').value) || 0) + (parseFloat(document.getElementById('g-pension').value) || 0) + (parseFloat(document.getElementById('g-sueldo').value) || 0);
                 var totalCuenta = brutoGlobal - g;
                 var tPas = 0;
@@ -435,14 +438,11 @@
 
                 var fechaActual = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
                 
-                // Obtener historial de días y guardar el nuevo
                 var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
                 histDias.push({ f: fechaActual, pax: tPas, b: brutoGlobal, g: g, n: totalCuenta });
                 
-                // Mantener solo los últimos 7 días
                 if (histDias.length > 7) histDias.shift();
 
-                // Proteger tema e historial de días al limpiar
                 var temaActual = localStorage.getItem('b_theme');
                 localStorage.clear(); 
                 
