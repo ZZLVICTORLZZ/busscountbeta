@@ -6,21 +6,25 @@
     <title>Línea Turquesa - v1.0</title>
     <style>
         :root { 
-            /* MODO CLARO */
+            /* MODO CLARO (CHAMPAÑA Y PASTEL) */
             --fondo: #F8E9D2;       
             --tarjeta: #EFEBE1;     
             --input_bg: #E6E0D4;    
             --texto: #4A4A4A;       
             --texto_claro: #888888; 
+            
             --turquesa: #5FA8A3;    
             --btn_turquesa: #A2D5D2;
+            
             --verde_balance: #62A871;
             --verde_btn: #A8DAB5;   
+            
             --rojo_suave: #E38888;  
             --rojo_btn: #FFB7B2;    
+            
             --naranja: #E67E22;     
             --borde_lineas: #DCD5C6;
-            --azul_historial: #2980B9; /* Color azul para historial */
+            --azul_historial: #2980B9; /* NUEVO: Color azul para historial */
         }
 
         /* MODO OSCURO */
@@ -31,6 +35,7 @@
             --texto: #E0E0E0;
             --texto_claro: #A0A0A0;
             --borde_lineas: #333333;
+            
             --turquesa: #00acc1;
             --btn_turquesa: #006064;
             --verde_balance: #66bb6a;
@@ -38,7 +43,7 @@
             --rojo_suave: #e57373;
             --rojo_btn: #c62828;
             --naranja: #ff9800;
-            --azul_historial: #5DADE2;
+            --azul_historial: #5DADE2; /* NUEVO: Azul más claro en modo oscuro */
         }
         
         body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: background 0.3s, color 0.3s; }
@@ -53,7 +58,7 @@
         .btn-verde { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); }
         .btn-gris { background: var(--borde_lineas); } 
-        .btn-naranja { background: var(--naranja); color: white; } /* Botón Naranja */
+        .btn-naranja { background: var(--naranja); color: white; } /* NUEVO: Botón Naranja */
         
         .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
 
@@ -84,13 +89,14 @@
 
         #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 15vh; align-items: center; text-align: center; }
         
+        /* PANTALLA DE CARGA CON LUNA EN SVG */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
-
-        /* AJUSTE TOP BAR E ICONO TEMO (SOLECITO DERECHO) */
+        
+        /* BARRA SUPERIOR PARA EL TEMA (SOLECTIO ALINEADO) */
         .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 0.9rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; transition: background 0.3s; }
         .toggle-tema { font-size: 1.5rem; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; }
         
-        /* HISTORIAL EN AZUL */
+        /* DISEÑO DE HISTORIAL DE DÍAS EN AZUL */
         .tarjeta-dia { text-align: left; padding: 12px; border-bottom: 1px solid var(--borde_lineas); color: var(--azul_historial); }
         .tarjeta-dia:last-child { border-bottom: none; }
         .dia-fecha { font-size: 1.1rem; font-weight: bold; color: var(--azul_historial); margin-bottom: 4px; }
@@ -105,7 +111,7 @@
             <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">Sistema de Recaudación v1.0</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.0</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -194,30 +200,46 @@
     </div>
 
     <div id="p-calc" class="pantalla">
-        <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Liquidación Final</h2></div>
         <div class="tarjeta">
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="reLiq()"><label>MUTUALIDAD ($20)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="reLiq()"><label>SEGURIDAD ($20)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="reLiq()"><label>OPERACIÓN DIESEL ($50)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="reLiq()"><label>PENSIÓN / COBRO ($40)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="reLiq()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="reLiq()" placeholder="0"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="reLiq()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="reLiq()" placeholder="0"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="reLiq()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="reLiq()" placeholder="0"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="reLiq()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="reLiq()" placeholder="0"></div>
+            <h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Liquidación Final</h2>
+        </div>
+
+        <div class="tarjeta">
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
+            
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            
             <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 5px; padding-top: 5px;">
-                <input type="checkbox" class="check-box" id="c-bol" onchange="reLiq()"><label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="reLiq()" placeholder="0">
+                <input type="checkbox" class="check-box" id="c-bol" onchange="recalcularLiquidacion()">
+                <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label>
+                <input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
             </div>
         </div>
+
         <div class="tarjeta">
-            <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
+            <div style="color:var(--verde_balance); font-size: 0.9rem; font-weight: bold; text-transform: uppercase;">Efectivo Entregar</div>
+            <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
-        <button class="btn btn-wa" onclick="enviarWhatsAppLiquidacion()">✅ ENVIAR POR WHATSAPP</button>
+
+        <button class="btn btn-wa" style="margin-bottom: 10px;" onclick="enviarWhatsAppLiquidacion()">✅ ENVIAR POR WHATSAPP</button>
+
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
 
     <div id="p-hist" class="pantalla">
-        <div class="tarjeta"><h2>Historial de 7 Días</h2></div>
-        <div class="tarjeta" id="contenedor-dias" style="padding: 0;"></div>
+        <div class="tarjeta">
+            <h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Historial de 7 Días</h2>
+        </div>
+        
+        <div class="tarjeta" id="contenedor-dias" style="padding: 0;">
+            </div>
+
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
 
@@ -227,57 +249,98 @@
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
 
         function iniciarApp() { 
+            // Manejar Splash Screen
             setTimeout(function() {
-                var s = document.getElementById('splash-screen');
-                s.style.opacity = '0';
-                setTimeout(function() { s.style.display = 'none'; }, 500);
+                var splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(function() { splash.style.display = 'none'; }, 500);
             }, 2000);
-            if(localStorage.getItem('b_theme') === 'dark') {
+
+            var temaGuardado = localStorage.getItem('b_theme');
+            if(temaGuardado === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('icono-tema').innerText = '☀️';
             }
             dibujarHistorial(); 
         }
 
-        // VALIDACIÓN DE 2 CIFRAS
-        function v2(i) { if(i.value.length > 2) i.value = i.value.slice(0, 2); }
+        // NUEVA FUNCIÓN: Validación de 2 cifras
+        function v2(input) {
+            if (input.value.length > 2) {
+                input.value = input.value.slice(0, 2);
+            }
+        }
 
         function cambiarTema() {
             var actual = document.body.getAttribute('data-theme');
-            if (actual === 'dark') { document.body.removeAttribute('data-theme'); document.getElementById('icono-tema').innerText = '🌙'; localStorage.setItem('b_theme', 'light'); }
-            else { document.body.setAttribute('data-theme', 'dark'); document.getElementById('icono-tema').innerText = '☀️'; localStorage.setItem('b_theme', 'dark'); }
+            if (actual === 'dark') {
+                document.body.removeAttribute('data-theme');
+                document.getElementById('icono-tema').innerText = '🌙';
+                localStorage.setItem('b_theme', 'light');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('icono-tema').innerText = '☀️';
+                localStorage.setItem('b_theme', 'dark');
+            }
         }
 
         function mostrarAviso(texto) {
-            var c = document.getElementById('contenedor-avisos');
-            var a = document.createElement('div'); a.className = 'aviso'; a.innerText = texto;
-            c.appendChild(a);
-            setTimeout(function() { a.style.opacity = '0'; }, 2500);
-            setTimeout(function() { c.removeChild(a); }, 3000);
+            var contenedor = document.getElementById('contenedor-avisos');
+            var aviso = document.createElement('div');
+            aviso.className = 'aviso';
+            aviso.innerText = texto;
+            contenedor.appendChild(aviso);
+            setTimeout(function() { aviso.style.opacity = '0'; }, 2500);
+            setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
         }
 
         function sumar() {
-            var f = (parseInt(document.getElementById('bol14').value) || 0) * 14 + (parseInt(document.getElementById('bol55').value) || 0) * 55 + (parseInt(document.getElementById('bol47').value) || 0) * 47 + (parseInt(document.getElementById('bol37').value) || 0) * 37;
+            var f = (parseInt(document.getElementById('bol14').value) || 0) * 14 + 
+                    (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
+                    (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
+                    (parseInt(document.getElementById('bol37').value) || 0) * 37;
             var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
             document.getElementById('total-vuelta').innerText = (f + e);
         }
 
         function agregarExtra() {
-            var p = parseFloat(document.getElementById('extra-precio').value) || 0, c = parseInt(document.getElementById('extra-cantidad').value) || 0;
-            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Agregado"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
+            var p = parseFloat(document.getElementById('extra-precio').value) || 0;
+            var c = parseInt(document.getElementById('extra-cantidad').value) || 0;
+            if (p > 0 && c > 0) { 
+                listaExtras.push({p: p, c: c}); 
+                sumar(); 
+                var msj = c === 1 ? "Se agregó 1 pasajero de $" + p : "Se agregaron " + c + " pasajeros de $" + p;
+                mostrarAviso(msj);
+                document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; 
+            }
         }
 
         function agregarCortesia() {
             var n = document.getElementById('nombre-cortesia').value.trim();
-            if (n) { listaCortesias.push(n.toUpperCase()); mostrarAviso("Cortesía anotada"); document.getElementById('nombre-cortesia').value = ""; }
+            if (n !== "") { 
+                var nomMayus = n.toUpperCase();
+                listaCortesias.push(nomMayus); 
+                mostrarAviso("Se agregó la cortesía " + nomMayus);
+                document.getElementById('nombre-cortesia').value = ""; 
+            }
         }
 
         function finalizarVuelta() {
-            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0, d = document.getElementById('destino').value;
-            var b14 = parseInt(document.getElementById('bol14').value) || 0, b55 = parseInt(document.getElementById('bol55').value) || 0, b47 = parseInt(document.getElementById('bol47').value) || 0, b37 = parseInt(document.getElementById('bol37').value) || 0;
+            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
+            var d = document.getElementById('destino').value;
+            
+            var b14 = parseInt(document.getElementById('bol14').value) || 0;
+            var b55 = parseInt(document.getElementById('bol55').value) || 0;
+            var b47 = parseInt(document.getElementById('bol47').value) || 0;
+            var b37 = parseInt(document.getElementById('bol37').value) || 0;
+            
             var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
             listaExtras.forEach(function(e) { tPas += e.c; });
             
+            if (m === 0 && tPas === 0) {
+                if (!confirm("¿Está seguro de cerrar esta vuelta vacía?")) return;
+            }
+
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             document.getElementById('cierre-dir').innerText = d;
             document.getElementById('cierre-monto').innerText = "$" + m;
@@ -288,8 +351,14 @@
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
-            listaExtras = []; listaCortesias = []; sumar(); 
-            setTimeout(function() { document.getElementById('pantalla-cierre').style.display = 'none'; irA('p-lib'); }, 2000);
+            listaExtras = []; 
+            listaCortesias = []; 
+            sumar(); 
+
+            setTimeout(function() {
+                document.getElementById('pantalla-cierre').style.display = 'none';
+                irA('p-lib');
+            }, 2000);
         }
 
         function actualizarBalance() {
@@ -297,42 +366,55 @@
             netoRuta = brutoGlobal - g;
             document.getElementById('gastos-etiqueta').innerText = g;
             document.getElementById('neto-total').innerText = "$" + netoRuta;
-            reLiq();
+            recalcularLiquidacion();
         }
 
-        function reLiq() {
-            var aj = 0;
-            if(document.getElementById('c-mut').checked) aj += 20;
-            if(document.getElementById('c-seg').checked) aj += 20;
-            if(document.getElementById('c-opd').checked) aj += 50;
-            if(document.getElementById('c-pen').checked) aj += 40;
-            aj += (parseFloat(document.getElementById('v-fia').value) || 0) + (parseFloat(document.getElementById('v-bas').value) || 0) + (parseFloat(document.getElementById('v-tag').value) || 0) + (parseFloat(document.getElementById('v-vdi').value) || 0);
-            var b = (document.getElementById('c-bol').checked) ? (parseFloat(document.getElementById('v-bol').value) || 0) : 0;
-            document.getElementById('final-entrega').innerText = "$" + (netoRuta + aj - b);
+        function recalcularLiquidacion() {
+            var ajuste = 0;
+            if(document.getElementById('c-mut').checked) ajuste += 20;
+            if(document.getElementById('c-seg').checked) ajuste += 20;
+            if(document.getElementById('c-opd').checked) ajuste += 50;
+            if(document.getElementById('c-pen').checked) ajuste += 40;
+            if(document.getElementById('c-fia').checked) ajuste += (parseFloat(document.getElementById('v-fia').value) || 0);
+            if(document.getElementById('c-bas').checked) ajuste += (parseFloat(document.getElementById('v-bas').value) || 0);
+            if(document.getElementById('c-tag').checked) ajuste += (parseFloat(document.getElementById('v-tag').value) || 0);
+            if(document.getElementById('c-vdi').checked) ajuste += (parseFloat(document.getElementById('v-vdi').value) || 0);
+            
+            var restaBoletos = 0;
+            if(document.getElementById('c-bol').checked) restaBoletos = (parseFloat(document.getElementById('v-bol').value) || 0);
+            
+            document.getElementById('final-entrega').innerText = "$" + (netoRuta + ajuste - restaBoletos);
         }
 
         function dibujarHistorial() {
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
             historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pax - $' + v.m + '</span></div>';
+                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pasajeros - $' + v.m + '</span></div>';
                 brutoGlobal += v.m;
             });
-            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px;'>Sin vueltas</p>";
+            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas</p>";
             document.getElementById('bruto-total').innerText = brutoGlobal;
             actualizarBalance();
         }
 
         function dibujarHistorialDias() {
-            var hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
-            document.getElementById('contenedor-dias').innerHTML = hd.slice().reverse().map(d => `
-                <div class="tarjeta-dia">
-                    <div class="dia-fecha">${d.f}</div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div class="dia-datos">${d.pax} Pax | Bruto: $${d.b}</div>
-                        <div class="dia-total">$${d.n}</div>
-                    </div>
-                </div>`).join('') || "<p style='padding:15px;'>Vacío</p>";
+            var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
+            var html = "";
+            if (histDias.length === 0) {
+                html = "<p style='padding:15px; color:var(--texto_claro);'>No hay días guardados aún.</p>";
+            } else {
+                // Invertimos para ver el más reciente arriba
+                histDias.slice().reverse().forEach(function(d) {
+                    html += '<div class="tarjeta-dia">';
+                    html += '<div class="dia-fecha">' + d.f + '</div>';
+                    html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+                    html += '<div class="dia-datos">' + d.pax + ' Pax | Bruto: $' + d.b + '<br>Gastos: -$' + d.g + '</div>';
+                    html += '<div class="dia-total">$' + d.n + '</div>';
+                    html += '</div></div>';
+                });
+            }
+            document.getElementById('contenedor-dias').innerHTML = html;
         }
 
         function irA(id) {
@@ -342,39 +424,128 @@
             if(id === 'p-hist') dibujarHistorialDias();
         }
 
+        // FUNCIÓN CERRAR DÍA Y GUARDAR (HISTORIAL DE 7 DÍAS)
         function borrarYGuardarDia() { 
-            if (!historial.length || !confirm("¿Terminar día?")) return;
-            var g = (parseFloat(document.getElementById('g-diesel').value) || 0) + (parseFloat(document.getElementById('g-caseta').value) || 0) + (parseFloat(document.getElementById('g-despachadores').value) || 0) + (parseFloat(document.getElementById('g-pension').value) || 0) + (parseFloat(document.getElementById('g-sueldo').value) || 0);
-            var tPas = 0; historial.forEach(v => tPas += v.p);
-            var hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
-            hd.push({ f: new Date().toLocaleDateString('es-MX'), pax: tPas, b: brutoGlobal, g: g, n: (brutoGlobal - g) });
-            if (hd.length > 7) hd.shift();
-            var theme = localStorage.getItem('b_theme');
-            localStorage.clear(); 
-            if (theme) localStorage.setItem('b_theme', theme);
-            localStorage.setItem('b_hist_dias', JSON.stringify(hd));
-            location.reload(); 
+            if (historial.length === 0) {
+                alert("No hay datos para guardar.");
+                return;
+            }
+            if (confirm("¿Terminar el día?\nEsto guardará tu resumen en el historial y limpiará la cuenta para empezar mañana.")) { 
+                // Calcular totales
+                var g = (parseFloat(document.getElementById('g-diesel').value) || 0) + (parseFloat(document.getElementById('g-caseta').value) || 0) + (parseFloat(document.getElementById('g-despachadores').value) || 0) + (parseFloat(document.getElementById('g-pension').value) || 0) + (parseFloat(document.getElementById('g-sueldo').value) || 0);
+                var totalCuenta = brutoGlobal - g;
+                var tPas = 0;
+                historial.forEach(function(v){ tPas += v.p; });
+
+                var fechaActual = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+                
+                // Obtener historial de días y guardar el nuevo
+                var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
+                histDias.push({ f: fechaActual, pax: tPas, b: brutoGlobal, g: g, n: totalCuenta });
+                
+                // Mantener solo los últimos 7 días
+                if (histDias.length > 7) histDias.shift();
+
+                // Proteger tema e historial de días al limpiar
+                var temaActual = localStorage.getItem('b_theme');
+                localStorage.clear(); 
+                
+                if (temaActual) localStorage.setItem('b_theme', temaActual);
+                localStorage.setItem('b_hist_dias', JSON.stringify(histDias));
+                
+                location.reload(); 
+            } 
         }
 
+        // FUNCIONES DE WHATSAPP INTACTAS DEL ORIGINAL
         function enviarWhatsApp() {
-            if (historial.length === 0) return alert("Sin datos.");
-            var msj = "*REPORTE DE CUENTA*%0A----------------------------%0A";
+            if (historial.length === 0) return alert("No hay datos registrados.");
+            
+            var d_diesel = parseFloat(document.getElementById('g-diesel').value) || 0;
+            var d_caseta = parseFloat(document.getElementById('g-caseta').value) || 0;
+            var d_desp = parseFloat(document.getElementById('g-despachadores').value) || 0;
+            var d_pen = parseFloat(document.getElementById('g-pension').value) || 0;
+            var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0;
+            var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue;
+
+            var mensaje = "*REPORTE DE CUENTA COMPLETO*%0A";
+            mensaje += "----------------------------%0A";
+            
             historial.forEach(function(v) {
-                msj += "*"+ v.n + "ª " + v.d + "*%0A";
-                if(v.det.b14 > 0) msj += "• " + v.det.b14 + " de $14%0A";
-                if(v.det.b55 > 0) msj += "• " + v.det.b55 + " de $55%0A";
-                if(v.det.b47 > 0) msj += "• " + v.det.b47 + " de $47%0A";
-                if(v.det.b37 > 0) msj += "• " + v.det.b37 + " de $37%0A";
-                if(v.det.ext && v.det.ext.length > 0) v.det.ext.forEach(e => msj += "• " + e.c + " de $" + e.p + " (Extra)%0A");
-                if(v.det.cor && v.det.cor.length > 0) v.det.cor.forEach(c => msj += "• Cortesía: " + c + "%0A");
-                msj += "Subtotal: $" + v.m + "%0A%0A";
+                mensaje += "*"+ v.n + "ª " + v.d + "*%0A";
+                if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
+                if(v.det.b55 > 0) mensaje += "• " + v.det.b55 + " de $55%0A";
+                if(v.det.b47 > 0) mensaje += "• " + v.det.b47 + " de $47%0A";
+                if(v.det.b37 > 0) mensaje += "• " + v.det.b37 + " de $37%0A";
+                if(v.det.ext && v.det.ext.length > 0) {
+                    v.det.ext.forEach(function(e) { mensaje += "• " + e.c + " de $" + e.p + " (Extra)%0A"; });
+                }
+                if(v.det.cor && v.det.cor.length > 0) {
+                    v.det.cor.forEach(function(c) { mensaje += "• Cortesía: " + c + "%0A"; });
+                }
+                mensaje += "Pasajeros: " + v.p + " | Subtotal: $" + v.m + "%0A%0A";
             });
-            msj += "----------------------------%0A*TOTAL CUENTA: $" + netoRuta + "*";
-            window.open("https://wa.me/?text=" + msj, "_blank");
+            
+            if (totalGastos > 0) {
+                mensaje += "----------------------------%0A";
+                mensaje += "*GASTOS DE RUTA*%0A";
+                if(d_diesel > 0) mensaje += "• Diesel: $" + d_diesel + "%0A";
+                if(d_caseta > 0) mensaje += "• Caseta: $" + d_caseta + "%0A";
+                if(d_desp > 0) mensaje += "• Despachadores: $" + d_desp + "%0A";
+                if(d_pen > 0) mensaje += "• Pensión: $" + d_pen + "%0A";
+                if(d_sue > 0) mensaje += "• Sueldo: $" + d_sue + "%0A";
+            }
+            
+            var totalCuenta = brutoGlobal - totalGastos;
+            
+            mensaje += "----------------------------%0A";
+            mensaje += "*BALANCE FINAL*%0A";
+            mensaje += "TOTAL EN BRUTO: $" + brutoGlobal + "%0A";
+            mensaje += "TOTAL DE GASTOS: -$" + totalGastos + "%0A";
+            mensaje += "----------------------------%0A";
+            mensaje += "*TOTAL DE CUENTA: $" + totalCuenta + "*";
+            
+            window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
 
         function enviarWhatsAppLiquidacion() {
-            window.open("https://wa.me/?text=*LIQUIDACIÓN APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
+            var ajuste = 0;
+            var mensaje = "*BALANCE DE ENTREGA*%0A";
+            mensaje += "----------------------------%0A";
+            mensaje += "Balance de Ruta: *$" + netoRuta + "*%0A";
+            mensaje += "----------------------------%0A";
+            
+            if(document.getElementById('c-mut').checked) { ajuste += 20; mensaje += "• Mutualidad: +$20%0A"; }
+            if(document.getElementById('c-seg').checked) { ajuste += 20; mensaje += "• Seguridad: +$20%0A"; }
+            if(document.getElementById('c-opd').checked) { ajuste += 50; mensaje += "• Operación Diesel: +$50%0A"; }
+            if(document.getElementById('c-pen').checked) { ajuste += 40; mensaje += "• Pensión/Cobro: +$40%0A"; }
+            
+            var fia = parseFloat(document.getElementById('v-fia').value) || 0;
+            if(document.getElementById('c-fia').checked && fia > 0) { ajuste += fia; mensaje += "• Fianza: +$" + fia + "%0A"; }
+            
+            var bas = parseFloat(document.getElementById('v-bas').value) || 0;
+            if(document.getElementById('c-bas').checked && bas > 0) { ajuste += bas; mensaje += "• Bases: +$" + bas + "%0A"; }
+            
+            var tag = parseFloat(document.getElementById('v-tag').value) || 0;
+            if(document.getElementById('c-tag').checked && tag > 0) { ajuste += tag; mensaje += "• TAG: +$" + tag + "%0A"; }
+            
+            var vdi = parseFloat(document.getElementById('v-vdi').value) || 0;
+            if(document.getElementById('c-vdi').checked && vdi > 0) { ajuste += vdi; mensaje += "• Vale Diesel: +$" + vdi + "%0A"; }
+            
+            var restaBoletos = 0;
+            var bol = parseFloat(document.getElementById('v-bol').value) || 0;
+            if(document.getElementById('c-bol').checked && bol > 0) { 
+                restaBoletos = bol; 
+                mensaje += "----------------------------%0A";
+                mensaje += "• Boletos entregados: -$" + bol + "%0A"; 
+            }
+            
+            var entregar = netoRuta + ajuste - restaBoletos;
+            
+            mensaje += "----------------------------%0A";
+            mensaje += "*EFECTIVO A ENTREGAR: $" + entregar + "*";
+            
+            window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
     </script>
 </body>
