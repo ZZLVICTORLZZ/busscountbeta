@@ -9,15 +9,17 @@
             --fondo: #F8E9D2; --tarjeta: #EFEBE1; --input_bg: #E6E0D4; --texto: #4A4A4A; 
             --texto_claro: #888888; --turquesa: #5FA8A3; --btn_turquesa: #A2D5D2;
             --verde_balance: #62A871; --verde_btn: #A8DAB5; --rojo_suave: #E38888; 
-            --rojo_btn: #FFB7B2; --naranja: #E67E22; --borde_lineas: #DCD5C6; 
+            --rojo_btn: #FFB7B2; --naranja: #E67E22; --borde_lineas: #DCD5C6;
+            --azul_historial: #2980B9; /* NUEVO COLOR AZUL */
         }
         [data-theme="dark"] {
             --fondo: #121212; --tarjeta: #1E1E1E; --input_bg: #2C2C2C; --texto: #E0E0E0;
             --texto_claro: #A0A0A0; --borde_lineas: #333333; --turquesa: #00acc1;
             --btn_turquesa: #006064; --verde_balance: #66bb6a; --verde_btn: #2e7d32;
             --rojo_suave: #e57373; --rojo_btn: #c62828; --naranja: #ff9800;
+            --azul_historial: #5DADE2;
         }
-        body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: background 0.3s, color 0.3s; }
+        body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: 0.3s; }
         .pantalla { display: none; }
         .activa { display: block !important; }
         .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -27,23 +29,28 @@
         .btn-verde { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); }
         .btn-gris { background: var(--borde_lineas); } 
-        .btn-naranja { background: var(--naranja); color: white; } /* COLOR NARANJA */
+        .btn-naranja { background: var(--naranja); color: white; }
         .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
+        
+        /* AJUSTE BARRA SUPERIOR E ICONO */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 0.9rem; font-weight: bold; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; }
+        .toggle-tema { font-size: 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 100%; }
+
+        /* AJUSTE TEXTO AZUL HISTORIAL */
+        .tarjeta-dia { text-align: left; padding: 12px; border-bottom: 1px solid var(--borde_lineas); color: var(--azul_historial); }
+        .dia-fecha { font-weight: bold; font-size: 1.1rem; color: var(--azul_historial); }
+        .dia-total { font-weight: bold; color: var(--azul_historial); font-size: 1.2rem; }
+        .dia-datos { color: var(--azul_historial); opacity: 0.9; }
+
+        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--borde_lineas); }
         .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; flex: 1; text-align: left; }
         .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         .input-variable { width: 70px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
-        .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
-        .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
-        .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
-        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
-        select { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: bold; }
-        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
-        .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 85px !important; text-align: right !important; }
+        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
-        .monto-texto { font-weight: bold; color: var(--turquesa); }
+        
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
         #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 15vh; align-items: center; text-align: center; }
         #contenedor-avisos { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
@@ -87,7 +94,7 @@
                 <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
                 <option value="REYES">REYES</option>
             </select>
-            <div class="monto-vuelta">$<span id="total-vuelta">0</span></div>
+            <div style="font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0;">$<span id="total-vuelta">0</span></div>
         </div>
         <div class="tarjeta">
             <div class="cuadricula">
@@ -120,7 +127,6 @@
             <div style="color:var(--texto_claro); font-size:0.9rem;">Total Bruto: $<span id="bruto-total">0</span></div>
             <div style="color:var(--rojo_suave); font-size:0.9rem; margin-top: 5px; font-weight: bold;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
             <hr style="border: 0.5px solid var(--borde_lineas); margin: 8px 0;">
-            <div style="color:var(--verde_balance); font-size:1rem; font-weight: bold; text-transform: uppercase;">Total de Cuenta</div>
             <div id="neto-total" style="font-size: 2.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
         </div>
 
@@ -140,8 +146,8 @@
         <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ REPORTE GENERAL WHATSAPP</button>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn btn-naranja" style="font-size: 0.85rem;" onclick="irA('p-hist')">VER HISTORIAL</button>
-            <button class="btn btn-rojo" style="font-size: 0.85rem;" onclick="borrarYGuardarDia()">CERRAR Y GUARDAR</button>
+            <button class="btn btn-naranja" onclick="irA('p-hist')">VER HISTORIAL</button>
+            <button class="btn btn-rojo" onclick="borrarYGuardarDia()">CERRAR Y GUARDAR</button>
         </div>
     </div>
 
@@ -168,8 +174,8 @@
     </div>
 
     <div id="p-hist" class="pantalla">
-        <div class="tarjeta"><h2>Historial de 7 Días</h2></div>
-        <div class="tarjeta" id="contenedor-dias" style="padding: 0;"></div>
+        <div class="tarjeta"><h2>ÚLTIMOS 7 DÍAS</h2></div>
+        <div id="contenedor-dias" class="tarjeta" style="padding: 0;"></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
 
@@ -179,81 +185,46 @@
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
 
         function iniciarApp() { 
-            setTimeout(function() {
-                var s = document.getElementById('splash-screen');
-                s.style.opacity = '0';
-                setTimeout(function() { s.style.display = 'none'; }, 500);
-            }, 2000);
-            if(localStorage.getItem('b_theme') === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('icono-tema').innerText = '☀️';
-            }
+            setTimeout(() => { document.getElementById('splash-screen').style.opacity = '0'; setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 500); }, 2000);
+            if(localStorage.getItem('b_theme') === 'dark') { document.body.setAttribute('data-theme', 'dark'); document.getElementById('icono-tema').innerText = '☀️'; }
             dibujarHistorial(); 
         }
 
-        // VALIDACIÓN: Máximo 2 cifras
-        function v2(input) { if (input.value.length > 2) input.value = input.value.slice(0, 2); }
+        function v2(i) { if(i.value.length > 2) i.value = i.value.slice(0, 2); }
 
         function cambiarTema() {
             var actual = document.body.getAttribute('data-theme');
-            if (actual === 'dark') {
-                document.body.removeAttribute('data-theme');
-                document.getElementById('icono-tema').innerText = '🌙';
-                localStorage.setItem('b_theme', 'light');
-            } else {
-                document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('icono-tema').innerText = '☀️';
-                localStorage.setItem('b_theme', 'dark');
-            }
+            if (actual === 'dark') { document.body.removeAttribute('data-theme'); document.getElementById('icono-tema').innerText = '🌙'; localStorage.setItem('b_theme', 'light'); }
+            else { document.body.setAttribute('data-theme', 'dark'); document.getElementById('icono-tema').innerText = '☀️'; localStorage.setItem('b_theme', 'dark'); }
         }
 
-        function mostrarAviso(texto) {
-            var contenedor = document.getElementById('contenedor-avisos');
-            var aviso = document.createElement('div');
-            aviso.className = 'aviso'; aviso.innerText = texto;
-            contenedor.appendChild(aviso);
-            setTimeout(function() { aviso.style.opacity = '0'; }, 2500);
-            setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
+        function mostrarAviso(t) {
+            var c = document.getElementById('contenedor-avisos'), a = document.createElement('div');
+            a.className = 'aviso'; a.innerText = t; c.appendChild(a);
+            setTimeout(() => a.style.opacity = '0', 2000); setTimeout(() => c.removeChild(a), 2500);
         }
 
         function sumar() {
-            var f = (parseInt(document.getElementById('bol14').value) || 0) * 14 + 
-                    (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
-                    (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
-                    (parseInt(document.getElementById('bol37').value) || 0) * 37;
-            var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
+            var f = (parseInt(document.getElementById('bol14').value) || 0) * 14 + (parseInt(document.getElementById('bol55').value) || 0) * 55 + (parseInt(document.getElementById('bol47').value) || 0) * 47 + (parseInt(document.getElementById('bol37').value) || 0) * 37;
+            var e = 0; listaExtras.forEach(x => e += (x.p * x.c));
             document.getElementById('total-vuelta').innerText = (f + e);
         }
 
         function agregarExtra() {
-            var p = parseFloat(document.getElementById('extra-precio').value) || 0;
-            var c = parseInt(document.getElementById('extra-cantidad').value) || 0;
-            if (p > 0 && c > 0) { 
-                listaExtras.push({p: p, c: c}); sumar(); 
-                mostrarAviso("Extra agregado");
-                document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; 
-            }
+            var p = parseFloat(document.getElementById('extra-precio').value) || 0, c = parseInt(document.getElementById('extra-cantidad').value) || 0;
+            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Extra agregado"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
         }
 
         function agregarCortesia() {
             var n = document.getElementById('nombre-cortesia').value.trim();
-            if (n !== "") { 
-                var nomMayus = n.toUpperCase();
-                listaCortesias.push(nomMayus); 
-                mostrarAviso("Cortesía de " + nomMayus);
-                document.getElementById('nombre-cortesia').value = ""; 
-            }
+            if (n) { listaCortesias.push(n.toUpperCase()); mostrarAviso("Cortesía de " + n); document.getElementById('nombre-cortesia').value = ""; }
         }
 
         function finalizarVuelta() {
-            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
-            var d = document.getElementById('destino').value;
-            var b14 = parseInt(document.getElementById('bol14').value) || 0;
-            var b55 = parseInt(document.getElementById('bol55').value) || 0;
-            var b47 = parseInt(document.getElementById('bol47').value) || 0;
-            var b37 = parseInt(document.getElementById('bol37').value) || 0;
+            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0, d = document.getElementById('destino').value;
+            var b14 = parseInt(document.getElementById('bol14').value) || 0, b55 = parseInt(document.getElementById('bol55').value) || 0, b47 = parseInt(document.getElementById('bol47').value) || 0, b37 = parseInt(document.getElementById('bol37').value) || 0;
             var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
-            listaExtras.forEach(function(e) { tPas += e.c; });
+            listaExtras.forEach(e => tPas += e.c);
             
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             document.getElementById('cierre-dir').innerText = d;
@@ -266,7 +237,7 @@
             
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             listaExtras = []; listaCortesias = []; sumar(); 
-            setTimeout(function() { document.getElementById('pantalla-cierre').style.display = 'none'; irA('p-lib'); }, 2000);
+            setTimeout(() => { document.getElementById('pantalla-cierre').style.display = 'none'; irA('p-lib'); }, 2000);
         }
 
         function actualizarBalance() {
@@ -278,23 +249,20 @@
         }
 
         function reLiq() {
-            var ajuste = 0;
-            if(document.getElementById('c-mut').checked) ajuste += 20;
-            if(document.getElementById('c-seg').checked) ajuste += 20;
-            if(document.getElementById('c-opd').checked) ajuste += 50;
-            if(document.getElementById('c-pen').checked) ajuste += 40;
-            ajuste += (parseFloat(document.getElementById('v-fia').value) || 0) + (parseFloat(document.getElementById('v-bas').value) || 0) + (parseFloat(document.getElementById('v-tag').value) || 0) + (parseFloat(document.getElementById('v-vdi').value) || 0);
-            var restaBoletos = (document.getElementById('c-bol').checked) ? (parseFloat(document.getElementById('v-bol').value) || 0) : 0;
-            document.getElementById('final-entrega').innerText = "$" + (netoRuta + ajuste - restaBoletos);
+            var aj = 0;
+            if(document.getElementById('c-mut').checked) aj += 20;
+            if(document.getElementById('c-seg').checked) aj += 20;
+            if(document.getElementById('c-opd').checked) aj += 50;
+            if(document.getElementById('c-pen').checked) aj += 40;
+            aj += (parseFloat(document.getElementById('v-fia').value) || 0) + (parseFloat(document.getElementById('v-bas').value) || 0) + (parseFloat(document.getElementById('v-tag').value) || 0) + (parseFloat(document.getElementById('v-vdi').value) || 0);
+            var b = (document.getElementById('c-bol').checked) ? (parseFloat(document.getElementById('v-bol').value) || 0) : 0;
+            document.getElementById('final-entrega').innerText = "$" + (netoRuta + aj - b);
         }
 
         function dibujarHistorial() {
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
-            historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pax - $' + v.m + '</span></div>';
-                brutoGlobal += v.m;
-            });
+            historial.forEach(v => { h += `<div class="fila-historial"><span><b>${v.n}ª</b> ${v.d}</span><span class="monto-texto">${v.p} pax - $${v.m}</span></div>`; brutoGlobal += v.m; });
             document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px;'>Sin vueltas</p>";
             document.getElementById('bruto-total').innerText = brutoGlobal;
             actualizarBalance();
@@ -302,7 +270,14 @@
 
         function dibujarHistorialDias() {
             var hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
-            document.getElementById('contenedor-dias').innerHTML = hd.slice().reverse().map(d => `<div class="tarjeta-dia"><div class="dia-fecha">${d.f}</div><div style="display:flex;justify-content:space-between;"><div>${d.pax} Pax | Bruto: $${d.b}</div><div class="dia-total">$${d.n}</div></div></div>`).join('') || "<p style='padding:15px;'>Vacío</p>";
+            document.getElementById('contenedor-dias').innerHTML = hd.slice().reverse().map(d => `
+                <div class="tarjeta-dia">
+                    <div class="dia-fecha">${d.f}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="dia-datos">${d.pax} Pax | Bruto: $${d.b}</div>
+                        <div class="dia-total">$${d.n}</div>
+                    </div>
+                </div>`).join('') || "<p style='padding:15px; color:var(--azul_historial);'>Vacío</p>";
         }
 
         function irA(id) {
@@ -313,14 +288,13 @@
         }
 
         function borrarYGuardarDia() { 
-            if (!historial.length || !confirm("¿Cerrar día?")) return;
+            if (!historial.length || !confirm("¿Cerrar y guardar día?")) return;
             var g = (parseFloat(document.getElementById('g-diesel').value) || 0) + (parseFloat(document.getElementById('g-caseta').value) || 0) + (parseFloat(document.getElementById('g-despachadores').value) || 0) + (parseFloat(document.getElementById('g-pension').value) || 0) + (parseFloat(document.getElementById('g-sueldo').value) || 0);
-            var tPas = 0; historial.forEach(function(v){ tPas += v.p; });
+            var tPas = 0; historial.forEach(v => tPas += v.p);
             var hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             hd.push({ f: new Date().toLocaleDateString('es-MX'), pax: tPas, b: brutoGlobal, g: g, n: (brutoGlobal - g) });
             if (hd.length > 7) hd.shift();
-            var theme = localStorage.getItem('b_theme');
-            localStorage.clear(); 
+            var theme = localStorage.getItem('b_theme'); localStorage.clear(); 
             if (theme) localStorage.setItem('b_theme', theme);
             localStorage.setItem('b_hist_dias', JSON.stringify(hd));
             location.reload(); 
@@ -328,8 +302,8 @@
 
         function enviarWhatsApp() {
             if (historial.length === 0) return alert("Sin datos.");
-            var msj = "*REPORTE DE CUENTA*%0A----------------------------%0A";
-            historial.forEach(function(v) {
+            var msj = "*REPORTE LÍNEA TURQUESA*%0A----------------------------%0A";
+            historial.forEach(v => {
                 msj += "*"+ v.n + "ª " + v.d + "*%0A";
                 if(v.det.b14 > 0) msj += "• " + v.det.b14 + " de $14%0A";
                 if(v.det.b55 > 0) msj += "• " + v.det.b55 + " de $55%0A";
@@ -343,10 +317,9 @@
             window.open("https://wa.me/?text=" + msj, "_blank");
         }
 
-        function enviarWhatsAppLiquidacion() {
-            window.open("https://wa.me/?text=*LIQUIDACIÓN APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
-        }
+        function enviarWhatsAppLiquidacion() { window.open("https://wa.me/?text=*LIQUIDACIÓN FINAL APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank"); }
     </script>
 </body>
 </html>
+
 
