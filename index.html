@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v8.5</title>
+    <title>BusCount BETA - v8.6</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -22,7 +22,7 @@
         .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
         .btn-turquesa { background: var(--turquesa); color: #000; }
         .btn-wa { background: var(--verde_wa); color: #000; }
-        .btn-verde { background: var(--verde_balance); color: #000; } /* NUEVO BOTÓN VERDE */
+        .btn-verde { background: var(--verde_balance); color: #000; }
         .btn-rojo { background: #b71c1c; color: #fff; }
         .btn-gris { background: #333; color: #fff; }
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
@@ -47,16 +47,16 @@
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
 
-        /* SISTEMA DE AVISOS FLOTANTES (TOAST) */
+        /* AVISOS FLOTANTES TOTALMENTE VERDES */
         #contenedor-avisos { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
-        .aviso { background: #222; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); opacity: 1; transition: opacity 0.5s ease; border-left: 4px solid var(--verde_balance); text-align: center; }
+        .aviso { background: var(--verde_balance); color: #000; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); opacity: 1; transition: opacity 0.5s ease; text-align: center; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
     <div id="contenedor-avisos"></div>
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - AVISOS INTELIGENTES v8.5</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - RESET Y AVISOS v8.6</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -158,21 +158,21 @@
 
         function iniciarApp() { dibujarHistorial(); }
 
-        // SISTEMA DE AVISOS (TOASTS)
         function mostrarAviso(texto) {
             var contenedor = document.getElementById('contenedor-avisos');
             var aviso = document.createElement('div');
             aviso.className = 'aviso';
             aviso.innerText = texto;
             contenedor.appendChild(aviso);
-            
-            // Desaparece después de 2.5 segundos
             setTimeout(function() { aviso.style.opacity = '0'; }, 2500);
             setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
         }
 
         function sumar() {
-            var f = (document.getElementById('bol14').value || 0) * 14 + (document.getElementById('bol55').value || 0) * 55 + (document.getElementById('bol47').value || 0) * 47 + (document.getElementById('bol37').value || 0) * 37;
+            var f = (parseInt(document.getElementById('bol14').value) || 0) * 14 + 
+                    (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
+                    (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
+                    (parseInt(document.getElementById('bol37').value) || 0) * 37;
             var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
             document.getElementById('total-vuelta').innerText = (f + e);
         }
@@ -183,10 +183,8 @@
             if (p > 0 && c > 0) { 
                 listaExtras.push({p: p, c: c}); 
                 sumar(); 
-                // AVISO DINÁMICO
                 var msj = c === 1 ? "Se agregó 1 pasajero de $" + p : "Se agregaron " + c + " pasajeros de $" + p;
                 mostrarAviso(msj);
-                
                 document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; 
             }
         }
@@ -196,27 +194,41 @@
             if (n !== "") { 
                 var nomMayus = n.toUpperCase();
                 listaCortesias.push(nomMayus); 
-                // AVISO DINÁMICO
                 mostrarAviso("Se agregó la cortesía " + nomMayus);
-                
                 document.getElementById('nombre-cortesia').value = ""; 
             }
         }
 
         function finalizarVuelta() {
-            var m = parseInt(document.getElementById('total-vuelta').innerText);
+            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
             var d = document.getElementById('destino').value;
-            var tPas = (parseInt(document.getElementById('bol14').value) || 0) + (parseInt(document.getElementById('bol55').value) || 0) + (parseInt(document.getElementById('bol47').value) || 0) + (parseInt(document.getElementById('bol37').value) || 0) + listaCortesias.length;
+            
+            var b14 = parseInt(document.getElementById('bol14').value) || 0;
+            var b55 = parseInt(document.getElementById('bol55').value) || 0;
+            var b47 = parseInt(document.getElementById('bol47').value) || 0;
+            var b37 = parseInt(document.getElementById('bol37').value) || 0;
+            
+            var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
             listaExtras.forEach(function(e) { tPas += e.c; });
             
-            // AVISO ACTUALIZADO: VUELTA VACÍA
-            if (m === 0 && listaCortesias.length === 0 && !confirm("¿Está seguro de cerrar esta vuelta vacía?")) return;
+            // VALIDACIÓN ESTRICTA DE VUELTA VACÍA
+            if (m === 0 && tPas === 0) {
+                if (!confirm("¿Está seguro de cerrar esta vuelta vacía?")) {
+                    return; // Detiene el guardado si eligen cancelar
+                }
+            }
             
-            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: (parseInt(document.getElementById('bol14').value) || 0), b55: (parseInt(document.getElementById('bol55').value) || 0), b47: (parseInt(document.getElementById('bol47').value) || 0), b37: (parseInt(document.getElementById('bol37').value) || 0), ext: [...listaExtras], cor: [...listaCortesias] } });
+            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
+            
+            // RESET TOTAL DE LA PANTALLA DE REGISTRO
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
-            listaExtras = []; listaCortesias = []; irA('p-lib');
+            listaExtras = []; 
+            listaCortesias = []; 
+            sumar(); // Fuerza a que el total-vuelta sea $0
+            
+            irA('p-lib');
         }
 
         function actualizarBalance() {
