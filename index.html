@@ -61,7 +61,8 @@
         .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
         .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
-        .input-variable { width: 70px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; transition: background 0.3s, color 0.3s; }
+        /* CASILLAS ALARGADAS: pasaron de 70px a 100px */
+        .input-variable { width: 100px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; transition: background 0.3s, color 0.3s; }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
@@ -74,7 +75,8 @@
 
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
-        .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 85px !important; text-align: right !important; margin: 0 !important; }
+        /* CASILLAS ALARGADAS: pasaron de 85px a 110px */
+        .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 110px !important; text-align: right !important; margin: 0 !important; }
         
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
@@ -95,7 +97,6 @@
         .dia-datos { font-size: 0.85rem; color: var(--azul_historial); }
         .dia-total { font-size: 1.2rem; font-weight: bold; color: var(--azul_historial); text-align: right; }
         
-        /* Botón chiquito para extras */
         .btn-chico { padding: 6px 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); }
     </style>
 </head>
@@ -140,15 +141,17 @@
         </div>
         
         <div class="tarjeta">
-            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="bol14" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="bol55" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $47</label><input type="number" class="input-variable" id="bol47" oninput="v2(this); sumar()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $42</label><input type="number" class="input-variable" id="bol42" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $37</label><input type="number" class="input-variable" id="bol37" oninput="v2(this); sumar()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="bol35" oninput="v2(this); sumar()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="bol14" oninput="v2(this); sumar()" placeholder="0"></div>
             
             <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 10px; padding-top: 10px;">
                 <label style="color: var(--turquesa); font-size: 0.9rem;">CORTESÍA</label>
                 <div style="display:flex; gap:5px; align-items:center;">
-                    <input type="text" id="nombre-cortesia" placeholder="Nombre" style="width: 100px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
+                    <input type="text" id="nombre-cortesia" placeholder="Nombre" style="width: 120px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
                     <button class="btn-chico" onclick="agregarCortesia()">+</button>
                 </div>
             </div>
@@ -156,8 +159,8 @@
             <div class="opcion-chequeo">
                 <label style="color: var(--turquesa); font-size: 0.9rem;">EXTRA</label>
                 <div style="display:flex; gap:5px; align-items:center;">
-                    <input type="number" id="extra-precio" placeholder="$" style="width: 45px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
-                    <input type="number" id="extra-cantidad" placeholder="#" style="width: 40px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
+                    <input type="number" id="extra-precio" placeholder="$" style="width: 60px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
+                    <input type="number" id="extra-cantidad" placeholder="#" style="width: 50px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
                     <button class="btn-chico" onclick="agregarExtra()">+</button>
                 </div>
             </div>
@@ -210,9 +213,7 @@
         <div class="tarjeta">
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
-            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
-            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
@@ -255,7 +256,6 @@
             dibujarHistorial(); 
         }
 
-        // VALIDACIÓN DE 2 CIFRAS
         function v2(input) { if (input.value.length > 2) input.value = input.value.slice(0, 2); }
 
         function cambiarTema() {
@@ -280,11 +280,14 @@
             setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
         }
 
+        // LÓGICA DE SUMA ACTUALIZADA PARA INCLUIR $42 Y $35
         function sumar() {
-            var f = (parseInt(document.getElementById('bol14').value) || 0) * 14 + 
-                    (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
+            var f = (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
                     (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
-                    (parseInt(document.getElementById('bol37').value) || 0) * 37;
+                    (parseInt(document.getElementById('bol42').value) || 0) * 42 + 
+                    (parseInt(document.getElementById('bol37').value) || 0) * 37 + 
+                    (parseInt(document.getElementById('bol35').value) || 0) * 35 + 
+                    (parseInt(document.getElementById('bol14').value) || 0) * 14;
             var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
             document.getElementById('total-vuelta').innerText = (f + e);
         }
@@ -314,12 +317,14 @@
             var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
             var d = document.getElementById('destino').value;
             
-            var b14 = parseInt(document.getElementById('bol14').value) || 0;
             var b55 = parseInt(document.getElementById('bol55').value) || 0;
             var b47 = parseInt(document.getElementById('bol47').value) || 0;
+            var b42 = parseInt(document.getElementById('bol42').value) || 0;
             var b37 = parseInt(document.getElementById('bol37').value) || 0;
+            var b35 = parseInt(document.getElementById('bol35').value) || 0;
+            var b14 = parseInt(document.getElementById('bol14').value) || 0;
             
-            var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
+            var tPas = b55 + b47 + b42 + b37 + b35 + b14 + listaCortesias.length;
             listaExtras.forEach(function(e) { tPas += e.c; });
             
             if (m === 0 && tPas === 0) {
@@ -331,7 +336,7 @@
             document.getElementById('cierre-monto').innerText = "$" + m;
             document.getElementById('pantalla-cierre').style.display = 'flex';
             
-            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
+            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b55: b55, b47: b47, b42: b42, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
@@ -366,7 +371,6 @@
             var ajuste = 0;
             if(document.getElementById('c-mut').checked) ajuste += 20;
             if(document.getElementById('c-seg').checked) ajuste += 20;
-            // OPERACIÓN DIÉSEL RESTAURADA EN LA LÓGICA DE LIQUIDACIÓN
             if(document.getElementById('c-opd').checked) ajuste += 50;
             if(document.getElementById('c-pen').checked) ajuste += 40;
             
@@ -392,7 +396,7 @@
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
             historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pax - $' + v.m + '</span></div>';
+                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pasajeros - $' + v.m + '</span></div>';
                 brutoGlobal += v.m;
             });
             document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas</p>";
@@ -476,10 +480,14 @@
             
             historial.forEach(function(v) {
                 mensaje += "*"+ v.n + "ª " + v.d + "*%0A";
-                if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
+                // REPORTE WHATSAPP ACTUALIZADO PARA $42 Y $35
                 if(v.det.b55 > 0) mensaje += "• " + v.det.b55 + " de $55%0A";
                 if(v.det.b47 > 0) mensaje += "• " + v.det.b47 + " de $47%0A";
+                if(v.det.b42 && v.det.b42 > 0) mensaje += "• " + v.det.b42 + " de $42%0A";
                 if(v.det.b37 > 0) mensaje += "• " + v.det.b37 + " de $37%0A";
+                if(v.det.b35 && v.det.b35 > 0) mensaje += "• " + v.det.b35 + " de $35%0A";
+                if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
+                
                 if(v.det.ext && v.det.ext.length > 0) {
                     v.det.ext.forEach(function(e) { mensaje += "• " + e.c + " de $" + e.p + " (Extra)%0A"; });
                 }
@@ -521,7 +529,6 @@
             
             if(document.getElementById('c-mut').checked) { ajuste += 20; mensaje += "• Mutualidad: +$20%0A"; }
             if(document.getElementById('c-seg').checked) { ajuste += 20; mensaje += "• Seguridad: +$20%0A"; }
-            // OPERACIÓN DIÉSEL RESTAURADA EN EL MENSAJE DE WHATSAPP
             if(document.getElementById('c-opd').checked) { ajuste += 50; mensaje += "• Operación Diesel: +$50%0A"; }
             if(document.getElementById('c-pen').checked) { ajuste += 40; mensaje += "• Pensión/Cobro: +$40%0A"; }
             
