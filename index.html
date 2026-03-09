@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v7.9</title>
+    <title>BusCount BETA - v7.8</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -26,13 +26,14 @@
         .btn-gris { background: #333; color: #fff; }
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
 
-        /* LISTA DE CONCEPTOS */
+        /* CHECKLIST COMPACTO */
+        .lista-chequeo { text-align: left; }
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; }
-        .opcion-chequeo label { font-size: 0.85rem; font-weight: bold; color: #ccc; flex: 1; text-align: left; }
-        .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
+        .opcion-chequeo label { font-size: 0.85rem; font-weight: bold; color: #ccc; flex: 1; }
+        .check-box { width: 20px; height: 20px; accent-color: var(--turquesa); margin-right: 10px; }
         
-        /* CASILLAS MANUALES DELGADAS */
-        .input-variable { width: 55px; height: 20px; background: #000; border: 1px solid #444; color: var(--turquesa); padding: 2px; border-radius: 4px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        /* CASILLAS MANUALES MÁS CHICAS */
+        .input-variable { width: 60px; background: #000; border: 1px solid #444; color: var(--turquesa); padding: 4px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 1rem; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -50,7 +51,7 @@
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - DISEÑO FINAL v7.9</div>
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - AJUSTE MANUAL v7.8</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -108,7 +109,7 @@
             <div class="gasto-fila"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="actualizarBalance()" placeholder="0"></div>
             <div class="gasto-fila"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="actualizarBalance()" placeholder="0"></div>
             <div class="gasto-fila"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
-            <button class="btn btn-calculo" onclick="irA('p-calc')">CALCULAR EFECTIVO ENTREGAR</button>
+            <button class="btn btn-calculo" onclick="irA('p-calc')">CALCULAR EFECTIVO A ENTREGAR</button>
         </div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
@@ -118,26 +119,24 @@
 
     <div id="p-calc" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--turquesa); margin-bottom:5px; font-size: 1.1rem; text-transform: uppercase;">EFECTIVO ENTREGAR</h2>
+            <h2 style="color:var(--turquesa); margin-bottom:5px; font-size: 1.1rem; text-transform: uppercase;">Liquidación Final</h2>
+            <p style="color: var(--verde_balance); font-size: 0.8rem; font-weight: bold;">A ENTREGAR: <span id="final-entrega" style="font-size: 1.5rem;">$0</span></p>
         </div>
 
-        <div class="tarjeta">
+        <div class="tarjeta lista-chequeo">
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
             
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="$"></div>
+            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="$"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="$"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="$"></div>
         </div>
 
-        <div class="tarjeta">
-            <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
-        </div>
-
-        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL RESUMEN</button>
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR</button>
     </div>
 
     <script>
@@ -190,10 +189,13 @@
             if(document.getElementById('c-seg').checked) descuento += 20;
             if(document.getElementById('c-opd').checked) descuento += 50;
             if(document.getElementById('c-pen').checked) descuento += 40;
+            
+            // MANUALES
             if(document.getElementById('c-fia').checked) descuento += (parseFloat(document.getElementById('v-fia').value) || 0);
             if(document.getElementById('c-bas').checked) descuento += (parseFloat(document.getElementById('v-bas').value) || 0);
             if(document.getElementById('c-tag').checked) descuento += (parseFloat(document.getElementById('v-tag').value) || 0);
             if(document.getElementById('c-vdi').checked) descuento += (parseFloat(document.getElementById('v-vdi').value) || 0);
+            
             document.getElementById('final-entrega').innerText = "$" + (netoRuta - descuento);
         }
 
@@ -226,3 +228,4 @@
     </script>
 </body>
 </html>
+
