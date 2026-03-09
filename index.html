@@ -210,6 +210,9 @@
         <div class="tarjeta">
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
+            
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
+            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
@@ -350,7 +353,6 @@
                     (parseFloat(document.getElementById('g-pension').value) || 0) + 
                     (parseFloat(document.getElementById('g-sueldo').value) || 0);
             
-            // SE AGREGA OPERACIÓN DIESEL A LOS GASTOS
             if(document.getElementById('g-opd').checked) g += 50;
 
             netoRuta = brutoGlobal - g;
@@ -364,6 +366,8 @@
             var ajuste = 0;
             if(document.getElementById('c-mut').checked) ajuste += 20;
             if(document.getElementById('c-seg').checked) ajuste += 20;
+            // OPERACIÓN DIÉSEL RESTAURADA EN LA LÓGICA DE LIQUIDACIÓN
+            if(document.getElementById('c-opd').checked) ajuste += 50;
             if(document.getElementById('c-pen').checked) ajuste += 40;
             
             var fia = parseFloat(document.getElementById('v-fia').value) || 0;
@@ -388,7 +392,7 @@
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
             historial.forEach(function(v) {
-                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pasajeros - $' + v.m + '</span></div>';
+                h += '<div class="fila-historial"><span><b>' + v.n + 'ª</b> ' + v.d + '</span><span class="monto-texto">' + v.p + ' pax - $' + v.m + '</span></div>';
                 brutoGlobal += v.m;
             });
             document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas</p>";
@@ -517,6 +521,8 @@
             
             if(document.getElementById('c-mut').checked) { ajuste += 20; mensaje += "• Mutualidad: +$20%0A"; }
             if(document.getElementById('c-seg').checked) { ajuste += 20; mensaje += "• Seguridad: +$20%0A"; }
+            // OPERACIÓN DIÉSEL RESTAURADA EN EL MENSAJE DE WHATSAPP
+            if(document.getElementById('c-opd').checked) { ajuste += 50; mensaje += "• Operación Diesel: +$50%0A"; }
             if(document.getElementById('c-pen').checked) { ajuste += 40; mensaje += "• Pensión/Cobro: +$40%0A"; }
             
             var fia = parseFloat(document.getElementById('v-fia').value) || 0;
@@ -549,4 +555,3 @@
     </script>
 </body>
 </html>
-
