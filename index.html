@@ -3,84 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - Proyecto Apolo 11</title>
+    <title>Línea Turquesa - Apolo 11 v1.1</title>
     <style>
         :root { 
             --fondo: #F8E9D2; --tarjeta: #EFEBE1; --input_bg: #E6E0D4; --texto: #4A4A4A; 
-            --turquesa: #1ABC9C; --gris_oscuro: #555555; --verde_btn: #A8DAB5; 
-            --rojo_suave: #E38888; --rojo_btn: #FFB7B2; --borde_lineas: #DCD5C6; 
+            --texto_claro: #888888; --turquesa: #1ABC9C; --btn_turquesa: #A2D5D2;
+            --verde_balance: #62A871; --verde_btn: #A8DAB5; --rojo_suave: #E38888; 
+            --rojo_btn: #FFB7B2; --borde_lineas: #DCD5C6; 
         }
+
         [data-theme="dark"] {
             --fondo: #121212; --tarjeta: #1E1E1E; --input_bg: #2C2C2C; --texto: #E0E0E0;
-            --turquesa: #16A085; --borde_lineas: #333333;
+            --texto_claro: #A0A0A0; --turquesa: #16A085; --btn_turquesa: #006064;
+            --verde_balance: #66bb6a; --verde_btn: #2e7d32; --rojo_suave: #e57373;
+            --rojo_btn: #c62828; --borde_lineas: #333333;
         }
+        
         body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: 0.3s; }
         .pantalla { display: none; }
         .activa { display: block !important; }
+        
         .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); }
-        .btn-turquesa { background: var(--turquesa); color: white; }
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: 0.3s; }
+        .btn-turquesa { background: var(--btn_turquesa); }
         .btn-wa { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--turquesa); color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 10px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
+        .btn-gris { background: var(--borde_lineas); } 
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--turquesa); color: white; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; }
+        
+        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--borde_lineas); }
-        .input-variable { width: 70px !important; font-size: 1rem !important; padding: 5px !important; }
+        .input-variable { width: 75px !important; font-size: 1.1rem !important; padding: 5px !important; border-color: var(--rojo_suave) !important; }
+
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; }
+        .luna-svg { fill: var(--turquesa); }
+        .bruja-svg { fill: var(--texto); }
+        
+        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
     <div id="splash-screen">
-        <svg viewBox="0 0 200 120" width="180">
-            <path d="M40 80 Q 100 20 180 60" fill="none" stroke="#1ABC9C" stroke-width="12" stroke-linecap="round"/>
-            <path d="M30 90 Q 90 30 170 70" fill="none" stroke="#555" stroke-width="8" stroke-linecap="round"/>
-            <path d="M50 70 L110 60 M115 62 L55 72 M80 65 Q 90 40 100 62" stroke="#000" stroke-width="4" fill="black"/>
+        <svg viewBox="0 0 100 100" width="130">
+            <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" class="luna-svg"/>
+            <path d="M 25 55 L 85 45 L 87 48 L 27 58 Z" class="bruja-svg"/>
+            <polygon points="45,47 62,20 68,45" class="bruja-svg"/>
+            <circle cx="68" cy="40" r="5" class="bruja-svg"/>
+            <path d="M 50 47 L 75 45 L 68 65 L 55 65 Z" class="bruja-svg"/>
         </svg>
-        <div style="font-size: 1.6rem; font-weight: bold; color: var(--gris_oscuro); margin-top: 10px;">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--gris_oscuro); opacity: 0.6;">PROYECTO APOLO 11 V 1.0</div>
+        <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; color: var(--turquesa); letter-spacing: 2px;">LÍNEA TURQUESA</div>
+        <div style="font-size: 0.8rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 V 1.0</div>
     </div>
 
     <div class="top-bar">
-        <div style="font-weight: bold; letter-spacing: 1px;">LÍNEA TURQUESA</div>
-        <span onclick="cambiarTema()" style="cursor:pointer; font-size: 1.2rem;">🌙</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 100 100" width="22">
+                <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="white"/>
+            </svg>
+            <span style="font-weight: bold;">LÍNEA TURQUESA</span>
+        </div>
+        <span onclick="cambiarTema()" style="cursor:pointer; font-size: 1.4rem;">🌙</span>
     </div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
-            <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0; font-size: 1.2rem;">1ª MEDIA VUELTA</h2>
-            <select id="destino" style="width:100%; padding:10px; margin-top:10px; border-radius:8px;">
-                <option>INDIOS VERDES</option><option>NUEVOS PASEOS</option><option>REYES</option>
+            <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0;">1ª MEDIA VUELTA</h2>
+            <select id="destino" style="width:100%; padding:10px; margin-top:10px; border-radius:8px; font-weight:bold;">
+                <option>INDIOS VERDES</option>
+                <option>NUEVOS PASEOS</option>
+                <option>REYES</option>
             </select>
-            <div id="total-vuelta" style="font-size: 2.5rem; color: var(--turquesa); font-weight: bold; margin: 10px 0;">$0</div>
+            <div id="total-vuelta" style="font-size: 3rem; color: var(--turquesa); font-weight: bold; margin: 10px 0;">$0</div>
         </div>
         <div class="tarjeta">
             <div class="cuadricula">
-                <div><label>$14</label><input type="number" id="bol14" oninput="v2(this); sum();"></div>
-                <div><label>$55</label><input type="number" id="bol55" oninput="v2(this); sum();"></div>
-                <div><label>$47</label><input type="number" id="bol47" oninput="v2(this); sum();"></div>
-                <div><label>$37</label><input type="number" id="bol37" oninput="v2(this); sum();"></div>
+                <div><label style="color:var(--turquesa); font-weight:bold;">$14</label><input type="number" id="bol14" oninput="v2(this); sum();"></div>
+                <div><label style="color:var(--turquesa); font-weight:bold;">$55</label><input type="number" id="bol55" oninput="v2(this); sum();"></div>
+                <div><label style="color:var(--turquesa); font-weight:bold;">$47</label><input type="number" id="bol47" oninput="v2(this); sum();"></div>
+                <div><label style="color:var(--turquesa); font-weight:bold;">$37</label><input type="number" id="bol37" oninput="v2(this); sum();"></div>
             </div>
-            <div style="margin-top:10px; border-top:1px solid var(--borde_lineas); padding-top:10px;">
-                <input type="text" id="n-cor" placeholder="NOMBRE CORTESÍA" style="font-size: 1rem; width: 60%;">
-                <button class="btn btn-turquesa" style="width:30%; padding:8px; margin:0;" onclick="addCor()">+</button>
+            <div style="margin-top:15px; border-top:1px solid var(--borde_lineas); padding-top:10px;">
+                <input type="text" id="n-cor" placeholder="NOMBRE CORTESÍA" style="width:65%; font-size: 1rem;">
+                <button class="btn btn-turquesa" style="width:25%; margin:0; padding:10px;" onclick="addCor()">+</button>
             </div>
         </div>
         <button class="btn btn-turquesa" onclick="finVuelta()">FINALIZAR VUELTA</button>
-        <button class="btn" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
+        <button class="btn btn-gris" onclick="irA('p-lib')">LIBRO DE RUTA</button>
     </div>
 
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
             <h3 style="margin:0;">BALANCE GENERAL</h3>
-            <div id="neto-total" style="font-size: 2.5rem; color: var(--turquesa); font-weight: bold;">$0</div>
-            <div style="font-size:0.8rem; color:var(--rojo_suave);">Gastos: -$<span id="g-total">0</span></div>
+            <div id="neto-total" style="font-size: 2.8rem; color: var(--verde_balance); font-weight: bold;">$0</div>
+            <div style="font-size:0.9rem;">Bruto: $<span id="b-total">0</span> | Gastos: -$<span id="g-total">0</span></div>
         </div>
-        <div id="lista-vueltas" class="tarjeta" style="text-align:left; max-height:150px; overflow-y:auto;"></div>
+        <div id="lista-vueltas" class="tarjeta" style="text-align:left; max-height:120px; overflow-y:auto; padding:5px;"></div>
         <div class="tarjeta">
-            <h4 style="margin:0; color:var(--rojo_suave);">GASTOS</h4>
-            <div class="cuadricula" style="margin-top:10px;">
+            <h4 style="margin:0 0 10px 0; color:var(--rojo_suave);">GASTOS DE RUTA</h4>
+            <div class="cuadricula">
                 <input type="number" id="g-diesel" placeholder="DIESEL" oninput="actBal()">
                 <input type="number" id="g-caseta" placeholder="CASETA" oninput="actBal()">
                 <input type="number" id="g-desp" placeholder="DESP." oninput="actBal()">
@@ -88,16 +111,18 @@
             </div>
         </div>
         <button class="btn btn-turquesa" onclick="irA('p-calc')">CALCULAR LIQUIDACIÓN</button>
-        <button class="btn btn-wa" onclick="enviarWA()">REPORTE GENERAL WA</button>
-        <button class="btn btn-rojo" onclick="cerrarDia()">CERRAR Y GUARDAR DÍA</button>
-        <button class="btn" onclick="irA('p-hist')">HISTORIAL 7 DÍAS</button>
+        <button class="btn btn-wa" onclick="enviarWA()">ENVIAR REPORTE WA</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <button class="btn btn-gris" onclick="irA('p-hist')">HISTORIAL</button>
+            <button class="btn btn-rojo" onclick="cerrarDia()">CERRAR DÍA</button>
+        </div>
         <button class="btn" onclick="irA('p-reg')">VOLVER</button>
     </div>
 
     <div id="p-calc" class="pantalla">
         <div class="tarjeta">
             <h3>EFECTIVO A ENTREGAR</h3>
-            <div id="final-entrega" style="font-size: 3rem; color: var(--turquesa); font-weight: bold;">$0</div>
+            <div id="final-entrega" style="font-size: 3.5rem; color: var(--verde_balance); font-weight: bold;">$0</div>
         </div>
         <div class="tarjeta">
             <div class="opcion-chequeo"><label>MUTUALIDAD ($20)</label><input type="checkbox" id="c-mut" onchange="actLiq()"></div>
@@ -110,22 +135,23 @@
     </div>
 
     <div id="p-hist" class="pantalla">
-        <div class="tarjeta"><h3>HISTORIAL SEMANAL</h3><div id="cont-hist" style="text-align:left;"></div></div>
+        <div class="tarjeta"><h3>ÚLTIMOS 7 DÍAS</h3><div id="cont-hist" style="text-align:left;"></div></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">VOLVER</button>
     </div>
 
     <script>
         let nV = parseInt(localStorage.getItem('ap_nv')) || 1;
         let vueltas = JSON.parse(localStorage.getItem('ap_v')) || [];
-        let cortesias = [];
+        let cortesiasActuales = [];
         let bruto = 0, neto = 0;
 
         function iniciarApp() { 
             setTimeout(() => document.getElementById('splash-screen').style.display='none', 2500);
+            if(localStorage.getItem('ap_theme')==='dark') document.body.setAttribute('data-theme','dark');
             actUI();
         }
 
-        // VALIDACIÓN: Máximo 2 cifras para pasaje
+        // VALIDACIÓN ESTRICTA: Máximo 2 cifras
         function v2(i) { if(i.value.length > 2) i.value = i.value.slice(0,2); }
 
         function sum() {
@@ -135,16 +161,16 @@
 
         function addCor() {
             let n = document.getElementById('n-cor').value.trim();
-            if(n) { cortesias.push(n.toUpperCase()); document.getElementById('n-cor').value = ""; alert("Cortesía anotada"); }
+            if(n) { cortesiasActuales.push(n.toUpperCase()); document.getElementById('n-cor').value = ""; alert("Cortesía de " + n + " agregada"); }
         }
 
         function finVuelta() {
             let m = parseInt(document.getElementById('total-vuelta').innerText.replace('$',''));
             let d = document.getElementById('destino').value;
-            vueltas.push({ n: nV, d: d, m: m, cor: [...cortesias] });
+            vueltas.push({ n: nV, d: d, m: m, cor: [...cortesiasActuales] });
             localStorage.setItem('ap_v', JSON.stringify(vueltas));
             nV++; localStorage.setItem('ap_nv', nV);
-            cortesias = [];
+            cortesiasActuales = [];
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             sum(); actUI(); irA('p-lib');
         }
@@ -153,6 +179,7 @@
             let g = (parseFloat(document.getElementById('g-diesel').value)||0) + (parseFloat(document.getElementById('g-caseta').value)||0) + (parseFloat(document.getElementById('g-desp').value)||0) + (parseFloat(document.getElementById('g-sueldo').value)||0);
             neto = bruto - g;
             document.getElementById('g-total').innerText = g;
+            document.getElementById('b-total').innerText = bruto;
             document.getElementById('neto-total').innerText = "$" + neto;
             actLiq();
         }
@@ -169,15 +196,15 @@
         function actUI() {
             document.getElementById('titulo-vuelta').innerText = nV + "ª MEDIA VUELTA";
             let h = ""; bruto = 0;
-            vueltas.forEach(v => { h += `<div><b>${v.n}ª ${v.d}:</b> $${v.m}</div>`; bruto += v.m; });
-            document.getElementById('lista-vueltas').innerHTML = h || "Sin vueltas";
+            vueltas.forEach(v => { h += `<div class="fila-historial"><b>${v.n}ª ${v.d}</b> <span>$${v.m}</span></div>`; bruto += v.m; });
+            document.getElementById('lista-vueltas').innerHTML = h || "Esperando primera vuelta...";
             actBal();
         }
 
         function cerrarDia() {
-            if(!confirm("¿Cerrar día y guardar historial?")) return;
+            if(!vueltas.length || !confirm("¿Cerrar día y guardar historial?")) return;
             let hd = JSON.parse(localStorage.getItem('ap_hd')) || [];
-            hd.push({ f: new Date().toLocaleDateString(), t: neto });
+            hd.push({ f: new Date().toLocaleDateString(), t: neto, b: bruto });
             if(hd.length > 7) hd.shift();
             localStorage.setItem('ap_hd', JSON.stringify(hd));
             localStorage.removeItem('ap_v'); localStorage.removeItem('ap_nv');
@@ -189,25 +216,28 @@
             document.getElementById(id).classList.add('activa');
             if(id === 'p-hist') {
                 let hd = JSON.parse(localStorage.getItem('ap_hd')) || [];
-                document.getElementById('cont-hist').innerHTML = hd.map(d => `<div>${d.f}: $${d.t}</div>`).join('') || "Vacío";
+                document.getElementById('cont-hist').innerHTML = hd.slice().reverse().map(d => `<div class="fila-historial"><b>${d.f}</b> <span>$${d.t}</span></div>`).join('') || "No hay historial";
             }
         }
 
         function cambiarTema() {
             let b = document.body;
-            b.getAttribute('data-theme') === 'dark' ? b.removeAttribute('data-theme') : b.setAttribute('data-theme', 'dark');
+            if(b.getAttribute('data-theme')==='dark') { b.removeAttribute('data-theme'); localStorage.setItem('ap_theme','light'); }
+            else { b.setAttribute('data-theme','dark'); localStorage.setItem('ap_theme','dark'); }
         }
 
         function enviarWA() {
-            let msj = "*LÍNEA TURQUESA - REPORTE*%0A";
-            vueltas.forEach(v => msj += `*${v.n}ª ${v.d}:* $${v.m}%0A`);
-            msj += `%0A*TOTAL BRUTO:* $${bruto}%0A*NETO:* $${neto}`;
+            let msj = "*PROYECTO APOLO 11 - REPORTE*%0A*LÍNEA TURQUESA*%0A------------------%0A";
+            vueltas.forEach(v => {
+                msj += `*${v.n}ª ${v.d}:* $${v.m}%0A`;
+                if(v.cor.length) msj += `_Cortesías: ${v.cor.join(', ')}_%0A`;
+            });
+            msj += `%0A*TOTAL BRUTO:* $${bruto}%0A*GASTOS:* $${document.getElementById('g-total').innerText}%0A*NETO:* $${neto}`;
             window.open("https://wa.me/?text=" + msj, "_blank");
         }
 
         function enviarWALiq() {
-            let e = document.getElementById('final-entrega').innerText;
-            let msj = `*LIQUIDACIÓN APOLO 11*%0A------------------%0A*EFECTIVO A ENTREGAR: ${e}*`;
+            let msj = `*LIQUIDACIÓN APOLO 11*%0A*LÍNEA TURQUESA*%0A------------------%0A*EFECTIVO A ENTREGAR: ${document.getElementById('final-entrega').innerText}*`;
             window.open("https://wa.me/?text=" + msj, "_blank");
         }
     </script>
