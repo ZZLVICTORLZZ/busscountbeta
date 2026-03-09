@@ -3,53 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v8.7</title>
+    <title>BusCount BETA - v9.0</title>
     <style>
         :root { 
-            --turquesa: #00acc1; 
-            --fondo: #000; 
-            --gris: #1a1a1a; 
-            --verde_wa: #25d366; 
-            --rojo_suave: #e57373; 
-            --verde_balance: #66bb6a;
+            /* PALETA PASTEL Y CHAMPAÑA */
+            --fondo: #F8E9D2;       /* Champaña */
+            --gris: #FFFFFF;        /* Tarjetas Blancas */
+            --texto: #4A4A4A;       /* Gris oscuro para leer bien */
+            --texto_claro: #888888; 
+            
+            --turquesa: #5FA8A3;    /* Turquesa suave para bordes/textos */
+            --btn_turquesa: #A2D5D2;/* Turquesa pastel para botones */
+            
+            --verde_balance: #62A871;/* Verde texto */
+            --verde_btn: #A8DAB5;   /* Verde pastel botones/avisos */
+            
+            --rojo_suave: #E38888;  /* Rojo pastel textos */
+            --rojo_btn: #FFB7B2;    /* Rojo pastel botones */
         }
         
-        body { background: var(--fondo); color: #fff; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
+        body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
         .pantalla { display: none; }
         .activa { display: block !important; }
-        .tarjeta { background: var(--gris); padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px; }
         
-        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
-        .btn-turquesa { background: var(--turquesa); color: #000; }
-        .btn-wa { background: var(--verde_wa); color: #000; }
-        .btn-verde { background: var(--verde_balance); color: #000; }
-        .btn-rojo { background: #b71c1c; color: #fff; }
-        .btn-gris { background: #333; color: #fff; }
+        .tarjeta { background: var(--gris); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); }
+        .btn-turquesa { background: var(--btn_turquesa); }
+        .btn-wa { background: var(--verde_btn); }
+        .btn-verde { background: var(--verde_btn); }
+        .btn-rojo { background: var(--rojo_btn); }
+        .btn-gris { background: #E0E0E0; }
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
 
-        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; }
-        .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: #ccc; flex: 1; text-align: left; }
+        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #EEEEEE; }
+        .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
         .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
-        .input-variable { width: 70px !important; background: #000; border: 1px solid var(--turquesa); color: var(--turquesa); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
+        .input-variable { width: 70px !important; background: #FAFAFA; border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
         
-        input[type="number"], input[type="text"] { background: #000; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
+        input[type="number"], input[type="text"] { background: #FAFAFA; color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
-        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 4px; }
+        select { background: #FAFAFA; color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: bold; }
+
+        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #EEEEEE; padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 85px !important; text-align: right !important; margin: 0 !important; }
         
-        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; font-size: 0.9rem; align-items: center; }
+        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #EEEEEE; font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
 
         /* AVISOS FLOTANTES */
         #contenedor-avisos { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
-        .aviso { background: var(--verde_balance); color: #000; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); opacity: 1; transition: opacity 0.5s ease; text-align: center; }
+        .aviso { background: var(--verde_btn); color: var(--texto); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 1; transition: opacity 0.5s ease; text-align: center; border: 1px solid #84C89A; }
 
         /* PANTALLA DE TRANSICIÓN GIGANTE */
         #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
@@ -60,18 +71,18 @@
     <div id="pantalla-cierre">
         <div style="color: var(--rojo_suave); font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; margin-bottom: 10px;">CIERRE</div>
         <div id="cierre-vuelta" style="color: var(--turquesa); font-size: 2.5rem; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;"></div>
-        <div id="cierre-dir" style="color: #ccc; font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 30px; text-transform: uppercase;"></div>
+        <div id="cierre-dir" style="color: var(--texto_claro); font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 30px; text-transform: uppercase;"></div>
         <div id="cierre-monto" style="color: var(--verde_balance); font-size: 5rem; font-weight: bold;"></div>
     </div>
 
     <div id="contenedor-avisos"></div>
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - TRANSICIÓN GIGANTE v8.7</div>
+    <div style="background: var(--btn_turquesa); color: var(--texto); font-size: 0.75rem; font-weight: bold; padding: 4px; border-radius: 5px; margin-bottom: 10px;">MODO BETA - TONOS PASTEL v9.0</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
             <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0; font-size: 1.3rem;">1ª MEDIA VUELTA</h2>
-            <select id="destino" style="background: #222; color: var(--turquesa); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px;">
+            <select id="destino">
                 <option value="INDIOS VERDES">INDIOS VERDES</option>
                 <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
                 <option value="REYES">REYES</option>
@@ -85,12 +96,12 @@
                 <div><label>$47</label><input type="number" id="bol47" oninput="sumar()"></div>
                 <div><label>$37</label><input type="number" id="bol37" oninput="sumar()"></div>
             </div>
-            <div style="margin-top:10px; border-top: 1px solid #444; padding-top:10px;">
+            <div style="margin-top:10px; border-top: 1px solid #EEE; padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">CORTESÍAS</label>
                 <input type="text" id="nombre-cortesia" placeholder="NOMBRE" style="width: 80%; font-size: 1.2rem; margin-top: 5px;">
                 <button class="btn btn-verde" style="padding: 10px;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
-            <div style="margin-top:10px; border-top: 1px solid #333; padding-top:10px;">
+            <div style="margin-top:10px; border-top: 1px solid #EEE; padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">EXTRA</label>
                 <div class="cuadricula" style="margin-top:5px;">
                     <input type="number" id="extra-precio" placeholder="$">
@@ -106,9 +117,9 @@
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
             <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen</h2>
-            <div style="color:#aaa; font-size:0.9rem;">Total Bruto: $<span id="bruto-total">0</span></div>
-            <div style="color:var(--rojo_suave); font-size:0.9rem; margin-top: 5px;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
-            <hr style="border: 0.5px solid #333; margin: 8px 0;">
+            <div style="color:var(--texto_claro); font-size:0.9rem;">Total Bruto: $<span id="bruto-total">0</span></div>
+            <div style="color:var(--rojo_suave); font-size:0.9rem; margin-top: 5px; font-weight: bold;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
+            <hr style="border: 0.5px solid #EEE; margin: 8px 0;">
             <div style="color:var(--verde_balance); font-size:1rem; font-weight: bold; text-transform: uppercase;">Total de Cuenta</div>
             <div id="neto-total" style="font-size: 2.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
         </div>
@@ -146,7 +157,7 @@
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
             
-            <div class="opcion-chequeo" style="border-top: 1px solid #444; margin-top: 5px; padding-top: 5px;">
+            <div class="opcion-chequeo" style="border-top: 1px solid #EEE; margin-top: 5px; padding-top: 5px;">
                 <input type="checkbox" class="check-box" id="c-bol" onchange="recalcularLiquidacion()">
                 <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label>
                 <input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
@@ -225,30 +236,26 @@
                 if (!confirm("¿Está seguro de cerrar esta vuelta vacía?")) return;
             }
 
-            // LLENAR Y MOSTRAR LA PANTALLA GIGANTE ANTES DE INCREMENTAR LA VUELTA
+            // PANTALLA DE TRANSICIÓN
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             document.getElementById('cierre-dir').innerText = d;
             document.getElementById('cierre-monto').innerText = "$" + m;
-
-            // MOSTRAR PANTALLA DE CIERRE
             document.getElementById('pantalla-cierre').style.display = 'flex';
             
-            // GUARDAR DATOS EN MEMORIA
             historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
-            // RESETEAR CASILLAS PARA LA SIGUIENTE
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             listaExtras = []; 
             listaCortesias = []; 
             sumar(); 
 
-            // ESPERAR 3 SEGUNDOS Y LUEGO IR AL LIBRO DE RUTA
+            // REDUCIDO A 2 SEGUNDOS
             setTimeout(function() {
                 document.getElementById('pantalla-cierre').style.display = 'none';
                 irA('p-lib');
-            }, 3000);
+            }, 2000);
         }
 
         function actualizarBalance() {
