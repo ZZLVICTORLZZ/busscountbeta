@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.0</title>
+    <title>Línea Turquesa - v1.1</title>
     <style>
         :root { 
             /* MODO CLARO */
@@ -100,7 +100,6 @@
         .btn-basura { background: transparent; border: none; color: var(--rojo_suave); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s; }
         .btn-basura:active { background: rgba(227, 136, 136, 0.2); }
 
-        /* ESTILOS PARA EL DESGLOSE DE DETALLES */
         .fila-desglose { display: flex; justify-content: space-between; border-bottom: 1px solid var(--borde_lineas); padding: 6px 0; font-size: 1.05rem; }
         .val-desglose { color: var(--turquesa); font-weight: bold; }
     </style>
@@ -112,7 +111,7 @@
             <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.0</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.1</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -120,7 +119,6 @@
         <div id="cierre-vuelta" style="color: var(--turquesa); font-size: 2.2rem; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;"></div>
         <div id="cierre-dir" style="color: var(--texto_claro); font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase;"></div>
         <div id="cierre-monto" style="color: var(--verde_balance); font-size: 4.5rem; font-weight: bold;"></div>
-        
         <div style="width: 85%; max-width: 350px; margin-top: 20px; background: var(--tarjeta); padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
             <div style="color:var(--turquesa); font-weight:bold; margin-bottom: 10px; font-size: 1.1rem; border-bottom: 2px solid var(--turquesa); padding-bottom: 5px;">DESGLOSE DE VUELTA</div>
             <div id="cierre-desglose" style="color: var(--texto); font-size: 1.1rem; text-align: left;"></div>
@@ -203,7 +201,21 @@
             <div class="gasto-fila"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="actualizarBalance()" placeholder="0"></div>
             <div class="gasto-fila"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="actualizarBalance()" placeholder="0"></div>
             <div class="gasto-fila"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
-            <button class="btn btn-calculo" onclick="irA('p-calc')">CALCULAR EFECTIVO ENTREGAR</button>
+            
+            <div class="gasto-fila" style="border-top: 1px dashed var(--borde_lineas); padding-top: 8px; margin-top: 8px;">
+                <label style="color: var(--naranja);">EJEMPLO 1 (Bono)</label>
+                <input type="checkbox" class="check-box" id="g-inc1" onchange="actualizarBalance()">
+            </div>
+            <div class="gasto-fila">
+                <label style="color: var(--naranja);">EJEMPLO 2 (Bono)</label>
+                <input type="checkbox" class="check-box" id="g-inc2" onchange="actualizarBalance()">
+            </div>
+            <div class="gasto-fila">
+                <label style="color: var(--naranja);">EJEMPLO 3 (Bono)</label>
+                <input type="checkbox" class="check-box" id="g-inc3" onchange="actualizarBalance()">
+            </div>
+
+            <button class="btn btn-calculo" style="margin-top: 15px;" onclick="irA('p-calc')">CALCULAR EFECTIVO ENTREGAR</button>
         </div>
         
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
@@ -221,16 +233,18 @@
             <div style="margin-top: 5px; font-weight: bold; color: var(--texto); font-size: 1.1rem;">CUENTA: $<span id="cuenta-base">0</span></div>
         </div>
         <div class="tarjeta">
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" checked disabled><label>MUTUALIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" checked disabled><label>SEGURIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            
+            <div class="opcion-chequeo"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            
             <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 5px; padding-top: 5px;">
-                <input type="checkbox" class="check-box" id="c-bol" onchange="recalcularLiquidacion()"><label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
+                <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
             </div>
         </div>
         <div class="tarjeta">
@@ -243,9 +257,7 @@
 
     <div id="p-hist" class="pantalla">
         <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Historial de 7 Días</h2></div>
-        
         <button class="btn btn-rojo" style="margin-bottom: 10px;" onclick="borrarTodoHistorial()">BORRAR TODO EL HISTORIAL</button>
-        
         <div id="contenedor-dias" style="padding: 0;"></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
@@ -254,8 +266,7 @@
         <div class="tarjeta">
             <h2 id="det-titulo" style="color:var(--turquesa); margin:0; font-size: 1.5rem; text-transform: uppercase;">Detalle</h2>
             <div id="det-subtitulo" style="color:var(--texto_claro); font-size:1rem; margin-top:5px; margin-bottom: 15px; font-weight:bold;"></div>
-            <div id="det-contenido" style="font-size: 1.1rem; text-align: left; color: var(--texto);">
-                </div>
+            <div id="det-contenido" style="font-size: 1.1rem; text-align: left; color: var(--texto);"></div>
         </div>
         <button class="btn btn-turquesa" onclick="volverDeDetalle()">REGRESAR</button>
     </div>
@@ -264,7 +275,7 @@
         var nVuelta = parseInt(localStorage.getItem('b_nv')) || 1;
         var historial = JSON.parse(localStorage.getItem('b_hist')) || [];
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
-        var pantallaAnterior = 'p-lib'; // Para saber a dónde volver desde la lupa
+        var pantallaAnterior = 'p-lib';
 
         function iniciarApp() { 
             setTimeout(function() {
@@ -336,7 +347,6 @@
             }
         }
 
-        // GENERADOR DE HTML BONITO PARA DESGLOSES (PANTALLA CIERRE Y LUPITA)
         function generarHTMLDesglose(det) {
             if (!det) return "<i>Sin detalle</i>";
             var html = "";
@@ -360,6 +370,21 @@
                 });
             }
             return html || "<div style='text-align:center;'>Vuelta Vacía</div>";
+        }
+
+        // LÓGICA DE AUTO-SUGERENCIA DE GASTOS
+        function calcularGastosSugeridos() {
+            if (historial.length === 0) return;
+            var cantVueltas = historial.length;
+            var bonos = 0;
+            historial.forEach(function(v) {
+                if (v.m >= 800) bonos++; 
+            });
+            
+            // Sugerencias (el chofer puede cambiarlas si quiere)
+            document.getElementById('g-despachadores').value = cantVueltas * 30;
+            document.getElementById('g-pension').value = 40;
+            document.getElementById('g-sueldo').value = (cantVueltas * 75) + (bonos * 150);
         }
 
         function finalizarVuelta() {
@@ -392,6 +417,9 @@
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
+            // Auto calcular gastos de ruta después de cada vuelta
+            calcularGastosSugeridos();
+
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             listaExtras = []; 
             listaCortesias = []; 
@@ -400,7 +428,7 @@
             setTimeout(function() {
                 document.getElementById('pantalla-cierre').style.display = 'none';
                 irA('p-lib');
-            }, 3500); // 3.5 Segundos para que alcancen a leer el desglose
+            }, 3500); 
         }
 
         function actualizarBalance() {
@@ -411,6 +439,11 @@
                     (parseFloat(document.getElementById('g-sueldo').value) || 0);
             
             if(document.getElementById('g-opd').checked) g += 50;
+            
+            // LOS 3 INCENTIVOS DE PRUEBA (Valen 50 temporalmente)
+            if(document.getElementById('g-inc1').checked) g += 50;
+            if(document.getElementById('g-inc2').checked) g += 50;
+            if(document.getElementById('g-inc3').checked) g += 50;
 
             netoRuta = brutoGlobal - g;
             document.getElementById('gastos-etiqueta').innerText = g;
@@ -419,32 +452,24 @@
             recalcularLiquidacion();
         }
 
+        // LÓGICA DE COBRO LIBRE AUTOMÁTICA (Sin Checkboxes)
         function recalcularLiquidacion() {
-            var ajuste = 0;
-            if(document.getElementById('c-mut').checked) ajuste += 20;
-            if(document.getElementById('c-seg').checked) ajuste += 20;
+            var ajuste = 20 + 20; // Mutualidad y Seguridad (Fijos)
+            
             if(document.getElementById('c-opd').checked) ajuste += 50;
             if(document.getElementById('c-pen').checked) ajuste += 40;
             
-            var fia = parseFloat(document.getElementById('v-fia').value) || 0;
-            if(document.getElementById('c-fia').checked) ajuste += fia;
+            // Automáticamente lee lo que escriban sin necesidad de palomita
+            ajuste += parseFloat(document.getElementById('v-fia').value) || 0;
+            ajuste += parseFloat(document.getElementById('v-bas').value) || 0;
+            ajuste += parseFloat(document.getElementById('v-tag').value) || 0;
+            ajuste += parseFloat(document.getElementById('v-vdi').value) || 0;
             
-            var bas = parseFloat(document.getElementById('v-bas').value) || 0;
-            if(document.getElementById('c-bas').checked) ajuste += bas;
-            
-            var tag = parseFloat(document.getElementById('v-tag').value) || 0;
-            if(document.getElementById('c-tag').checked) ajuste += tag;
-            
-            var vdi = parseFloat(document.getElementById('v-vdi').value) || 0;
-            if(document.getElementById('c-vdi').checked) ajuste += vdi;
-            
-            var restaBoletos = 0;
-            if(document.getElementById('c-bol').checked) restaBoletos = (parseFloat(document.getElementById('v-bol').value) || 0);
+            var restaBoletos = parseFloat(document.getElementById('v-bol').value) || 0;
             
             document.getElementById('final-entrega').innerText = "$" + (netoRuta + ajuste - restaBoletos);
         }
 
-        // LÓGICA DE LA PANTALLA DE DETALLE (LUPITA)
         function abrirDetalle(tipo, index) {
             var html = "";
             var titulo = "";
@@ -494,7 +519,6 @@
                 h += '<span><b>' + v.n + 'ª</b> ' + v.d + '</span>';
                 h += '<div style="display:flex; align-items:center; gap:10px;">';
                 h += '<span class="monto-texto">' + v.p + ' Pax - $' + v.m + '</span>';
-                // ICONO DE LUPA (VERDE Y MÁS GRUESA)
                 h += '<span onclick="abrirDetalle(\'vuelta\', ' + index + ')" style="cursor:pointer; padding:6px; margin-left:5px;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
                 h += '</div></div></div>';
                 brutoGlobal += v.m;
@@ -516,10 +540,8 @@
                     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">';
                     html += '<div class="dia-fecha" style="display:flex; align-items:center; color:var(--azul_historial);">';
                     html += d.f;
-                    // LUPA DEL HISTORIAL (VERDE Y GRUESA)
                     html += '<span onclick="abrirDetalle(\'dia\', ' + i + ')" style="cursor:pointer; padding:6px; margin-left:12px;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
                     html += '</div>';
-                    // BOTE DE BASURA ROJO
                     html += '<button class="btn-basura" onclick="borrarDiaIndividual(' + i + ')"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>';
                     html += '</div>';
                     
@@ -571,6 +593,9 @@
                         (parseFloat(document.getElementById('g-pension').value) || 0) + 
                         (parseFloat(document.getElementById('g-sueldo').value) || 0);
                 if(document.getElementById('g-opd').checked) g += 50;
+                if(document.getElementById('g-inc1').checked) g += 50;
+                if(document.getElementById('g-inc2').checked) g += 50;
+                if(document.getElementById('g-inc3').checked) g += 50;
 
                 var totalCuenta = brutoGlobal - g;
                 var tPas = 0;
@@ -603,7 +628,11 @@
             var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0;
             var d_opd = document.getElementById('g-opd').checked ? 50 : 0;
             
-            var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue + d_opd;
+            var i1 = document.getElementById('g-inc1').checked ? 50 : 0;
+            var i2 = document.getElementById('g-inc2').checked ? 50 : 0;
+            var i3 = document.getElementById('g-inc3').checked ? 50 : 0;
+            
+            var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue + d_opd + i1 + i2 + i3;
 
             var mensaje = "*REPORTE DE CUENTA COMPLETO*%0A";
             mensaje += "----------------------------%0A";
@@ -635,6 +664,9 @@
                 if(d_desp > 0) mensaje += "• Despachadores: $" + d_desp + "%0A";
                 if(d_pen > 0) mensaje += "• Pensión: $" + d_pen + "%0A";
                 if(d_sue > 0) mensaje += "• Sueldo: $" + d_sue + "%0A";
+                if(i1 > 0) mensaje += "• Ejemplo 1: $" + i1 + "%0A";
+                if(i2 > 0) mensaje += "• Ejemplo 2: $" + i2 + "%0A";
+                if(i3 > 0) mensaje += "• Ejemplo 3: $" + i3 + "%0A";
             }
             
             var totalCuenta = brutoGlobal - totalGastos;
@@ -650,35 +682,33 @@
         }
 
         function enviarWhatsAppLiquidacion() {
-            var ajuste = 0;
+            var ajuste = 20 + 20; // Mut y Seg fijos
             var mensaje = "*BALANCE DE EFECTIVO*%0A";
             mensaje += "----------------------------%0A";
             mensaje += "Cuenta: *$" + netoRuta + "*%0A";
             mensaje += "----------------------------%0A";
             
-            if(document.getElementById('c-mut').checked) { ajuste += 20; mensaje += "• Mutualidad: +$20%0A"; }
-            if(document.getElementById('c-seg').checked) { ajuste += 20; mensaje += "• Seguridad: +$20%0A"; }
+            mensaje += "• Mutualidad: +$20%0A";
+            mensaje += "• Seguridad: +$20%0A"; 
             if(document.getElementById('c-opd').checked) { ajuste += 50; mensaje += "• Operación Diesel: +$50%0A"; }
             if(document.getElementById('c-pen').checked) { ajuste += 40; mensaje += "• Pensión/Cobro: +$40%0A"; }
             
             var fia = parseFloat(document.getElementById('v-fia').value) || 0;
-            if(document.getElementById('c-fia').checked && fia > 0) { ajuste += fia; mensaje += "• Fianza: +$" + fia + "%0A"; }
+            if(fia > 0) { ajuste += fia; mensaje += "• Fianza: +$" + fia + "%0A"; }
             
             var bas = parseFloat(document.getElementById('v-bas').value) || 0;
-            if(document.getElementById('c-bas').checked && bas > 0) { ajuste += bas; mensaje += "• Bases: +$" + bas + "%0A"; }
+            if(bas > 0) { ajuste += bas; mensaje += "• Bases: +$" + bas + "%0A"; }
             
             var tag = parseFloat(document.getElementById('v-tag').value) || 0;
-            if(document.getElementById('c-tag').checked && tag > 0) { ajuste += tag; mensaje += "• TAG: +$" + tag + "%0A"; }
+            if(tag > 0) { ajuste += tag; mensaje += "• TAG: +$" + tag + "%0A"; }
             
             var vdi = parseFloat(document.getElementById('v-vdi').value) || 0;
-            if(document.getElementById('c-vdi').checked && vdi > 0) { ajuste += vdi; mensaje += "• Vale Diesel: +$" + vdi + "%0A"; }
+            if(vdi > 0) { ajuste += vdi; mensaje += "• Vale Diesel: +$" + vdi + "%0A"; }
             
-            var restaBoletos = 0;
-            var bol = parseFloat(document.getElementById('v-bol').value) || 0;
-            if(document.getElementById('c-bol').checked && bol > 0) { 
-                restaBoletos = bol; 
+            var restaBoletos = parseFloat(document.getElementById('v-bol').value) || 0;
+            if(restaBoletos > 0) { 
                 mensaje += "----------------------------%0A";
-                mensaje += "• Boletos entregados: -$" + bol + "%0A"; 
+                mensaje += "• Boletos entregados: -$" + restaBoletos + "%0A"; 
             }
             
             var entregar = netoRuta + ajuste - restaBoletos;
