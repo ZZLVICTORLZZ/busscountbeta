@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.1</title>
+    <title>Línea Turquesa - v1.2</title>
     <style>
         :root { 
             /* MODO CLARO */
@@ -111,7 +111,7 @@
             <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.1</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.2</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -156,21 +156,27 @@
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="bol35" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="bol14" oninput="v2(this); sumar()" placeholder="0"></div>
             
-            <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 10px; padding-top: 10px;">
-                <label style="color: var(--turquesa); font-size: 0.9rem;">CORTESÍA</label>
-                <div style="display:flex; gap:5px; align-items:center;">
-                    <input type="text" id="nombre-cortesia" placeholder="Nombre" style="width: 120px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
-                    <button class="btn-chico" onclick="agregarCortesia()">+</button>
+            <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 10px; padding-top: 10px; display: block;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label style="color: var(--turquesa); font-size: 0.9rem;">CORTESÍA</label>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <input type="text" id="nombre-cortesia" placeholder="Nombre" style="width: 120px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
+                        <button class="btn-chico" onclick="agregarCortesia()">+</button>
+                    </div>
                 </div>
+                <div id="lista-cortesias-visual" style="text-align: right; margin-top: 5px; color: var(--texto_claro); font-size: 0.85rem; font-style: italic;"></div>
             </div>
             
-            <div class="opcion-chequeo">
-                <label style="color: var(--turquesa); font-size: 0.9rem;">EXTRA</label>
-                <div style="display:flex; gap:5px; align-items:center;">
-                    <input type="number" id="extra-precio" placeholder="$ Monto" style="width: 80px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
-                    <input type="number" id="extra-cantidad" placeholder="# Cant" style="width: 70px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
-                    <button class="btn-chico" onclick="agregarExtra()">+</button>
+            <div class="opcion-chequeo" style="display: block;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label style="color: var(--turquesa); font-size: 0.9rem;">EXTRA</label>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <input type="number" id="extra-precio" placeholder="$ Monto" style="width: 80px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
+                        <input type="number" id="extra-cantidad" placeholder="# Cant" oninput="v2(this);" style="width: 70px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
+                        <button class="btn-chico" onclick="agregarExtra()">+</button>
+                    </div>
                 </div>
+                <div id="lista-extras-visual" style="text-align: right; margin-top: 5px; color: var(--texto_claro); font-size: 0.85rem; font-style: italic;"></div>
             </div>
         </div>
         
@@ -204,15 +210,15 @@
             
             <div class="gasto-fila" style="border-top: 1px dashed var(--borde_lineas); padding-top: 8px; margin-top: 8px;">
                 <label style="color: var(--naranja);">EJEMPLO 1 (Bono)</label>
-                <input type="checkbox" class="check-box" id="g-inc1" onchange="actualizarBalance()">
+                <input type="checkbox" class="check-box" id="g-inc1" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
             <div class="gasto-fila">
                 <label style="color: var(--naranja);">EJEMPLO 2 (Bono)</label>
-                <input type="checkbox" class="check-box" id="g-inc2" onchange="actualizarBalance()">
+                <input type="checkbox" class="check-box" id="g-inc2" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
             <div class="gasto-fila">
                 <label style="color: var(--naranja);">EJEMPLO 3 (Bono)</label>
-                <input type="checkbox" class="check-box" id="g-inc3" onchange="actualizarBalance()">
+                <input type="checkbox" class="check-box" id="g-inc3" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
 
             <button class="btn btn-calculo" style="margin-top: 15px;" onclick="irA('p-calc')">CALCULAR EFECTIVO ENTREGAR</button>
@@ -235,6 +241,7 @@
         <div class="tarjeta">
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" checked disabled><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" checked disabled><label>SEGURIDAD ($20)</label></div>
+            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
             
@@ -333,6 +340,10 @@
                 listaExtras.push({p: p, c: c}); sumar(); 
                 var msj = c === 1 ? "Se agregó 1 pasajero de $" + p : "Se agregaron " + c + " pasajeros de $" + p;
                 mostrarAviso(msj);
+                
+                // FEEDBACK VISUAL MINIMALISTA
+                document.getElementById('lista-extras-visual').innerHTML += "<div>+ " + c + " extra(s) de $" + p + "</div>";
+                
                 document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; 
             }
         }
@@ -343,6 +354,10 @@
                 var nomMayus = n.toUpperCase();
                 listaCortesias.push(nomMayus); 
                 mostrarAviso("Se agregó la cortesía " + nomMayus);
+                
+                // FEEDBACK VISUAL MINIMALISTA
+                document.getElementById('lista-cortesias-visual').innerHTML += "<div>+ " + nomMayus + "</div>";
+                
                 document.getElementById('nombre-cortesia').value = ""; 
             }
         }
@@ -372,19 +387,34 @@
             return html || "<div style='text-align:center;'>Vuelta Vacía</div>";
         }
 
-        // LÓGICA DE AUTO-SUGERENCIA DE GASTOS
+        // LÓGICA DE AUTO-SUGERENCIA DE GASTOS Y BONO $150
         function calcularGastosSugeridos() {
             if (historial.length === 0) return;
             var cantVueltas = historial.length;
-            var bonos = 0;
-            historial.forEach(function(v) {
-                if (v.m >= 800) bonos++; 
-            });
             
-            // Sugerencias (el chofer puede cambiarlas si quiere)
+            // Verificar si TODAS las vueltas registradas generaron 800 o más
+            var todasMayores = true;
+            historial.forEach(function(v) { if (v.m < 800) todasMayores = false; });
+            var bono = (todasMayores) ? 150 : 0; // Un solo bono general
+
+            var i1 = document.getElementById('g-inc1').checked ? 50 : 0;
+            var i2 = document.getElementById('g-inc2').checked ? 50 : 0;
+            var i3 = document.getElementById('g-inc3').checked ? 50 : 0;
+
             document.getElementById('g-despachadores').value = cantVueltas * 30;
             document.getElementById('g-pension').value = 40;
-            document.getElementById('g-sueldo').value = (cantVueltas * 75) + (bonos * 150);
+            
+            // Sueldo base + bono 150 + incentivos activos
+            document.getElementById('g-sueldo').value = (cantVueltas * 75) + bono + i1 + i2 + i3;
+            actualizarBalance();
+        }
+
+        // SUMA DIRECTA DE INCENTIVOS A LA CASILLA DE SUELDO
+        function sumarIncentivoAlSueldo(cb, monto) {
+            var sInput = document.getElementById('g-sueldo');
+            var valActual = parseFloat(sInput.value) || 0;
+            sInput.value = cb.checked ? (valActual + monto) : Math.max(0, valActual - monto);
+            actualizarBalance();
         }
 
         function finalizarVuelta() {
@@ -417,10 +447,14 @@
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
-            // Auto calcular gastos de ruta después de cada vuelta
+            // Auto calcular gastos y bonos después de la vuelta
             calcularGastosSugeridos();
 
+            // Limpiar inputs y listas visuales
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
+            document.getElementById('lista-cortesias-visual').innerHTML = "";
+            document.getElementById('lista-extras-visual').innerHTML = "";
+            
             listaExtras = []; 
             listaCortesias = []; 
             sumar(); 
@@ -436,14 +470,9 @@
                     (parseFloat(document.getElementById('g-caseta').value) || 0) + 
                     (parseFloat(document.getElementById('g-despachadores').value) || 0) + 
                     (parseFloat(document.getElementById('g-pension').value) || 0) + 
-                    (parseFloat(document.getElementById('g-sueldo').value) || 0);
+                    (parseFloat(document.getElementById('g-sueldo').value) || 0); // Los incentivos ya están absorbidos aquí
             
             if(document.getElementById('g-opd').checked) g += 50;
-            
-            // LOS 3 INCENTIVOS DE PRUEBA (Valen 50 temporalmente)
-            if(document.getElementById('g-inc1').checked) g += 50;
-            if(document.getElementById('g-inc2').checked) g += 50;
-            if(document.getElementById('g-inc3').checked) g += 50;
 
             netoRuta = brutoGlobal - g;
             document.getElementById('gastos-etiqueta').innerText = g;
@@ -592,10 +621,8 @@
                         (parseFloat(document.getElementById('g-despachadores').value) || 0) + 
                         (parseFloat(document.getElementById('g-pension').value) || 0) + 
                         (parseFloat(document.getElementById('g-sueldo').value) || 0);
+                
                 if(document.getElementById('g-opd').checked) g += 50;
-                if(document.getElementById('g-inc1').checked) g += 50;
-                if(document.getElementById('g-inc2').checked) g += 50;
-                if(document.getElementById('g-inc3').checked) g += 50;
 
                 var totalCuenta = brutoGlobal - g;
                 var tPas = 0;
@@ -625,14 +652,10 @@
             var d_caseta = parseFloat(document.getElementById('g-caseta').value) || 0;
             var d_desp = parseFloat(document.getElementById('g-despachadores').value) || 0;
             var d_pen = parseFloat(document.getElementById('g-pension').value) || 0;
-            var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0;
+            var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0; // Ya incluye incentivos si se marcaron
             var d_opd = document.getElementById('g-opd').checked ? 50 : 0;
             
-            var i1 = document.getElementById('g-inc1').checked ? 50 : 0;
-            var i2 = document.getElementById('g-inc2').checked ? 50 : 0;
-            var i3 = document.getElementById('g-inc3').checked ? 50 : 0;
-            
-            var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue + d_opd + i1 + i2 + i3;
+            var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue + d_opd;
 
             var mensaje = "*REPORTE DE CUENTA COMPLETO*%0A";
             mensaje += "----------------------------%0A";
@@ -663,10 +686,7 @@
                 if(d_caseta > 0) mensaje += "• Caseta: $" + d_caseta + "%0A";
                 if(d_desp > 0) mensaje += "• Despachadores: $" + d_desp + "%0A";
                 if(d_pen > 0) mensaje += "• Pensión: $" + d_pen + "%0A";
-                if(d_sue > 0) mensaje += "• Sueldo: $" + d_sue + "%0A";
-                if(i1 > 0) mensaje += "• Ejemplo 1: $" + i1 + "%0A";
-                if(i2 > 0) mensaje += "• Ejemplo 2: $" + i2 + "%0A";
-                if(i3 > 0) mensaje += "• Ejemplo 3: $" + i3 + "%0A";
+                if(d_sue > 0) mensaje += "• Sueldo: $" + d_sue + " (Con bonos)%0A";
             }
             
             var totalCuenta = brutoGlobal - totalGastos;
