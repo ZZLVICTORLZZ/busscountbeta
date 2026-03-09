@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.0</title>
+    <title>Línea Turquesa - Proyecto Apolo 11</title>
     <style>
         :root { 
             --fondo: #F8E9D2;       
@@ -120,7 +120,7 @@
     <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 8px;">
             <svg viewBox="0 0 100 100" width="24" height="24">
-                <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" class="luna-turquesa" style="fill:#fff"/>
+                <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" style="fill:#fff"/>
             </svg>
             <span style="letter-spacing: 1px;">LÍNEA TURQUESA</span>
         </div>
@@ -194,11 +194,18 @@
     </div>
 
     <div id="p-calc" class="pantalla">
-        <div class="tarjeta"><h2>Liquidación Final</h2></div>
+        <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Liquidación Final</h2></div>
         <div class="tarjeta">
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
+            
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="recalcularLiquidacion()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="recalcularLiquidacion()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            
             <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 5px; padding-top: 5px;">
                 <input type="checkbox" class="check-box" id="c-bol" onchange="recalcularLiquidacion()">
                 <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label>
@@ -214,7 +221,7 @@
     </div>
 
     <div id="p-hist" class="pantalla">
-        <div class="tarjeta"><h2>Historial de 7 Días</h2></div>
+        <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Historial de 7 Días</h2></div>
         <div class="tarjeta" id="contenedor-dias" style="padding: 0;"></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
@@ -225,12 +232,16 @@
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
 
         function iniciarApp() { 
-            setTimeout(() => { document.getElementById('splash-screen').style.opacity = '0'; setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 500); }, 2000);
+            setTimeout(() => { 
+                var s = document.getElementById('splash-screen');
+                s.style.opacity = '0';
+                setTimeout(() => s.style.display = 'none', 500); 
+            }, 2000);
             if(localStorage.getItem('b_theme') === 'dark') { document.body.setAttribute('data-theme', 'dark'); document.getElementById('icono-tema').innerText = '☀️'; }
             dibujarHistorial(); 
         }
 
-        // VALIDACIÓN DE 2 CIFRAS
+        // VALIDACIÓN DE 2 CIFRAS (SOLO PARA BOLETOS)
         function v2(i) { if(i.value.length > 2) i.value = i.value.slice(0, 2); }
 
         function sumar() {
@@ -244,12 +255,12 @@
 
         function agregarExtra() {
             var p = parseFloat(document.getElementById('extra-precio').value) || 0, c = parseInt(document.getElementById('extra-cantidad').value) || 0;
-            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Extra agregado"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
+            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Agregado"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
         }
 
         function agregarCortesia() {
             var n = document.getElementById('nombre-cortesia').value.trim();
-            if (n !== "") { listaCortesias.push(n.toUpperCase()); mostrarAviso("Cortesía agregada"); document.getElementById('nombre-cortesia').value = ""; }
+            if (n !== "") { listaCortesias.push(n.toUpperCase()); mostrarAviso("Cortesía anotada"); document.getElementById('nombre-cortesia').value = ""; }
         }
 
         function finalizarVuelta() {
@@ -284,7 +295,12 @@
             var a = 0;
             if(document.getElementById('c-mut').checked) a += 20;
             if(document.getElementById('c-seg').checked) a += 20;
+            if(document.getElementById('c-opd').checked) a += 50;
+            if(document.getElementById('c-pen').checked) a += 40;
             a += (parseFloat(document.getElementById('v-fia').value) || 0);
+            a += (parseFloat(document.getElementById('v-bas').value) || 0);
+            a += (parseFloat(document.getElementById('v-tag').value) || 0);
+            a += (parseFloat(document.getElementById('v-vdi').value) || 0);
             var b = (document.getElementById('c-bol').checked) ? (parseFloat(document.getElementById('v-bol').value) || 0) : 0;
             document.getElementById('final-entrega').innerText = "$" + (netoRuta + a - b);
         }
@@ -311,7 +327,7 @@
         }
 
         function borrarYGuardarDia() { 
-            if (!historial.length || !confirm("¿Cerrar y guardar día?")) return;
+            if (!historial.length || !confirm("¿Terminar día?")) return;
             var g = (parseFloat(document.getElementById('g-diesel').value) || 0) + (parseFloat(document.getElementById('g-caseta').value) || 0) + (parseFloat(document.getElementById('g-despachadores').value) || 0) + (parseFloat(document.getElementById('g-pension').value) || 0) + (parseFloat(document.getElementById('g-sueldo').value) || 0);
             var tPas = 0; historial.forEach(v => tPas += v.p);
             var hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
@@ -344,7 +360,7 @@
         }
 
         function enviarWhatsAppLiquidacion() {
-            window.open("https://wa.me/?text=*LIQUIDACIÓN APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
+            window.open("https://wa.me/?text=*LIQUIDACIÓN FINAL APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
         }
     </script>
 </body>
