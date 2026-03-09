@@ -3,41 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - Apolo 11</title>
+    <title>Línea Turquesa - v1.0</title>
     <style>
         :root { 
-            --fondo: #F8E9D2; --tarjeta: #EFEBE1; --input_bg: #E6E0D4; --texto: #4A4A4A; 
-            --texto_claro: #888888; --turquesa: #5FA8A3; --btn_turquesa: #A2D5D2;
-            --verde_balance: #62A871; --verde_btn: #A8DAB5; --rojo_suave: #E38888; 
-            --rojo_btn: #FFB7B2; --naranja: #E67E22; --borde_lineas: #DCD5C6; 
+            --fondo: #F8E9D2;       
+            --tarjeta: #EFEBE1;     
+            --input_bg: #E6E0D4;    
+            --texto: #4A4A4A;       
+            --texto_claro: #888888; 
+            --turquesa: #5FA8A3;    
+            --btn_turquesa: #A2D5D2;
+            --verde_balance: #62A871;
+            --verde_btn: #A8DAB5;   
+            --rojo_suave: #E38888;  
+            --rojo_btn: #FFB7B2;    
+            --naranja: #E67E22;     
+            --borde_lineas: #DCD5C6; 
         }
+
         [data-theme="dark"] {
-            --fondo: #121212; --tarjeta: #1E1E1E; --input_bg: #2C2C2C; --texto: #E0E0E0;
-            --texto_claro: #A0A0A0; --borde_lineas: #333333; --turquesa: #00acc1;
-            --btn_turquesa: #006064; --verde_balance: #66bb6a; --verde_btn: #2e7d32;
-            --rojo_suave: #e57373; --rojo_btn: #c62828; --naranja: #D35400;
+            --fondo: #121212;
+            --tarjeta: #1E1E1E;
+            --input_bg: #2C2C2C;
+            --texto: #E0E0E0;
+            --texto_claro: #A0A0A0;
+            --borde_lineas: #333333;
+            --turquesa: #00acc1;
+            --btn_turquesa: #006064;
+            --verde_balance: #66bb6a;
+            --verde_btn: #2e7d32;
+            --rojo_suave: #e57373;
+            --rojo_btn: #c62828;
+            --naranja: #ff9800;
         }
+        
         body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: background 0.3s, color 0.3s; }
         .pantalla { display: none; }
         .activa { display: block !important; }
+        
         .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: background 0.3s; }
-        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: 0.3s; }
+        
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: background 0.3s; }
         .btn-turquesa { background: var(--btn_turquesa); }
         .btn-wa { background: var(--verde_btn); }
         .btn-verde { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); }
         .btn-gris { background: var(--borde_lineas); } 
         .btn-naranja { background: var(--naranja); color: white; }
+        
         .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 0.9rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; }
-        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; transition: 0.3s; }
-        .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--borde_lineas); }
-        .input-variable { width: 70px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
-        #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 15vh; align-items: center; text-align: center; }
+        .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
+        .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
+        
+        .input-variable { width: 70px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; transition: background 0.3s, color 0.3s; }
+        .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
+
+        .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
+        .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
+        
+        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; transition: background 0.3s, color 0.3s; }
+        
+        select { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: bold; transition: background 0.3s, color 0.3s; }
+
+        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
+        .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
+        .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 85px !important; text-align: right !important; margin: 0 !important; }
+        
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
+
+        #contenedor-avisos { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        .aviso { background: var(--verde_btn); color: var(--texto); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 1; transition: opacity 0.5s ease; text-align: center; border: 1px solid var(--verde_balance); }
+
+        #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 15vh; align-items: center; text-align: center; }
+        
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
+        .logo-bruja { fill: var(--texto); transition: fill 0.3s; }
+        .luna-turquesa { fill: var(--turquesa); }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 0.9rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; transition: background 0.3s; }
+        .toggle-tema { font-size: 1.5rem; cursor: pointer; user-select: none; }
+        
+        .tarjeta-dia { text-align: left; padding: 12px; border-bottom: 1px solid var(--borde_lineas); }
+        .tarjeta-dia:last-child { border-bottom: none; }
+        .dia-fecha { font-size: 1.1rem; font-weight: bold; color: var(--turquesa); margin-bottom: 4px; }
+        .dia-datos { font-size: 0.85rem; color: var(--texto_claro); }
+        .dia-total { font-size: 1.2rem; font-weight: bold; color: var(--verde_balance); text-align: right; }
     </style>
 </head>
 <body onload="iniciarApp()">
@@ -47,7 +101,7 @@
             <path d="M40 85 Q 110 15 190 65" fill="none" stroke="#5FA8A3" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
             <path d="M30 95 Q 100 25 180 75" fill="none" stroke="#888" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
             <path d="M45 75 L115 62 M120 64 L50 77" stroke="#000" stroke-width="5" fill="black"/>
-            <path d="M90 66 Q 100 35 110 64 L100 85 Z" fill="black"/>
+            <path d="M90 66 Q 100 35 110 64 L 100 85 Z" fill="black"/>
             <circle cx="110" cy="55" r="5" fill="black"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; letter-spacing: 2px; color: #5FA8A3;">LÍNEA TURQUESA</div>
@@ -66,7 +120,7 @@
     <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 8px;">
             <svg viewBox="0 0 100 100" width="24" height="24">
-                <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#fff"/>
+                <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" class="luna-turquesa" style="fill:#fff"/>
             </svg>
             <span style="letter-spacing: 1px;">LÍNEA TURQUESA</span>
         </div>
@@ -134,13 +188,13 @@
         <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ REPORTE GENERAL WHATSAPP</button>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn btn-naranja" style="font-size: 0.85rem;" onclick="irA('p-hist')">VER HISTORIAL</button>
-            <button class="btn btn-rojo" style="font-size: 0.85rem;" onclick="borrarYGuardarDia()">CERRAR Y GUARDAR</button>
+            <button class="btn btn-naranja" onclick="irA('p-hist')">VER HISTORIAL</button>
+            <button class="btn btn-rojo" onclick="borrarYGuardarDia()">CERRAR Y GUARDAR</button>
         </div>
     </div>
 
     <div id="p-calc" class="pantalla">
-        <div class="tarjeta"><h3>Liquidación Final</h3></div>
+        <div class="tarjeta"><h2>Liquidación Final</h2></div>
         <div class="tarjeta">
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="recalcularLiquidacion()"><label>MUTUALIDAD ($20)</label></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="recalcularLiquidacion()"><label>SEGURIDAD ($20)</label></div>
@@ -184,24 +238,22 @@
                     (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
                     (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
                     (parseInt(document.getElementById('bol37').value) || 0) * 37;
-            var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
+            var e = 0; listaExtras.forEach(x => e += (x.p * x.c));
             document.getElementById('total-vuelta').innerText = (f + e);
         }
 
         function agregarExtra() {
-            var p = parseFloat(document.getElementById('extra-precio').value) || 0;
-            var c = parseInt(document.getElementById('extra-cantidad').value) || 0;
-            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Agregado pasajero extra"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
+            var p = parseFloat(document.getElementById('extra-precio').value) || 0, c = parseInt(document.getElementById('extra-cantidad').value) || 0;
+            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Extra agregado"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
         }
 
         function agregarCortesia() {
             var n = document.getElementById('nombre-cortesia').value.trim();
-            if (n !== "") { listaCortesias.push(n.toUpperCase()); mostrarAviso("Cortesía de " + n); document.getElementById('nombre-cortesia').value = ""; }
+            if (n !== "") { listaCortesias.push(n.toUpperCase()); mostrarAviso("Cortesía agregada"); document.getElementById('nombre-cortesia').value = ""; }
         }
 
         function finalizarVuelta() {
-            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
-            var d = document.getElementById('destino').value;
+            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0, d = document.getElementById('destino').value;
             var b14 = parseInt(document.getElementById('bol14').value) || 0, b55 = parseInt(document.getElementById('bol55').value) || 0, b47 = parseInt(document.getElementById('bol47').value) || 0, b37 = parseInt(document.getElementById('bol37').value) || 0;
             var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
             listaExtras.forEach(e => tPas += e.c);
@@ -279,20 +331,20 @@
         }
 
         function mostrarAviso(t) {
-            var c = document.getElementById('contenedor-avisos');
-            var a = document.createElement('div'); a.className = 'aviso'; a.innerText = t;
-            c.appendChild(a); setTimeout(() => a.style.opacity = '0', 2000); setTimeout(() => c.removeChild(a), 2500);
+            var c = document.getElementById('contenedor-avisos'), a = document.createElement('div');
+            a.className = 'aviso'; a.innerText = t; c.appendChild(a);
+            setTimeout(() => a.style.opacity = '0', 2000); setTimeout(() => c.removeChild(a), 2500);
         }
 
         function enviarWhatsApp() {
             var m = "*REPORTE LÍNEA TURQUESA*%0A";
             historial.forEach(v => m += `*${v.n}ª ${v.d}:* $${v.m}%0A`);
-            m += `%0A*TOTAL CUENTA: $${document.getElementById('neto-total').innerText}*`;
+            m += `%0A*TOTAL: $${document.getElementById('neto-total').innerText}*`;
             window.open("https://wa.me/?text=" + m, "_blank");
         }
 
         function enviarWhatsAppLiquidacion() {
-            window.open("https://wa.me/?text=*LIQUIDACIÓN FINAL APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
+            window.open("https://wa.me/?text=*LIQUIDACIÓN APOLO 11*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
         }
     </script>
 </body>
