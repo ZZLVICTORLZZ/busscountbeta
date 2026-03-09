@@ -15,7 +15,7 @@
             --fondo: #121212; --tarjeta: #1E1E1E; --input_bg: #2C2C2C; --texto: #E0E0E0;
             --texto_claro: #A0A0A0; --borde_lineas: #333333; --turquesa: #00acc1;
             --btn_turquesa: #006064; --verde_balance: #66bb6a; --verde_btn: #2e7d32;
-            --rojo_suave: #e57373; --rojo_btn: #c62828; --naranja: #D35400;
+            --rojo_suave: #e57373; --rojo_btn: #c62828; --naranja: #ff9800;
         }
         body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: 0.3s; }
         .pantalla { display: none; }
@@ -27,7 +27,7 @@
         .btn-verde { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); }
         .btn-gris { background: var(--borde_lineas); } 
-        .btn-naranja { background: var(--naranja); color: white; } /* BOTÓN NARANJA */
+        .btn-naranja { background: var(--naranja); color: white; }
         .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
         .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 0.9rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; }
         input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; transition: 0.3s; }
@@ -35,10 +35,7 @@
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--borde_lineas); }
         .input-variable { width: 70px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
         
-        /* SPLASH SCREEN CON TU IMAGEN */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
-        #splash-screen img { max-width: 85%; height: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        
         #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 15vh; align-items: center; text-align: center; }
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
@@ -47,7 +44,11 @@
 <body onload="iniciarApp()">
 
     <div id="splash-screen">
-        <img src="logo.png" alt="Cargando Apolo 11..."> <div style="font-size: 0.8rem; color: var(--texto_claro); margin-top: 15px; letter-spacing: 1px;">SISTEMA DE RECAUDACIÓN v1.0</div>
+        <svg viewBox="0 0 100 100" width="120" height="120">
+            <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
+        </svg>
+        <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
+        <div style="font-size: 0.8rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.0</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -85,6 +86,13 @@
                 <input type="text" id="nombre-cortesia" placeholder="NOMBRE CORTESÍA" style="width: 80%; font-size: 1rem; margin-bottom:10px;">
                 <button class="btn btn-verde" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
+            <div style="margin-top:10px; border-top: 1px solid var(--borde_lineas); padding-top:10px;">
+                <div class="cuadricula">
+                    <input type="number" id="extra-precio" placeholder="$">
+                    <input type="number" id="extra-cantidad" placeholder="#">
+                </div>
+                <button class="btn btn-verde" onclick="agregarExtra()">+ AGREGAR EXTRA</button>
+            </div>
         </div>
         <button class="btn btn-turquesa" onclick="finalizarVuelta()">FINALIZAR VUELTA</button>
         <button class="btn btn-gris" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
@@ -92,9 +100,9 @@
 
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.8rem;">BALANCE</h2>
+            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.8rem; text-transform: uppercase;">BALANCE</h2>
             <div style="font-size:0.9rem;">Bruto: $<span id="bruto-total">0</span> | Gastos: -$<span id="gastos-etiqueta">0</span></div>
-            <div id="neto-total" style="font-size: 2.8rem; color:var(--verde_balance); font-weight:bold; margin-top:5px;">$0</div>
+            <div id="neto-total" style="font-size: 2.5rem; color:var(--verde_balance); font-weight:bold; margin-top:5px;">$0</div>
         </div>
         <div id="lista-vueltas" class="tarjeta" style="text-align:left; max-height: 120px; overflow-y: auto;"></div>
         <div class="tarjeta">
@@ -107,7 +115,7 @@
             <button class="btn btn-calculo" onclick="irA('p-calc')">CALCULAR EFECTIVO ENTREGAR</button>
         </div>
         <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
-        <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ REPORTE WHATSAPP</button>
+        <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ REPORTE WA</button>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <button class="btn btn-naranja" onclick="irA('p-hist')">VER HISTORIAL</button>
             <button class="btn btn-rojo" onclick="borrarYGuardarDia()">CERRAR Y GUARDAR</button>
@@ -117,28 +125,26 @@
     <div id="p-calc" class="pantalla">
         <div class="tarjeta"><h3>Liquidación Final</h3></div>
         <div class="tarjeta">
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" onchange="reLiq()"><label>MUTUALIDAD ($20)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" onchange="reLiq()"><label>SEGURIDAD ($20)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="reLiq()"><label>OPERACIÓN DIESEL ($50)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="reLiq()"><label>PENSIÓN / COBRO ($40)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-fia" onchange="reLiq()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="reLiq()"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-bas" onchange="reLiq()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="reLiq()"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="reLiq()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="reLiq()"></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="reLiq()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="reLiq()"></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-mut" onchange="reLiq()"><label>MUTUALIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-seg" onchange="reLiq()"><label>SEGURIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-opd" onchange="reLiq()"><label>OPERACIÓN DIESEL ($50)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-pen" onchange="reLiq()"><label>PENSIÓN / COBRO ($40)</label></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-fia" onchange="reLiq()"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="reLiq()"></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-bas" onchange="reLiq()"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="reLiq()"></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-tag" onchange="reLiq()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="reLiq()"></div>
+            <div class="opcion-chequeo"><input type="checkbox" id="c-vdi" onchange="reLiq()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="reLiq()"></div>
             <div class="opcion-chequeo" style="border-top:1px solid var(--borde_lineas); padding-top:5px; margin-top:5px;">
-                <input type="checkbox" class="check-box" id="c-bol" onchange="reLiq()"><label style="color:var(--rojo_suave)">EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="reLiq()">
+                <input type="checkbox" id="c-bol" onchange="reLiq()"><label style="color:var(--rojo_suave)">EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="reLiq()">
             </div>
         </div>
         <div class="tarjeta">
-            <div style="font-weight:bold; color:var(--verde_balance);">EFECTIVO ENTREGAR</div>
             <div id="final-entrega" style="font-size:3.5rem; font-weight:bold; color:var(--verde_balance);">$0</div>
         </div>
-        <button class="btn btn-wa" onclick="enviarWhatsAppLiquidacion()">✅ REPORTE WA</button>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR</button>
     </div>
 
     <div id="p-hist" class="pantalla">
-        <div class="tarjeta"><h2>Historial Semanal</h2></div>
+        <div class="tarjeta"><h2>Historial de 7 Días</h2></div>
         <div class="tarjeta" id="contenedor-dias" style="padding: 0;"></div>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">VOLVER</button>
     </div>
@@ -146,7 +152,7 @@
     <script>
         var nVuelta = parseInt(localStorage.getItem('b_nv')) || 1;
         var historial = JSON.parse(localStorage.getItem('b_hist')) || [];
-        var listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
+        var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
 
         function iniciarApp() { 
             setTimeout(() => { document.getElementById('splash-screen').style.opacity = '0'; setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 500); }, 2000);
@@ -154,11 +160,17 @@
             dibujarHistorial(); 
         }
 
-        function v2(i) { if(i.value.length > 2) i.value = i.value.slice(0, 2); } // VALIDACIÓN 2 CIFRAS
+        function v2(i) { if(i.value.length > 2) i.value = i.value.slice(0, 2); } // 2 CIFRAS
 
         function sumar() {
-            var t = (parseInt(document.getElementById('bol14').value)||0)*14 + (parseInt(document.getElementById('bol55').value)||0)*55 + (parseInt(document.getElementById('bol47').value)||0)*47 + (parseInt(document.getElementById('bol37').value)||0)*37;
-            document.getElementById('total-vuelta').innerText = t;
+            var f = (parseInt(document.getElementById('bol14').value)||0)*14 + (parseInt(document.getElementById('bol55').value)||0)*55 + (parseInt(document.getElementById('bol47').value)||0)*47 + (parseInt(document.getElementById('bol37').value)||0)*37;
+            var e = 0; listaExtras.forEach(x => e += (x.p * x.c));
+            document.getElementById('total-vuelta').innerText = (f + e);
+        }
+
+        function agregarExtra() {
+            var p = parseFloat(document.getElementById('extra-precio').value)||0, c = parseInt(document.getElementById('extra-cantidad').value)||0;
+            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); mostrarAviso("Agregado"); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
         }
 
         function agregarCortesia() {
@@ -167,21 +179,22 @@
         }
 
         function finalizarVuelta() {
-            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
-            var d = document.getElementById('destino').value;
-            var tPas = (parseInt(document.getElementById('bol14').value)||0) + (parseInt(document.getElementById('bol55').value)||0) + (parseInt(document.getElementById('bol47').value)||0) + (parseInt(document.getElementById('bol37').value)||0) + listaCortesias.length;
+            var m = parseInt(document.getElementById('total-vuelta').innerText) || 0, d = document.getElementById('destino').value;
+            var b14 = (parseInt(document.getElementById('bol14').value)||0), b55 = (parseInt(document.getElementById('bol55').value)||0), b47 = (parseInt(document.getElementById('bol47').value)||0), b37 = (parseInt(document.getElementById('bol37').value)||0);
+            var tPas = b14 + b55 + b47 + b37 + listaCortesias.length;
+            listaExtras.forEach(e => tPas += e.c);
             
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             document.getElementById('cierre-dir').innerText = d;
             document.getElementById('cierre-monto').innerText = "$" + m;
             document.getElementById('pantalla-cierre').style.display = 'flex';
             
-            historial.push({ n: nVuelta, d: d, m: m, p: tPas, cor: [...listaCortesias] });
+            historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: b14, b55: b55, b47: b47, b37: b37, ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
-            listaCortesias = []; sumar(); 
+            listaExtras = []; listaCortesias = []; sumar(); 
             setTimeout(() => { document.getElementById('pantalla-cierre').style.display = 'none'; irA('p-lib'); }, 2000);
         }
 
@@ -207,14 +220,14 @@
         function dibujarHistorial() {
             document.getElementById('titulo-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             var h = ""; brutoGlobal = 0;
-            historial.forEach(v => { h += `<div class="fila-historial"><b>${v.n}ª ${v.d}</b> <span>$${v.m}</span></div>`; brutoGlobal += v.m; });
-            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:10px;'>Sin vueltas registradas</p>";
+            historial.forEach(v => { h += `<div class="fila-historial"><b>${v.n}ª ${v.d}</b><span>$${v.m}</span></div>`; brutoGlobal += v.m; });
+            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:10px;'>Sin vueltas</p>";
             document.getElementById('bruto-total').innerText = brutoGlobal;
             actualizarBalance();
         }
 
         function borrarYGuardarDia() { 
-            if (!historial.length || !confirm("¿Cerrar y guardar día?")) return;
+            if (!historial.length || !confirm("¿Terminar día?")) return;
             var hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             hd.push({ f: new Date().toLocaleDateString(), n: netoRuta });
             if (hd.length > 7) hd.shift();
@@ -245,14 +258,8 @@
         }
 
         function enviarWhatsApp() {
-            window.open("https://wa.me/?text=*REPORTE APOLO 11*%0A*TOTAL: " + document.getElementById('neto-total').innerText + "*", "_blank");
-        }
-
-        function enviarWhatsAppLiquidacion() {
-            window.open("https://wa.me/?text=*LIQUIDACIÓN FINAL*%0A*ENTREGAR: " + document.getElementById('final-entrega').innerText + "*", "_blank");
+            window.open("https://wa.me/?text=*REPORTE LÍNEA TURQUESA*%0A*TOTAL: " + document.getElementById('neto-total').innerText + "*", "_blank");
         }
     </script>
 </body>
 </html>
-
-
