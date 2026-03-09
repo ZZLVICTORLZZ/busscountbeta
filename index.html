@@ -6,41 +6,38 @@
     <title>Línea Turquesa - Apolo 11</title>
     <style>
         :root { 
-            --fondo: #F8E9D2;       
-            --tarjeta: #EFEBE1;     
-            --input_bg: #E6E0D4;    
-            --texto: #4A4A4A;       
-            --turquesa: #1ABC9C;    
-            --gris_oscuro: #555555;
-            --borde_lineas: #DCD5C6; 
+            --fondo: #F8E9D2; --tarjeta: #EFEBE1; --input_bg: #E6E0D4; --texto: #4A4A4A; 
+            --turquesa: #1ABC9C; --gris_oscuro: #555555; --verde_btn: #A8DAB5; 
+            --rojo_btn: #FFB7B2; --borde_lineas: #DCD5C6; 
         }
 
-        body { background: var(--fondo); color: var(--texto); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; }
-        .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        [data-theme="dark"] {
+            --fondo: #121212; --tarjeta: #1E1E1E; --input_bg: #2C2C2C; --texto: #E0E0E0;
+            --turquesa: #16A085; --borde_lineas: #333333;
+        }
         
-        /* ESTILO DE ENTRADA CON VALIDACIÓN VISUAL */
+        body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: 0.3s; }
+        .pantalla { display: none; }
+        .activa { display: block !important; }
+        
+        .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
+        .btn-turquesa { background: var(--turquesa); color: white; }
+        .btn-wa { background: var(--verde_btn); }
+        .btn-rojo { background: var(--rojo_btn); }
+
         input[type="number"] { 
-            background: var(--input_bg); 
-            color: var(--texto); 
-            border: 2px solid var(--turquesa); 
-            padding: 12px; 
-            width: 80px; 
-            font-size: 1.6rem; 
-            text-align: center; 
-            border-radius: 10px; 
-            font-weight: bold;
-            outline: none;
+            background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); 
+            padding: 10px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; 
         }
-
-        input[type="number"]:focus { border-color: #16A085; background: #fff; }
-
-        .etiqueta-boleto { color: var(--turquesa); font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 5px; }
 
         #splash-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
             background: var(--fondo); display: flex; flex-direction: column; 
             justify-content: center; align-items: center; z-index: 99999; 
         }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--turquesa); color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
     </style>
 </head>
 <body onload="iniciarApp()">
@@ -50,64 +47,114 @@
             <path d="M40 80 Q 100 20 180 60" fill="none" stroke="#1ABC9C" stroke-width="12" stroke-linecap="round"/>
             <path d="M30 90 Q 90 30 170 70" fill="none" stroke="#555" stroke-width="8" stroke-linecap="round"/>
             <path d="M50 70 L110 60 M115 62 L55 72 M80 65 Q 90 40 100 62" stroke="#000" stroke-width="4" fill="black"/>
-            <circle cx="100" cy="55" r="4" fill="black"/>
         </svg>
-        <div style="font-size: 1.6rem; font-weight: bold; color: var(--gris_oscuro); margin-top: 10px;">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--gris_oscuro); opacity: 0.7;">PROYECTO APOLO 11 V 1.0</div>
+        <div style="font-size: 1.6rem; font-weight: bold; color: var(--gris_oscuro);">LÍNEA TURQUESA</div>
+        <div style="font-size: 0.8rem; letter-spacing: 2px;">PROYECTO APOLO 11 V 1.0</div>
     </div>
 
-    <div id="p-reg" class="activa">
-        <div class="tarjeta">
-            <h2 style="color:var(--turquesa); margin-bottom: 20px;">REGISTRO DE PASAJEROS</h2>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <span class="etiqueta-boleto">$14</span>
-                    <input type="number" id="bol14" oninput="validarCifras(this); sumar();" placeholder="0">
-                </div>
-                <div>
-                    <span class="etiqueta-boleto">$55</span>
-                    <input type="number" id="bol55" oninput="validarCifras(this); sumar();" placeholder="0">
-                </div>
-                <div>
-                    <span class="etiqueta-boleto">$47</span>
-                    <input type="number" id="bol47" oninput="validarCifras(this); sumar();" placeholder="0">
-                </div>
-                <div>
-                    <span class="etiqueta-boleto">$37</span>
-                    <input type="number" id="bol37" oninput="validarCifras(this); sumar();" placeholder="0">
-                </div>
-            </div>
+    <div class="top-bar">
+        <span>LÍNEA TURQUESA</span>
+        <span onclick="cambiarTema()" style="cursor:pointer">🌙</span>
+    </div>
 
-            <div style="margin-top: 25px; border-top: 2px solid var(--borde_lineas); padding-top: 15px;">
-                <span style="font-size: 1.2rem; color: var(--gris_oscuro);">Total Vuelta:</span>
-                <div id="total-vuelta" style="font-size: 2.5rem; font-weight: bold; color: var(--turquesa);">$0</div>
+    <div id="p-reg" class="pantalla activa">
+        <div class="tarjeta">
+            <h2 style="color:var(--turquesa); margin:0;">REGISTRO</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top:15px;">
+                <div><label>$14</label><br><input type="number" id="bol14" oninput="val(this); sum();"></div>
+                <div><label>$55</label><br><input type="number" id="bol55" oninput="val(this); sum();"></div>
+                <div><label>$47</label><br><input type="number" id="bol47" oninput="val(this); sum();"></div>
+                <div><label>$37</label><br><input type="number" id="bol37" oninput="val(this); sum();"></div>
             </div>
+            <div id="total-vuelta" style="font-size: 2rem; color: var(--turquesa); font-weight: bold; margin-top: 10px;">$0</div>
         </div>
+        <button class="btn btn-turquesa" onclick="finalizarVuelta()">FINALIZAR VUELTA</button>
+        <button class="btn" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
+    </div>
+
+    <div id="p-lib" class="pantalla">
+        <div class="tarjeta">
+            <h3>BALANCE TOTAL</h3>
+            <div id="neto-total" style="font-size: 2.5rem; color: var(--turquesa); font-weight: bold;">$0</div>
+        </div>
+        <div id="lista-vueltas" class="tarjeta" style="text-align:left; font-size: 0.9rem;"></div>
+        <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A REGISTRAR</button>
+        <button class="btn btn-wa" onclick="enviarReporte()">ENVIAR REPORTE WA</button>
+        <button class="btn btn-rojo" onclick="guardarDia()">CERRAR Y GUARDAR DÍA</button>
+        <button class="btn" onclick="irA('p-hist')">VER HISTORIAL 7 DÍAS</button>
+    </div>
+
+    <div id="p-hist" class="pantalla">
+        <div class="tarjeta">
+            <h3>HISTORIAL SEMANAL</h3>
+            <div id="cont-historial" style="text-align:left;"></div>
+        </div>
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">VOLVER</button>
     </div>
 
     <script>
+        let historial = JSON.parse(localStorage.getItem('b_hist')) || [];
+        
         function iniciarApp() { 
             setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 2000);
+            actualizarUI();
         }
 
-        // FUNCIÓN CLAVE: Bloquea entradas de más de 2 cifras
-        function validarCifras(input) {
-            if (input.value.length > 2) {
-                input.value = input.value.slice(0, 2); 
-            }
+        // VALIDACIÓN DE 2 CIFRAS
+        function val(i) { if(i.value.length > 2) i.value = i.value.slice(0,2); }
+
+        function sum() {
+            let t = (parseInt(document.getElementById('bol14').value)||0)*14 + (parseInt(document.getElementById('bol55').value)||0)*55 + (parseInt(document.getElementById('bol47').value)||0)*47 + (parseInt(document.getElementById('bol37').value)||0)*37;
+            document.getElementById('total-vuelta').innerText = "$" + t;
         }
 
-        function sumar() {
-            const v14 = (parseInt(document.getElementById('bol14').value) || 0) * 14;
-            const v55 = (parseInt(document.getElementById('bol55').value) || 0) * 55;
-            const v47 = (parseInt(document.getElementById('bol47').value) || 0) * 47;
-            const v37 = (parseInt(document.getElementById('bol37').value) || 0) * 37;
-            document.getElementById('total-vuelta').innerText = "$" + (v14 + v55 + v47 + v37);
+        function finalizarVuelta() {
+            let m = parseInt(document.getElementById('total-vuelta').innerText.replace('$',''));
+            historial.push({f: new Date().toLocaleTimeString(), m: m});
+            localStorage.setItem('b_hist', JSON.stringify(historial));
+            document.querySelectorAll('input').forEach(i => i.value = "");
+            sum();
+            irA('p-lib');
+        }
+
+        function actualizarUI() {
+            let h = "", total = 0;
+            historial.forEach(v => { h += `<div>Vuelta ${v.f}: $${v.m}</div>`; total += v.m; });
+            document.getElementById('lista-vueltas').innerHTML = h || "Sin vueltas hoy";
+            document.getElementById('neto-total').innerText = "$" + total;
+        }
+
+        function guardarDia() {
+            if(!confirm("¿Cerrar día?")) return;
+            let histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
+            let total = historial.reduce((a,b) => a + b.m, 0);
+            histDias.push({f: new Date().toLocaleDateString(), t: total});
+            if(histDias.length > 7) histDias.shift();
+            localStorage.setItem('b_hist_dias', JSON.stringify(histDias));
+            historial = [];
+            localStorage.removeItem('b_hist');
+            location.reload();
+        }
+
+        function irA(id) {
+            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+            document.getElementById(id).classList.add('activa');
+            if(id === 'p-lib') actualizarUI();
+            if(id === 'p-hist') mostrarHistorialSemanal();
+        }
+
+        function mostrarHistorialSemanal() {
+            let hd = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
+            let res = hd.map(d => `<div>${d.f}: $${d.t}</div>`).join('');
+            document.getElementById('cont-historial').innerHTML = res || "No hay días guardados";
+        }
+
+        function cambiarTema() {
+            let t = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', t);
         }
     </script>
 </body>
 </html>
-
 
 
