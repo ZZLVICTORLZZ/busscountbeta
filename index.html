@@ -3,59 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v9.0</title>
+    <title>BusCount BETA - v9.1</title>
     <style>
         :root { 
-            /* PALETA PASTEL Y CHAMPAÑA */
+            /* PALETA PASTEL, CHAMPAÑA Y TONOS OPACOS */
             --fondo: #F8E9D2;       /* Champaña */
-            --gris: #FFFFFF;        /* Tarjetas Blancas */
-            --texto: #4A4A4A;       /* Gris oscuro para leer bien */
+            --tarjeta: #EFEBE1;     /* Hueso opaco (reemplaza al blanco chillón) */
+            --input_bg: #E6E0D4;    /* Fondo de inputs ligeramente más oscuro */
+            --texto: #4A4A4A;       /* Gris oscuro */
             --texto_claro: #888888; 
             
-            --turquesa: #5FA8A3;    /* Turquesa suave para bordes/textos */
-            --btn_turquesa: #A2D5D2;/* Turquesa pastel para botones */
+            --turquesa: #5FA8A3;    
+            --btn_turquesa: #A2D5D2;
             
-            --verde_balance: #62A871;/* Verde texto */
-            --verde_btn: #A8DAB5;   /* Verde pastel botones/avisos */
+            --verde_balance: #62A871;
+            --verde_btn: #A8DAB5;   
             
-            --rojo_suave: #E38888;  /* Rojo pastel textos */
-            --rojo_btn: #FFB7B2;    /* Rojo pastel botones */
+            --rojo_suave: #E38888;  
+            --rojo_btn: #FFB7B2;    
+            
+            --naranja: #E67E22;     /* Naranja para el botón de cálculo */
+            --borde_lineas: #DCD5C6; /* Líneas divisorias suaves */
         }
         
         body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
         .pantalla { display: none; }
         .activa { display: block !important; }
         
-        .tarjeta { background: var(--gris); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         
         .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); }
         .btn-turquesa { background: var(--btn_turquesa); }
         .btn-wa { background: var(--verde_btn); }
         .btn-verde { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); }
-        .btn-gris { background: #E0E0E0; }
-        .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
+        .btn-gris { background: #D1CDC4; } /* Gris más cálido */
+        
+        /* BOTÓN NARANJA */
+        .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
 
-        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #EEEEEE; }
+        .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--borde_lineas); }
         .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
         .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
-        .input-variable { width: 70px !important; background: #FAFAFA; border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
+        .input-variable { width: 70px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
         .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
         
-        input[type="number"], input[type="text"] { background: #FAFAFA; color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
+        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; }
         
-        select { background: #FAFAFA; color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: bold; }
+        select { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: bold; }
 
-        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #EEEEEE; padding-bottom: 4px; }
+        .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
         .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 85px !important; text-align: right !important; margin: 0 !important; }
         
-        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #EEEEEE; font-size: 0.9rem; align-items: center; }
+        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--borde_lineas); font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
 
         /* AVISOS FLOTANTES */
@@ -77,7 +83,7 @@
 
     <div id="contenedor-avisos"></div>
 
-    <div style="background: var(--btn_turquesa); color: var(--texto); font-size: 0.75rem; font-weight: bold; padding: 4px; border-radius: 5px; margin-bottom: 10px;">MODO BETA - TONOS PASTEL v9.0</div>
+    <div style="background: var(--btn_turquesa); color: var(--texto); font-size: 0.75rem; font-weight: bold; padding: 4px; border-radius: 5px; margin-bottom: 10px;">MODO BETA - VISTA DESCANSADA v9.1</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -96,12 +102,12 @@
                 <div><label>$47</label><input type="number" id="bol47" oninput="sumar()"></div>
                 <div><label>$37</label><input type="number" id="bol37" oninput="sumar()"></div>
             </div>
-            <div style="margin-top:10px; border-top: 1px solid #EEE; padding-top:10px;">
+            <div style="margin-top:10px; border-top: 1px solid var(--borde_lineas); padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">CORTESÍAS</label>
                 <input type="text" id="nombre-cortesia" placeholder="NOMBRE" style="width: 80%; font-size: 1.2rem; margin-top: 5px;">
                 <button class="btn btn-verde" style="padding: 10px;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
-            <div style="margin-top:10px; border-top: 1px solid #EEE; padding-top:10px;">
+            <div style="margin-top:10px; border-top: 1px solid var(--borde_lineas); padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">EXTRA</label>
                 <div class="cuadricula" style="margin-top:5px;">
                     <input type="number" id="extra-precio" placeholder="$">
@@ -116,10 +122,10 @@
 
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">Resumen</h2>
+            <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.1rem; text-transform: uppercase;">BALANCE</h2>
             <div style="color:var(--texto_claro); font-size:0.9rem;">Total Bruto: $<span id="bruto-total">0</span></div>
             <div style="color:var(--rojo_suave); font-size:0.9rem; margin-top: 5px; font-weight: bold;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
-            <hr style="border: 0.5px solid #EEE; margin: 8px 0;">
+            <hr style="border: 0.5px solid var(--borde_lineas); margin: 8px 0;">
             <div style="color:var(--verde_balance); font-size:1rem; font-weight: bold; text-transform: uppercase;">Total de Cuenta</div>
             <div id="neto-total" style="font-size: 2.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
         </div>
@@ -157,7 +163,7 @@
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-tag" onchange="recalcularLiquidacion()"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
             <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-vdi" onchange="recalcularLiquidacion()"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
             
-            <div class="opcion-chequeo" style="border-top: 1px solid #EEE; margin-top: 5px; padding-top: 5px;">
+            <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 5px; padding-top: 5px;">
                 <input type="checkbox" class="check-box" id="c-bol" onchange="recalcularLiquidacion()">
                 <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label>
                 <input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
@@ -169,7 +175,7 @@
             <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
 
-        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL RESUMEN</button>
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
     </div>
 
     <script>
@@ -355,3 +361,4 @@
     </script>
 </body>
 </html>
+
