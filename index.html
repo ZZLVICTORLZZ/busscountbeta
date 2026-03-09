@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BusCount BETA - v8.4</title>
+    <title>BusCount BETA - v8.5</title>
     <style>
         :root { 
             --turquesa: #00acc1; 
@@ -22,6 +22,7 @@
         .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; }
         .btn-turquesa { background: var(--turquesa); color: #000; }
         .btn-wa { background: var(--verde_wa); color: #000; }
+        .btn-verde { background: var(--verde_balance); color: #000; } /* NUEVO BOTÓN VERDE */
         .btn-rojo { background: #b71c1c; color: #fff; }
         .btn-gris { background: #333; color: #fff; }
         .btn-calculo { background: transparent; border: 2px solid var(--turquesa); color: var(--turquesa); }
@@ -45,11 +46,17 @@
         
         .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; font-size: 0.9rem; align-items: center; }
         .monto-texto { font-weight: bold; color: var(--turquesa); }
+
+        /* SISTEMA DE AVISOS FLOTANTES (TOAST) */
+        #contenedor-avisos { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
+        .aviso { background: #222; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); opacity: 1; transition: opacity 0.5s ease; border-left: 4px solid var(--verde_balance); text-align: center; }
     </style>
 </head>
 <body onload="iniciarApp()">
 
-    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - WHATSAPP v8.4</div>
+    <div id="contenedor-avisos"></div>
+
+    <div style="background: var(--turquesa); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px;">MODO BETA - AVISOS INTELIGENTES v8.5</div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
@@ -60,7 +67,6 @@
                 <option value="REYES">REYES</option>
             </select>
             <div class="monto-vuelta">$<span id="total-vuelta">0</span></div>
-            <div id="aviso-extra" style="font-size: 0.8rem; color: var(--turquesa); height: 1.2rem;"></div>
         </div>
         <div class="tarjeta">
             <div class="cuadricula">
@@ -72,7 +78,7 @@
             <div style="margin-top:10px; border-top: 1px solid #444; padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">CORTESÍAS</label>
                 <input type="text" id="nombre-cortesia" placeholder="NOMBRE" style="width: 80%; font-size: 1.2rem; margin-top: 5px;">
-                <button class="btn btn-gris" style="padding: 8px;" onclick="agregarCortesia()">+ AGREGAR</button>
+                <button class="btn btn-verde" style="padding: 10px;" onclick="agregarCortesia()">+ AGREGAR CORTESÍA</button>
             </div>
             <div style="margin-top:10px; border-top: 1px solid #333; padding-top:10px;">
                 <label style="color: var(--turquesa); font-size: 0.8rem; font-weight: bold;">EXTRA</label>
@@ -80,7 +86,7 @@
                     <input type="number" id="extra-precio" placeholder="$">
                     <input type="number" id="extra-cantidad" placeholder="#">
                 </div>
-                <button class="btn btn-gris" style="padding: 8px;" onclick="agregarExtra()">+ EXTRA</button>
+                <button class="btn btn-verde" style="padding: 10px;" onclick="agregarExtra()">+ AGREGAR EXTRA</button>
             </div>
         </div>
         <button class="btn btn-turquesa" onclick="finalizarVuelta()">FINALIZAR VUELTA</button>
@@ -152,6 +158,19 @@
 
         function iniciarApp() { dibujarHistorial(); }
 
+        // SISTEMA DE AVISOS (TOASTS)
+        function mostrarAviso(texto) {
+            var contenedor = document.getElementById('contenedor-avisos');
+            var aviso = document.createElement('div');
+            aviso.className = 'aviso';
+            aviso.innerText = texto;
+            contenedor.appendChild(aviso);
+            
+            // Desaparece después de 2.5 segundos
+            setTimeout(function() { aviso.style.opacity = '0'; }, 2500);
+            setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
+        }
+
         function sumar() {
             var f = (document.getElementById('bol14').value || 0) * 14 + (document.getElementById('bol55').value || 0) * 55 + (document.getElementById('bol47').value || 0) * 47 + (document.getElementById('bol37').value || 0) * 37;
             var e = 0; listaExtras.forEach(function(x){ e += (x.p * x.c); });
@@ -161,12 +180,27 @@
         function agregarExtra() {
             var p = parseFloat(document.getElementById('extra-precio').value) || 0;
             var c = parseInt(document.getElementById('extra-cantidad').value) || 0;
-            if (p > 0 && c > 0) { listaExtras.push({p: p, c: c}); sumar(); document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; }
+            if (p > 0 && c > 0) { 
+                listaExtras.push({p: p, c: c}); 
+                sumar(); 
+                // AVISO DINÁMICO
+                var msj = c === 1 ? "Se agregó 1 pasajero de $" + p : "Se agregaron " + c + " pasajeros de $" + p;
+                mostrarAviso(msj);
+                
+                document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; 
+            }
         }
 
         function agregarCortesia() {
             var n = document.getElementById('nombre-cortesia').value.trim();
-            if (n !== "") { listaCortesias.push(n.toUpperCase()); document.getElementById('nombre-cortesia').value = ""; }
+            if (n !== "") { 
+                var nomMayus = n.toUpperCase();
+                listaCortesias.push(nomMayus); 
+                // AVISO DINÁMICO
+                mostrarAviso("Se agregó la cortesía " + nomMayus);
+                
+                document.getElementById('nombre-cortesia').value = ""; 
+            }
         }
 
         function finalizarVuelta() {
@@ -174,6 +208,10 @@
             var d = document.getElementById('destino').value;
             var tPas = (parseInt(document.getElementById('bol14').value) || 0) + (parseInt(document.getElementById('bol55').value) || 0) + (parseInt(document.getElementById('bol47').value) || 0) + (parseInt(document.getElementById('bol37').value) || 0) + listaCortesias.length;
             listaExtras.forEach(function(e) { tPas += e.c; });
+            
+            // AVISO ACTUALIZADO: VUELTA VACÍA
+            if (m === 0 && listaCortesias.length === 0 && !confirm("¿Está seguro de cerrar esta vuelta vacía?")) return;
+            
             historial.push({ n: nVuelta, d: d, m: m, p: tPas, det: { b14: (parseInt(document.getElementById('bol14').value) || 0), b55: (parseInt(document.getElementById('bol55').value) || 0), b47: (parseInt(document.getElementById('bol47').value) || 0), b37: (parseInt(document.getElementById('bol37').value) || 0), ext: [...listaExtras], cor: [...listaCortesias] } });
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
