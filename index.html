@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.3</title>
+    <title>Línea Turquesa - v1.4</title>
     <style>
         :root { 
-            /* MODO CLARO */
-            --fondo: #F8E9D2;       
-            --tarjeta: #EFEBE1;     
-            --input_bg: #E6E0D4;    
-            --texto: #4A4A4A;       
-            --texto_claro: #888888; 
-            --turquesa: #5FA8A3;    
-            --btn_turquesa: #A2D5D2;
-            --verde_balance: #62A871;
+            /* MODO CLARO MEJORADO (Anti-Fatiga Visual) */
+            --fondo: #E4E9F0;       /* Gris azulado mate, elimina el brillo blanco molesto */
+            --tarjeta: #F0F4F8;     /* Un tono ligeramente más claro que el fondo, sin ser blanco puro */
+            --input_bg: #D1D9E0;    /* Gris suave para los inputs, hace que no resplandezcan */
+            --texto: #2C3E50;       /* Azul marino oscuro, cansa menos la vista que el negro carbón */
+            --texto_claro: #7F8C8D; 
+            --turquesa: #3A8891;    /* Turquesa ligeramente más profundo para destacar en el nuevo fondo */
+            --btn_turquesa: #89C4C4;
+            --verde_balance: #27AE60; /* Verde más sólido y legible */
             --verde_btn: #A8DAB5;   
-            --rojo_suave: #E38888;  
-            --rojo_btn: #FFB7B2;    
-            --naranja: #E67E22;     
-            --borde_lineas: #DCD5C6;
+            --rojo_suave: #C0392B;  /* Rojo más oscuro para no lastimar la vista */
+            --rojo_btn: #F1948A;    
+            --naranja: #D35400;     /* Naranja más ejecutivo */
+            --borde_lineas: #BDC3C7;
             --azul_historial: #2980B9;
         }
 
-        /* MODO OSCURO */
+        /* MODO OSCURO (Se mantiene igual) */
         [data-theme="dark"] {
             --fondo: #121212;
             --tarjeta: #1E1E1E;
@@ -103,7 +103,6 @@
         .fila-desglose { display: flex; justify-content: space-between; border-bottom: 1px solid var(--borde_lineas); padding: 6px 0; font-size: 1.05rem; }
         .val-desglose { color: var(--turquesa); font-weight: bold; }
         
-        /* Estilos para etiquetas borrables en la edición */
         .etiqueta-borrable { display: inline-flex; align-items: center; background: var(--rojo_suave); color: white; padding: 4px 10px; border-radius: 8px; margin: 4px 4px 0 0; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
@@ -114,7 +113,7 @@
             <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.2</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.4</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -212,15 +211,15 @@
             <div class="gasto-fila"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
             
             <div class="gasto-fila" style="border-top: 1px dashed var(--borde_lineas); padding-top: 8px; margin-top: 8px;">
-                <label style="color: var(--naranja);">EJEMPLO 1 (Bono)</label>
+                <label style="color: var(--naranja);">LIMPIEZA</label>
                 <input type="checkbox" class="check-box" id="g-inc1" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
             <div class="gasto-fila">
-                <label style="color: var(--naranja);">EJEMPLO 2 (Bono)</label>
+                <label style="color: var(--naranja);">PUNTUALIDAD</label>
                 <input type="checkbox" class="check-box" id="g-inc2" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
             <div class="gasto-fila">
-                <label style="color: var(--naranja);">EJEMPLO 3 (Bono)</label>
+                <label style="color: var(--naranja);">UNIFORME</label>
                 <input type="checkbox" class="check-box" id="g-inc3" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
 
@@ -320,7 +319,6 @@
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
         var pantallaAnterior = 'p-lib';
         
-        // Variables para la edición de vuelta
         var editIndex = -1;
         var editExtrasTmp = [];
         var editCortesiasTmp = [];
@@ -524,7 +522,6 @@
             document.getElementById('final-entrega').innerText = "$" + (netoRuta + ajuste - restaBoletos);
         }
 
-        // FUNCIONES PARA LA EDICIÓN DE MEDIAS VUELTAS
         function renderEditCor() {
             var html = "";
             editCortesiasTmp.forEach(function(c, i) {
