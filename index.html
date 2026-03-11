@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Motor F1 - v1.8</title>
+    <title>Motor F1 - v1.9</title>
     <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
             /* MODO CLARO ANTI-FATIGA */
@@ -24,7 +25,6 @@
             --azul_historial: #2980B9;
         }
 
-        /* MODO OSCURO */
         [data-theme="dark"] {
             --fondo: #121212;
             --tarjeta: #1E1E1E;
@@ -42,14 +42,20 @@
             --azul_historial: #5DADE2;
         }
         
-        body { background: var(--fondo); color: var(--texto); font-family: sans-serif; margin: 0; padding: 10px; text-align: center; transition: background 0.3s, color 0.3s; }
+        body { background: var(--fondo); color: var(--texto); font-family: 'Montserrat', sans-serif; margin: 0; padding: 10px; text-align: center; transition: background 0.3s, color 0.3s; }
         .pantalla { display: none; }
-        .activa { display: block !important; }
+        
+        /* ANIMACIÓN DE DESLIZAMIENTO */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .activa { display: block !important; animation: fadeIn 0.35s ease-out; }
         
         .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,0.4); transition: background 0.3s; }
         [data-theme="dark"] .tarjeta { box-shadow: 0 6px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
 
-        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: background 0.3s, transform 0.1s; }
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: background 0.3s, transform 0.1s; letter-spacing: 0.5px; }
         .btn:active, .btn-chico:active, .btn-basura:active { transform: scale(0.96); }
         
         .btn-turquesa { background: var(--btn_turquesa); }
@@ -61,7 +67,7 @@
         .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
 
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--borde_lineas); }
-        .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
+        .opcion-chequeo label { font-size: 0.85rem; font-weight: 700; color: var(--texto); flex: 1; text-align: left; }
         
         .check-box { 
             appearance: none; -webkit-appearance: none; 
@@ -79,54 +85,54 @@
         .check-box:checked::after { transform: translateX(20px); }
         .check-box:disabled { opacity: 0.6; cursor: not-allowed; }
         
-        .pill { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: #fff; display: inline-block; margin-left: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .pill { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; color: #fff; display: inline-block; margin-left: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
         .pill-indios { background: #27AE60; }
         .pill-paseos { background: #2980B9; }
         .pill-reyes { background: #8E44AD; }
 
-        .input-variable { width: 100px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; transition: background 0.3s, color 0.3s; }
+        .input-variable { width: 100px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: 700; font-size: 1.1rem !important; transition: background 0.3s, color 0.3s; font-family: 'Montserrat', sans-serif;}
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
-        .monto-vuelta { font-size: 2.6rem; font-weight: bold; color: var(--turquesa); margin: 5px 0; }
+        .monto-vuelta { font-size: 2.8rem; font-weight: 800; color: var(--turquesa); margin: 5px 0; }
         .cuadricula { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: bold; display: block; margin-bottom: 4px; }
+        .cuadricula label { color: var(--turquesa); font-size: 1.1rem; font-weight: 700; display: block; margin-bottom: 4px; }
         
-        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: bold; transition: background 0.3s, color 0.3s; }
+        input[type="number"], input[type="text"] { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 85%; font-size: 1.5rem; text-align: center; border-radius: 8px; font-weight: 700; font-family: 'Montserrat', sans-serif; transition: background 0.3s, color 0.3s; }
         
-        select { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: bold; transition: background 0.3s, color 0.3s; }
+        select { background: var(--input_bg); color: var(--texto); border: 1px solid var(--turquesa); padding: 12px; width: 100%; font-size: 1.2rem; border-radius: 10px; margin-top:10px; font-weight: 700; font-family: 'Montserrat', sans-serif; transition: background 0.3s, color 0.3s; }
 
         .gasto-fila { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 4px; }
-        .gasto-fila label { color: var(--rojo_suave); font-size: 0.8rem; font-weight: bold; text-align: left; flex: 1; }
+        .gasto-fila label { color: var(--rojo_suave); font-size: 0.85rem; font-weight: 700; text-align: left; flex: 1; }
         .input-gasto { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; font-size: 1.1rem !important; padding: 6px !important; width: 110px !important; text-align: right !important; margin: 0 !important; }
         
-        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: none; font-size: 0.9rem; align-items: center; }
-        .monto-texto { font-weight: bold; color: var(--turquesa); }
+        .fila-historial { display: flex; justify-content: space-between; padding: 10px; border-bottom: none; font-size: 0.95rem; align-items: center; }
+        .monto-texto { font-weight: 800; color: var(--turquesa); }
 
         #contenedor-avisos { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px; pointer-events: none; }
-        .aviso { background: var(--verde_btn); color: var(--texto); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 1; transition: opacity 0.5s ease; text-align: center; border: 1px solid var(--verde_balance); }
+        .aviso { background: var(--verde_btn); color: var(--texto); padding: 12px 20px; border-radius: 8px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 1; transition: opacity 0.5s ease; text-align: center; border: 1px solid var(--verde_balance); }
 
         #pantalla-cierre { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); z-index: 10000; flex-direction: column; justify-content: flex-start; padding-top: 10vh; align-items: center; text-align: center; overflow-y: auto; }
         
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--fondo); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s ease; }
 
-        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 0.9rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; transition: background 0.3s; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--btn_turquesa); color: var(--texto); font-size: 1rem; font-weight: 800; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; transition: background 0.3s; }
         .toggle-tema { font-size: 1.5rem; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; }
         
         .tarjeta-dia { text-align: left; padding: 12px; border-bottom: 1px solid var(--borde_lineas); color: var(--azul_historial); }
         .tarjeta-dia:last-child { border-bottom: none; }
-        .dia-fecha { font-size: 1.1rem; font-weight: bold; color: var(--azul_historial); margin-bottom: 4px; }
-        .dia-datos { font-size: 0.85rem; color: var(--azul_historial); }
-        .dia-total { font-size: 1.2rem; font-weight: bold; color: var(--azul_historial); text-align: right; }
+        .dia-fecha { font-size: 1.1rem; font-weight: 800; color: var(--azul_historial); margin-bottom: 4px; }
+        .dia-datos { font-size: 0.85rem; color: var(--azul_historial); font-weight: 600; }
+        .dia-total { font-size: 1.2rem; font-weight: 800; color: var(--azul_historial); text-align: right; }
         
-        .btn-chico { padding: 6px 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); transition: transform 0.1s; }
+        .btn-chico { padding: 6px 15px; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); transition: transform 0.1s; }
         
         .btn-basura { background: transparent; border: none; color: var(--rojo_suave); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s; }
         .btn-basura:active { background: rgba(227, 136, 136, 0.2); }
 
         .fila-desglose { display: flex; justify-content: space-between; border-bottom: 1px solid var(--borde_lineas); padding: 6px 0; font-size: 1.05rem; }
-        .val-desglose { color: var(--turquesa); font-weight: bold; }
+        .val-desglose { color: var(--turquesa); font-weight: 700; }
         
-        .etiqueta-borrable { display: inline-flex; align-items: center; background: var(--rojo_suave); color: white; padding: 4px 10px; border-radius: 8px; margin: 4px 4px 0 0; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .etiqueta-borrable { display: inline-flex; align-items: center; background: var(--rojo_suave); color: white; padding: 4px 10px; border-radius: 8px; margin: 4px 4px 0 0; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
     </style>
 </head>
 <body onload="iniciarApp()">
@@ -138,17 +144,17 @@
             <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
             <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
         </svg>
-        <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">Motor F1</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.8</div>
+        <div style="font-size: 1.8rem; font-weight: 800; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">Motor F1</div>
+        <div style="font-size: 0.9rem; font-weight: 600; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.9</div>
     </div>
 
     <div id="pantalla-cierre">
-        <div style="color: var(--rojo_suave); font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; margin-bottom: 10px;">CIERRE</div>
-        <div id="cierre-vuelta" style="color: var(--turquesa); font-size: 2.2rem; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;"></div>
-        <div id="cierre-dir" style="color: var(--texto_claro); font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase;"></div>
-        <div id="cierre-monto" style="color: var(--verde_balance); font-size: 4.5rem; font-weight: bold;"></div>
+        <div style="color: var(--rojo_suave); font-size: 2.2rem; font-weight: 800; letter-spacing: 4px; margin-bottom: 10px;">CIERRE</div>
+        <div id="cierre-vuelta" style="color: var(--turquesa); font-size: 2.2rem; font-weight: 800; margin-bottom: 5px; text-transform: uppercase;"></div>
+        <div id="cierre-dir" style="color: var(--texto_claro); font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase;"></div>
+        <div id="cierre-monto" style="color: var(--verde_balance); font-size: 4.5rem; font-weight: 800;"></div>
         <div style="width: 85%; max-width: 350px; margin-top: 20px; background: var(--tarjeta); padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <div style="color:var(--turquesa); font-weight:bold; margin-bottom: 10px; font-size: 1.1rem; border-bottom: 2px solid var(--turquesa); padding-bottom: 5px;">DESGLOSE DE VUELTA</div>
+            <div style="color:var(--turquesa); font-weight:800; margin-bottom: 10px; font-size: 1.1rem; border-bottom: 2px solid var(--turquesa); padding-bottom: 5px;">DESGLOSE DE VUELTA</div>
             <div id="cierre-desglose" style="color: var(--texto); font-size: 1.1rem; text-align: left;"></div>
         </div>
     </div>
@@ -157,18 +163,18 @@
 
     <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 8px;">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
                 <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
             </svg>
-            <span style="letter-spacing: 1px;">Motor F1</span>
+            <span style="letter-spacing: 1px;">MOTOR F1</span>
         </div>
         <span class="toggle-tema" id="icono-tema" onclick="cambiarTema()">🌙</span>
     </div>
 
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
-            <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0; font-size: 1.3rem;">1ª MEDIA VUELTA</h2>
+            <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0; font-size: 1.4rem; font-weight: 800;">1ª MEDIA VUELTA</h2>
             
             <select id="destino">
                 <option value="" disabled selected>📍 SELECCIONA DESTINO...</option>
@@ -191,25 +197,25 @@
             
             <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 10px; padding-top: 10px; display: block;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <label style="color: var(--turquesa); font-size: 0.9rem;">CORTESÍA</label>
+                    <label style="color: var(--turquesa); font-size: 0.95rem;">🎁 CORTESÍA</label>
                     <div style="display:flex; gap:5px; align-items:center;">
                         <input type="text" id="nombre-cortesia" placeholder="Nombre" style="width: 120px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
                         <button class="btn-chico" onclick="agregarCortesia()">+</button>
                     </div>
                 </div>
-                <div id="lista-cortesias-visual" style="text-align: right; margin-top: 5px; color: var(--texto_claro); font-size: 0.85rem; font-style: italic;"></div>
+                <div id="lista-cortesias-visual" style="text-align: right; margin-top: 5px; color: var(--texto_claro); font-size: 0.85rem; font-weight: 600;"></div>
             </div>
             
             <div class="opcion-chequeo" style="display: block;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <label style="color: var(--turquesa); font-size: 0.9rem;">EXTRA</label>
+                    <label style="color: var(--turquesa); font-size: 0.95rem;">➕ EXTRA</label>
                     <div style="display:flex; gap:5px; align-items:center;">
                         <input type="number" id="extra-precio" placeholder="$ Monto" style="width: 80px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
                         <input type="number" id="extra-cantidad" placeholder="# Cant" oninput="v2(this);" style="width: 70px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
                         <button class="btn-chico" onclick="agregarExtra()">+</button>
                     </div>
                 </div>
-                <div id="lista-extras-visual" style="text-align: right; margin-top: 5px; color: var(--texto_claro); font-size: 0.85rem; font-style: italic;"></div>
+                <div id="lista-extras-visual" style="text-align: right; margin-top: 5px; color: var(--texto_claro); font-size: 0.85rem; font-weight: 600;"></div>
             </div>
         </div>
         
@@ -220,37 +226,37 @@
     <div id="p-lib" class="pantalla">
         <div class="tarjeta">
             <h2 style="color:var(--turquesa); margin-bottom:10px; font-size: 1.8rem; text-transform: uppercase;">BALANCE</h2>
-            <div style="color:var(--texto_claro); font-size:0.9rem;">Total Bruto: $<span id="bruto-total">0</span></div>
-            <div style="color:var(--rojo_suave); font-size:0.9rem; margin-top: 5px; font-weight: bold;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
+            <div style="color:var(--texto_claro); font-size:0.95rem; font-weight: 600;">Total Bruto: $<span id="bruto-total">0</span></div>
+            <div style="color:var(--rojo_suave); font-size:0.95rem; margin-top: 5px; font-weight: 800;">Gastos Ruta: -$<span id="gastos-etiqueta">0</span></div>
             <hr style="border: 0.5px solid var(--borde_lineas); margin: 8px 0;">
-            <div style="color:var(--verde_balance); font-size:1rem; font-weight: bold; text-transform: uppercase;">Total de Cuenta</div>
-            <div id="neto-total" style="font-size: 2.5rem; color:var(--verde_balance); font-weight:bold;">$0</div>
+            <div style="color:var(--verde_balance); font-size:1.1rem; font-weight: 800; text-transform: uppercase;">Total de Cuenta</div>
+            <div id="neto-total" style="font-size: 2.8rem; color:var(--verde_balance); font-weight:800;">$0</div>
         </div>
 
         <div id="lista-vueltas" class="tarjeta" style="padding:0; text-align:left; max-height: 120px; overflow-y: auto;"></div>
 
         <div class="tarjeta">
-            <h3 style="color: var(--rojo_suave); margin: 0 0 10px 0; font-size: 0.9rem;">GASTOS DE RUTA</h3>
+            <h3 style="color: var(--rojo_suave); margin: 0 0 10px 0; font-size: 0.95rem; font-weight: 800;">GASTOS DE RUTA</h3>
             <div class="gasto-fila">
-                <label>OPERACIÓN DIÉSEL ($50)</label>
+                <label>⛽ OPERACIÓN DIÉSEL ($50)</label>
                 <input type="checkbox" class="check-box" id="g-opd" onchange="actualizarBalance()">
             </div>
-            <div class="gasto-fila"><label>DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="actualizarBalance()" placeholder="0"></div>
-            <div class="gasto-fila"><label>CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="actualizarBalance()" placeholder="0"></div>
-            <div class="gasto-fila"><label>DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="actualizarBalance()" placeholder="0"></div>
-            <div class="gasto-fila"><label>PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="actualizarBalance()" placeholder="0"></div>
-            <div class="gasto-fila"><label>SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>⛽ DIESEL</label><input type="number" class="input-gasto" id="g-diesel" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>🛣️ CASETA</label><input type="number" class="input-gasto" id="g-caseta" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>⏱️ DESPACHADORES</label><input type="number" class="input-gasto" id="g-despachadores" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>🅿️ PENSIÓN</label><input type="number" class="input-gasto" id="g-pension" oninput="actualizarBalance()" placeholder="0"></div>
+            <div class="gasto-fila"><label>💵 SUELDO</label><input type="number" class="input-gasto" id="g-sueldo" oninput="actualizarBalance()" placeholder="0"></div>
             
             <div class="gasto-fila" style="border-top: 1px dashed var(--borde_lineas); padding-top: 8px; margin-top: 8px;">
-                <label style="color: var(--naranja);">LIMPIEZA</label>
+                <label style="color: var(--naranja);">🧽 LIMPIEZA</label>
                 <input type="checkbox" class="check-box" id="g-inc1" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
             <div class="gasto-fila">
-                <label style="color: var(--naranja);">PUNTUALIDAD</label>
+                <label style="color: var(--naranja);">⏰ PUNTUALIDAD</label>
                 <input type="checkbox" class="check-box" id="g-inc2" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
             <div class="gasto-fila">
-                <label style="color: var(--naranja);">UNIFORME</label>
+                <label style="color: var(--naranja);">👕 UNIFORME</label>
                 <input type="checkbox" class="check-box" id="g-inc3" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
 
@@ -268,38 +274,38 @@
 
     <div id="p-calc" class="pantalla">
         <div class="tarjeta">
-            <h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Liquidación Final</h2>
-            <div style="margin-top: 5px; font-weight: bold; color: var(--texto); font-size: 1.1rem;">CUENTA: $<span id="cuenta-base">0</span></div>
+            <h2 style="color:var(--turquesa); margin:0; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Liquidación Final</h2>
+            <div style="margin-top: 5px; font-weight: 800; color: var(--texto); font-size: 1.2rem;">CUENTA: $<span id="cuenta-base">0</span></div>
         </div>
         <div class="tarjeta">
-            <div class="opcion-chequeo"><label>MUTUALIDAD ($20)</label><input type="checkbox" class="check-box" id="c-mut" checked disabled></div>
-            <div class="opcion-chequeo"><label>SEGURIDAD ($20)</label><input type="checkbox" class="check-box" id="c-seg" checked disabled></div>
+            <div class="opcion-chequeo"><label>🛡️ MUTUALIDAD ($20)</label><input type="checkbox" class="check-box" id="c-mut" checked disabled></div>
+            <div class="opcion-chequeo"><label>🚓 SEGURIDAD ($20)</label><input type="checkbox" class="check-box" id="c-seg" checked disabled></div>
             
-            <div class="opcion-chequeo"><label>OPERACIÓN DIESEL ($50)</label><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"></div>
-            <div class="opcion-chequeo"><label>PENSIÓN / COBRO ($40)</label><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"></div>
+            <div class="opcion-chequeo"><label>⛽ OPERACIÓN DIESEL ($50)</label><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"></div>
+            <div class="opcion-chequeo"><label>🅿️ PENSIÓN / COBRO ($40)</label><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"></div>
             
-            <div class="opcion-chequeo"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
-            <div class="opcion-chequeo"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
-            <div class="opcion-chequeo"><label>TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
-            <div class="opcion-chequeo"><label>VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>📑 FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>🏢 BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>📡 TAG</label><input type="number" class="input-variable" id="v-tag" oninput="recalcularLiquidacion()" placeholder="0"></div>
+            <div class="opcion-chequeo"><label>🎟️ VALE DIESEL</label><input type="number" class="input-variable" id="v-vdi" oninput="recalcularLiquidacion()" placeholder="0"></div>
             
             <div class="opcion-chequeo" style="border-top: 1px solid var(--borde_lineas); margin-top: 5px; padding-top: 5px;">
-                <label style="color:var(--rojo_suave)">TOTAL EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
+                <label style="color:var(--rojo_suave)">❌ TOTAL EN BOLETOS</label><input type="number" class="input-variable input-rojo" id="v-bol" oninput="recalcularLiquidacion()" placeholder="0">
             </div>
         </div>
         <div class="tarjeta">
-            <div style="color:var(--verde_balance); font-size: 0.9rem; font-weight: bold; text-transform: uppercase;">Efectivo Entregar</div>
-            <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
+            <div style="color:var(--verde_balance); font-size: 1rem; font-weight: 800; text-transform: uppercase;">Efectivo Entregar</div>
+            <div id="final-entrega" style="font-size: 3.8rem; color:var(--verde_balance); font-weight:800; margin-top: 5px;">$0</div>
         </div>
         <button class="btn btn-wa" style="margin-bottom: 10px;" onclick="enviarWhatsAppLiquidacion()">✅ ENVIAR POR WHATSAPP</button>
         <button class="btn btn-turquesa" onclick="irA('p-lib')">🔙 REGRESAR AL BALANCE</button>
     </div>
 
     <div id="p-hist" class="pantalla">
-        <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Historial de 7 Días</h2></div>
+        <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Historial de 7 Días</h2></div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <button class="btn btn-verde" style="margin-top: 0; font-size: 0.9rem;" onclick="exportarHistorialCSV()">📥 EXCEL F1 (CSV)</button>
+            <button class="btn btn-verde" style="margin-top: 0; font-size: 0.9rem;" onclick="exportarHistorialCSV()">📥 EXCEL F1</button>
             <button class="btn btn-rojo" style="margin-top: 0; font-size: 0.9rem;" onclick="borrarTodoHistorial()">🗑️ BORRAR TODO</button>
         </div>
 
@@ -317,7 +323,7 @@
             <div id="det-edicion" style="display:none; text-align: left;">
                 
                 <div style="margin-bottom: 15px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 10px;">
-                    <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">DESTINO DE LA VUELTA</label>
+                    <label style="color: var(--turquesa); font-size: 0.95rem; font-weight: 800;">📍 DESTINO DE LA VUELTA</label>
                     <select id="e-destino" style="margin-top: 5px;">
                         <option value="INDIOS VERDES">INDIOS VERDES</option>
                         <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
@@ -336,7 +342,7 @@
                 </div>
                 
                 <div style="border-top: 1px solid var(--borde_lineas); padding-top: 10px; margin-bottom: 10px;">
-                    <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (Toque para borrar)</label>
+                    <label style="color: var(--turquesa); font-size: 0.95rem; font-weight: 800;">🎁 CORTESÍAS (Toque para borrar)</label>
                     <div id="e-lista-cor" style="margin-bottom: 5px;"></div>
                     <div style="display:flex; gap:5px; align-items:center;">
                         <input type="text" id="e-nom-cor" placeholder="Agregar Nombre..." style="flex:1; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
@@ -345,7 +351,7 @@
                 </div>
                 
                 <div style="border-top: 1px solid var(--borde_lineas); padding-top: 10px; margin-bottom: 15px;">
-                    <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">EXTRAS (Toque para borrar)</label>
+                    <label style="color: var(--turquesa); font-size: 0.95rem; font-weight: 800;">➕ EXTRAS (Toque para borrar)</label>
                     <div id="e-lista-ext" style="margin-bottom: 5px;"></div>
                     <div style="display:flex; gap:5px; align-items:center;">
                         <input type="number" id="e-pre-ext" placeholder="$ Monto" style="width: 80px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
@@ -370,6 +376,18 @@
         var editExtrasTmp = [];
         var editCortesiasTmp = [];
 
+        // VIBRACIÓN HÁPTICA PARA BOTONES
+        function vibrar(ms) {
+            if (navigator.vibrate) navigator.vibrate(ms || 15);
+        }
+
+        // ESCHUCHADOR GLOBAL PARA QUE CUALQUIER BOTÓN VIBRE
+        document.addEventListener('click', function(e) {
+            if(e.target.closest('.btn') || e.target.closest('.btn-chico') || e.target.closest('.btn-basura') || e.target.closest('.check-box')) {
+                vibrar(20);
+            }
+        });
+
         function iniciarApp() { 
             setTimeout(function() {
                 var s = document.getElementById('splash-screen');
@@ -382,6 +400,16 @@
                 document.getElementById('icono-tema').innerText = '☀️';
             }
             dibujarHistorial(); 
+
+            // Lógica para el botón físico de retroceso
+            history.replaceState({ pantalla: 'p-reg' }, "", "");
+            window.addEventListener("popstate", function(e) {
+                if (e.state && e.state.pantalla) {
+                    irA(e.state.pantalla, true);
+                } else {
+                    irA('p-reg', true);
+                }
+            });
         }
 
         function v2(input) { if (input.value.length > 2) input.value = input.value.slice(0, 2); }
@@ -462,13 +490,13 @@
             if (det.b14 > 0) html += "<div class='fila-desglose'><span>Boleto $14:</span> <span class='val-desglose'>" + det.b14 + " pax</span></div>";
             
             if (det.ext && det.ext.length > 0) {
-                html += "<div style='margin-top:12px; color:var(--rojo_suave); font-weight:bold; font-size:0.95rem;'>EXTRAS</div>";
+                html += "<div style='margin-top:12px; color:var(--rojo_suave); font-weight:800; font-size:0.95rem;'>EXTRAS</div>";
                 det.ext.forEach(function(e) { 
                     html += "<div class='fila-desglose' style='border:none; padding:2px 0;'><span>" + e.c + " pasajero(s) de $" + e.p + "</span></div>"; 
                 });
             }
             if (det.cor && det.cor.length > 0) {
-                html += "<div style='margin-top:12px; color:var(--verde_balance); font-weight:bold; font-size:0.95rem;'>CORTESÍAS ("+det.cor.length+")</div>";
+                html += "<div style='margin-top:12px; color:var(--verde_balance); font-weight:800; font-size:0.95rem;'>CORTESÍAS ("+det.cor.length+")</div>";
                 det.cor.forEach(function(c) {
                     html += "<div class='fila-desglose' style='border:none; padding:2px 0;'>• " + c + "</div>";
                 });
@@ -516,7 +544,6 @@
             var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
             var d = document.getElementById('destino').value;
             
-            // VALIDACIÓN DE DESTINO OBLIGATORIO
             if (!d) {
                 alert("⚠️ ALTO: Debes seleccionar un destino de la lista (Indios Verdes, Paseos, etc.) para poder cerrar esta vuelta.");
                 return;
@@ -554,7 +581,7 @@
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             document.getElementById('lista-cortesias-visual').innerHTML = "";
             document.getElementById('lista-extras-visual').innerHTML = "";
-            document.getElementById('destino').value = ""; // Resetea el destino al terminar
+            document.getElementById('destino').value = ""; 
             listaExtras = []; 
             listaCortesias = []; 
             sumar(); 
@@ -653,7 +680,6 @@
             historial[editIndex].p = nPas;
             historial[editIndex].m = nMonto;
             
-            // GUARDAR EL NUEVO DESTINO
             historial[editIndex].d = document.getElementById('e-destino').value;
             
             localStorage.setItem('b_hist', JSON.stringify(historial));
@@ -682,7 +708,6 @@
                 editExtrasTmp = [...(v.det.ext || [])];
                 editCortesiasTmp = [...(v.det.cor || [])];
                 
-                // CARGAMOS EL DESTINO ACTUAL EN EL MENU
                 document.getElementById('e-destino').value = v.d;
                 
                 document.getElementById('e-bol55').value = v.det.b55 || "";
@@ -710,8 +735,8 @@
                     d.vueltas.forEach(function(vu) {
                         html += "<div style='background:var(--input_bg); padding:15px; border-radius:10px; margin-bottom:15px; box-shadow:0 2px 5px rgba(0,0,0,0.05);'>";
                         html += "<div style='display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--turquesa); padding-bottom:5px; margin-bottom:8px;'>";
-                        html += "<span style='color:var(--turquesa); font-weight:bold; font-size:1.1rem;'>" + vu.n + "ª " + getPillHTML(vu.d) + "</span>";
-                        html += "<span style='font-weight:bold; color:var(--verde_balance); font-size:1.1rem;'>$" + vu.m + "</span>";
+                        html += "<span style='color:var(--turquesa); font-weight:800; font-size:1.1rem;'>" + vu.n + "ª " + getPillHTML(vu.d) + "</span>";
+                        html += "<span style='font-weight:800; color:var(--verde_balance); font-size:1.1rem;'>$" + vu.m + "</span>";
                         html += "</div>";
                         html += generarHTMLDesglose(vu.det);
                         html += "</div>";
@@ -744,7 +769,7 @@
                 h += '</div></div></div>';
                 brutoGlobal += v.m;
             });
-            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555;'>Sin vueltas registradas</p>";
+            document.getElementById('lista-vueltas').innerHTML = h || "<p style='padding:15px; color:#555; font-weight:600;'>Sin vueltas registradas</p>";
             document.getElementById('bruto-total').innerText = brutoGlobal;
             actualizarBalance();
         }
@@ -753,7 +778,7 @@
             var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             var html = "";
             if (histDias.length === 0) {
-                html = "<p style='padding:15px; color:var(--texto_claro);'>No hay días guardados aún.</p>";
+                html = "<p style='padding:15px; color:var(--texto_claro); font-weight:600;'>No hay días guardados aún.</p>";
             } else {
                 for(var i = histDias.length - 1; i >= 0; i--) {
                     var d = histDias[i];
@@ -766,9 +791,14 @@
                     html += '<button class="btn-basura" onclick="borrarDiaIndividual(' + i + ')"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>';
                     html += '</div>';
                     
-                    html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
+                    html += '<div style="display:flex; justify-content:space-between; align-items:flex-end;">';
                     html += '<div class="dia-datos" style="color:var(--azul_historial); opacity:0.9;">' + d.pax + ' Pax | Bruto: $' + d.b + '<br>Gastos: -$' + d.g + '</div>';
-                    html += '<div class="dia-total" style="color:var(--azul_historial); font-size: 1.3rem;">$' + d.n + '</div>';
+                    
+                    // AQUI ESTÁ LA PALABRA CUENTA AGREGADA
+                    html += '<div class="dia-total" style="color:var(--azul_historial); font-size: 1.4rem; line-height: 1.1;">';
+                    html += '<span style="font-size: 0.75rem; color: var(--texto_claro); font-weight: 700;">CUENTA:</span><br>$' + d.n;
+                    html += '</div>';
+                    
                     html += '</div>';
                     html += '</div>';
                 }
@@ -795,7 +825,6 @@
             }
         }
         
-        // FUNCIÓN NUEVA: EXPORTAR A CSV
         function exportarHistorialCSV() {
             var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
             if (histDias.length === 0) return alert("No hay datos para exportar.");
@@ -816,11 +845,17 @@
             document.body.removeChild(link);
         }
 
-        function irA(id) {
+        // FUNCION PARA NAVEGAR Y REGISTRAR EL BOTON FISICO
+        function irA(id, retroceso = false) {
             document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
             if(id === 'p-lib') dibujarHistorial();
             if(id === 'p-hist') dibujarHistorialDias();
+            
+            // Registramos el movimiento para el botón de retroceso físico
+            if (!retroceso) {
+                history.pushState({ pantalla: id }, "", "");
+            }
         }
 
         function borrarYGuardarDia() { 
