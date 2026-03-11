@@ -1,6 +1,6 @@
 {
-  "name": "Línea Turquesa",
-  "short_name": "Turquesa",
+  "name": "Motor F1 - Operadores",
+  "short_name": "F1",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#E4E9F0",
