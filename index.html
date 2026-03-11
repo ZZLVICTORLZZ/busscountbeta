@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Motor F1 - v1.7</title>
+    <title>Motor F1 - v1.8</title>
     <link rel="manifest" href="manifest.json">
     <style>
         :root { 
@@ -132,11 +132,14 @@
 <body onload="iniciarApp()">
 
     <div id="splash-screen">
-        <svg viewBox="0 0 100 100" width="130" height="130">
-            <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#3A8891"/>
+        <svg viewBox="0 0 24 24" width="120" height="120" stroke="var(--turquesa)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+            <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">Motor F1</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.7</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.8</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -154,8 +157,9 @@
 
     <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 8px;">
-            <svg viewBox="0 0 100 100" width="24" height="24">
-                <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#fff"/>
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
             </svg>
             <span style="letter-spacing: 1px;">Motor F1</span>
         </div>
@@ -165,11 +169,14 @@
     <div id="p-reg" class="pantalla activa">
         <div class="tarjeta">
             <h2 id="titulo-vuelta" style="color:var(--turquesa); margin:0; font-size: 1.3rem;">1ª MEDIA VUELTA</h2>
+            
             <select id="destino">
+                <option value="" disabled selected>📍 SELECCIONA DESTINO...</option>
                 <option value="INDIOS VERDES">INDIOS VERDES</option>
                 <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
                 <option value="REYES">REYES</option>
             </select>
+            
             <div class="monto-vuelta">$<span id="total-vuelta">0</span></div>
         </div>
         
@@ -308,6 +315,16 @@
             <div id="det-contenido" style="font-size: 1.1rem; text-align: left; color: var(--texto);"></div>
             
             <div id="det-edicion" style="display:none; text-align: left;">
+                
+                <div style="margin-bottom: 15px; border-bottom: 1px solid var(--borde_lineas); padding-bottom: 10px;">
+                    <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">DESTINO DE LA VUELTA</label>
+                    <select id="e-destino" style="margin-top: 5px;">
+                        <option value="INDIOS VERDES">INDIOS VERDES</option>
+                        <option value="NUEVOS PASEOS">NUEVOS PASEOS</option>
+                        <option value="REYES">REYES</option>
+                    </select>
+                </div>
+
                 <div class="cuadricula" style="margin-bottom: 10px;">
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="e-bol55" oninput="v2(this)"></div>
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $50</label><input type="number" class="input-variable" id="e-bol50" oninput="v2(this)"></div>
@@ -499,6 +516,12 @@
             var m = parseInt(document.getElementById('total-vuelta').innerText) || 0;
             var d = document.getElementById('destino').value;
             
+            // VALIDACIÓN DE DESTINO OBLIGATORIO
+            if (!d) {
+                alert("⚠️ ALTO: Debes seleccionar un destino de la lista (Indios Verdes, Paseos, etc.) para poder cerrar esta vuelta.");
+                return;
+            }
+            
             var b55 = parseInt(document.getElementById('bol55').value) || 0;
             var b50 = parseInt(document.getElementById('bol50').value) || 0;
             var b47 = parseInt(document.getElementById('bol47').value) || 0;
@@ -531,6 +554,7 @@
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             document.getElementById('lista-cortesias-visual').innerHTML = "";
             document.getElementById('lista-extras-visual').innerHTML = "";
+            document.getElementById('destino').value = ""; // Resetea el destino al terminar
             listaExtras = []; 
             listaCortesias = []; 
             sumar(); 
@@ -629,6 +653,9 @@
             historial[editIndex].p = nPas;
             historial[editIndex].m = nMonto;
             
+            // GUARDAR EL NUEVO DESTINO
+            historial[editIndex].d = document.getElementById('e-destino').value;
+            
             localStorage.setItem('b_hist', JSON.stringify(historial));
             
             calcularGastosSugeridos(); 
@@ -646,7 +673,7 @@
                 pantallaAnterior = 'p-lib';
                 var v = historial[index];
                 titulo = "Editar Vuelta " + v.n;
-                subtitulo = getPillHTML(v.d) + " | Total actual: $" + v.m;
+                subtitulo = "Total actual: $" + v.m;
                 
                 document.getElementById('det-contenido').style.display = 'none';
                 document.getElementById('det-edicion').style.display = 'block';
@@ -654,6 +681,9 @@
                 editIndex = index;
                 editExtrasTmp = [...(v.det.ext || [])];
                 editCortesiasTmp = [...(v.det.cor || [])];
+                
+                // CARGAMOS EL DESTINO ACTUAL EN EL MENU
+                document.getElementById('e-destino').value = v.d;
                 
                 document.getElementById('e-bol55').value = v.det.b55 || "";
                 document.getElementById('e-bol50').value = v.det.b50 || "";
