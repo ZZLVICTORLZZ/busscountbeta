@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.4</title>
+    <title>Línea Turquesa - v1.5</title>
     <style>
         :root { 
-            /* MODO CLARO MEJORADO (Anti-Fatiga Visual) */
-            --fondo: #E4E9F0;       /* Gris azulado mate, elimina el brillo blanco molesto */
-            --tarjeta: #F0F4F8;     /* Un tono ligeramente más claro que el fondo, sin ser blanco puro */
-            --input_bg: #D1D9E0;    /* Gris suave para los inputs, hace que no resplandezcan */
-            --texto: #2C3E50;       /* Azul marino oscuro, cansa menos la vista que el negro carbón */
+            /* MODO CLARO */
+            --fondo: #E4E9F0;       
+            --tarjeta: #F0F4F8;     
+            --input_bg: #D1D9E0;    
+            --texto: #2C3E50;       
             --texto_claro: #7F8C8D; 
-            --turquesa: #3A8891;    /* Turquesa ligeramente más profundo para destacar en el nuevo fondo */
+            --turquesa: #3A8891;    
             --btn_turquesa: #89C4C4;
-            --verde_balance: #27AE60; /* Verde más sólido y legible */
+            --verde_balance: #27AE60; 
             --verde_btn: #A8DAB5;   
-            --rojo_suave: #C0392B;  /* Rojo más oscuro para no lastimar la vista */
+            --rojo_suave: #C0392B;  
             --rojo_btn: #F1948A;    
-            --naranja: #D35400;     /* Naranja más ejecutivo */
+            --naranja: #D35400;     
             --borde_lineas: #BDC3C7;
             --azul_historial: #2980B9;
         }
 
-        /* MODO OSCURO (Se mantiene igual) */
+        /* MODO OSCURO */
         [data-theme="dark"] {
             --fondo: #121212;
             --tarjeta: #1E1E1E;
@@ -113,7 +113,7 @@
             <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.4</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.5</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -154,6 +154,9 @@
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="bol55" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $50</label><input type="number" class="input-variable" id="bol50" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $47</label><input type="number" class="input-variable" id="bol47" oninput="v2(this); sumar()" placeholder="0"></div>
+            
+            <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $42</label><input type="number" class="input-variable" id="bol42" oninput="v2(this); sumar()" placeholder="0"></div>
+            
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $37</label><input type="number" class="input-variable" id="bol37" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="bol35" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="bol14" oninput="v2(this); sumar()" placeholder="0"></div>
@@ -283,6 +286,7 @@
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="e-bol55" oninput="v2(this)"></div>
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $50</label><input type="number" class="input-variable" id="e-bol50" oninput="v2(this)"></div>
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $47</label><input type="number" class="input-variable" id="e-bol47" oninput="v2(this)"></div>
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $42</label><input type="number" class="input-variable" id="e-bol42" oninput="v2(this)"></div>
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $37</label><input type="number" class="input-variable" id="e-bol37" oninput="v2(this)"></div>
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="e-bol35" oninput="v2(this)"></div>
                     <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="e-bol14" oninput="v2(this)"></div>
@@ -365,6 +369,7 @@
             var f = (parseInt(document.getElementById('bol55').value) || 0) * 55 + 
                     (parseInt(document.getElementById('bol50').value) || 0) * 50 + 
                     (parseInt(document.getElementById('bol47').value) || 0) * 47 + 
+                    (parseInt(document.getElementById('bol42').value) || 0) * 42 + 
                     (parseInt(document.getElementById('bol37').value) || 0) * 37 + 
                     (parseInt(document.getElementById('bol35').value) || 0) * 35 + 
                     (parseInt(document.getElementById('bol14').value) || 0) * 14;
@@ -401,6 +406,7 @@
             if (det.b55 > 0) html += "<div class='fila-desglose'><span>Boleto $55:</span> <span class='val-desglose'>" + det.b55 + " pax</span></div>";
             if (det.b50 > 0) html += "<div class='fila-desglose'><span>Boleto $50:</span> <span class='val-desglose'>" + det.b50 + " pax</span></div>";
             if (det.b47 > 0) html += "<div class='fila-desglose'><span>Boleto $47:</span> <span class='val-desglose'>" + det.b47 + " pax</span></div>";
+            if (det.b42 > 0) html += "<div class='fila-desglose'><span>Boleto $42:</span> <span class='val-desglose'>" + det.b42 + " pax</span></div>";
             if (det.b37 > 0) html += "<div class='fila-desglose'><span>Boleto $37:</span> <span class='val-desglose'>" + det.b37 + " pax</span></div>";
             if (det.b35 > 0) html += "<div class='fila-desglose'><span>Boleto $35:</span> <span class='val-desglose'>" + det.b35 + " pax</span></div>";
             if (det.b14 > 0) html += "<div class='fila-desglose'><span>Boleto $14:</span> <span class='val-desglose'>" + det.b14 + " pax</span></div>";
@@ -425,7 +431,18 @@
             var cantVueltas = historial.length;
             
             var todasMayores = true;
-            historial.forEach(function(v) { if (v.m < 800) todasMayores = false; });
+            var totalCasetas = 0;
+
+            historial.forEach(function(v) { 
+                if (v.m < 800) todasMayores = false; 
+                
+                // CÁLCULO INTELIGENTE DE CASETAS
+                if (v.d === "REYES") {
+                    totalCasetas += 69;
+                } else if (v.d === "INDIOS VERDES" || v.d === "NUEVOS PASEOS") {
+                    totalCasetas += 156;
+                }
+            });
             var bono = (todasMayores) ? 150 : 0; 
 
             var i1 = document.getElementById('g-inc1').checked ? 50 : 0;
@@ -434,6 +451,7 @@
 
             document.getElementById('g-despachadores').value = cantVueltas * 30;
             document.getElementById('g-pension').value = 40;
+            document.getElementById('g-caseta').value = totalCasetas;
             
             document.getElementById('g-sueldo').value = (cantVueltas * 75) + bono + i1 + i2 + i3;
             actualizarBalance();
@@ -453,18 +471,19 @@
             var b55 = parseInt(document.getElementById('bol55').value) || 0;
             var b50 = parseInt(document.getElementById('bol50').value) || 0;
             var b47 = parseInt(document.getElementById('bol47').value) || 0;
+            var b42 = parseInt(document.getElementById('bol42').value) || 0;
             var b37 = parseInt(document.getElementById('bol37').value) || 0;
             var b35 = parseInt(document.getElementById('bol35').value) || 0;
             var b14 = parseInt(document.getElementById('bol14').value) || 0;
             
-            var tPas = b55 + b50 + b47 + b37 + b35 + b14 + listaCortesias.length;
+            var tPas = b55 + b50 + b47 + b42 + b37 + b35 + b14 + listaCortesias.length;
             listaExtras.forEach(function(e) { tPas += e.c; });
             
             if (m === 0 && tPas === 0) {
                 if (!confirm("¿Está seguro de cerrar esta vuelta vacía?")) return;
             }
 
-            var detalleObj = { b55: b55, b50: b50, b47: b47, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] };
+            var detalleObj = { b55: b55, b50: b50, b47: b47, b42: b42, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] };
 
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
             document.getElementById('cierre-dir').innerText = d;
@@ -565,16 +584,17 @@
             var b55 = parseInt(document.getElementById('e-bol55').value)||0;
             var b50 = parseInt(document.getElementById('e-bol50').value)||0;
             var b47 = parseInt(document.getElementById('e-bol47').value)||0;
+            var b42 = parseInt(document.getElementById('e-bol42').value)||0;
             var b37 = parseInt(document.getElementById('e-bol37').value)||0;
             var b35 = parseInt(document.getElementById('e-bol35').value)||0;
             var b14 = parseInt(document.getElementById('e-bol14').value)||0;
             
-            var nPas = b55 + b50 + b47 + b37 + b35 + b14 + editCortesiasTmp.length;
-            var nMonto = (b55*55) + (b50*50) + (b47*47) + (b37*37) + (b35*35) + (b14*14);
+            var nPas = b55 + b50 + b47 + b42 + b37 + b35 + b14 + editCortesiasTmp.length;
+            var nMonto = (b55*55) + (b50*50) + (b47*47) + (b42*42) + (b37*37) + (b35*35) + (b14*14);
             
             editExtrasTmp.forEach(function(e) { nPas += e.c; nMonto += (e.c * e.p); });
             
-            historial[editIndex].det = { b55:b55, b50:b50, b47:b47, b37:b37, b35:b35, b14:b14, ext:[...editExtrasTmp], cor:[...editCortesiasTmp] };
+            historial[editIndex].det = { b55:b55, b50:b50, b47:b47, b42:b42, b37:b37, b35:b35, b14:b14, ext:[...editExtrasTmp], cor:[...editCortesiasTmp] };
             historial[editIndex].p = nPas;
             historial[editIndex].m = nMonto;
             
@@ -607,6 +627,7 @@
                 document.getElementById('e-bol55').value = v.det.b55 || "";
                 document.getElementById('e-bol50').value = v.det.b50 || "";
                 document.getElementById('e-bol47').value = v.det.b47 || "";
+                document.getElementById('e-bol42').value = v.det.b42 || "";
                 document.getElementById('e-bol37').value = v.det.b37 || "";
                 document.getElementById('e-bol35').value = v.det.b35 || "";
                 document.getElementById('e-bol14').value = v.det.b14 || "";
@@ -772,6 +793,7 @@
                 if(v.det.b55 > 0) mensaje += "• " + v.det.b55 + " de $55%0A";
                 if(v.det.b50 && v.det.b50 > 0) mensaje += "• " + v.det.b50 + " de $50%0A";
                 if(v.det.b47 > 0) mensaje += "• " + v.det.b47 + " de $47%0A";
+                if(v.det.b42 && v.det.b42 > 0) mensaje += "• " + v.det.b42 + " de $42%0A";
                 if(v.det.b37 > 0) mensaje += "• " + v.det.b37 + " de $37%0A";
                 if(v.det.b35 && v.det.b35 > 0) mensaje += "• " + v.det.b35 + " de $35%0A";
                 if(v.det.b14 > 0) mensaje += "• " + v.det.b14 + " de $14%0A";
