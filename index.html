@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Línea Turquesa - v1.7</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         :root { 
             /* MODO CLARO ANTI-FATIGA */
@@ -922,5 +923,15 @@
             window.open("https://wa.me/?text=" + mensaje, "_blank");
         }
     </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('App lista para usarse sin internet'))
+                .catch(err => console.log('Error al instalar', err));
+            });
+        }
+    </script>
 </body>
 </html>
+
