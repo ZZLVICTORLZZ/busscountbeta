@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.5</title>
+    <title>Línea Turquesa - v1.6</title>
     <style>
         :root { 
-            /* MODO CLARO */
+            /* MODO CLARO ANTI-FATIGA */
             --fondo: #E4E9F0;       
             --tarjeta: #F0F4F8;     
             --input_bg: #D1D9E0;    
@@ -45,22 +45,48 @@
         .pantalla { display: none; }
         .activa { display: block !important; }
         
-        .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: background 0.3s; }
+        /* SOMBRAS FLOTANTES Y RELIEVES */
+        .tarjeta { background: var(--tarjeta); padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,0.4); transition: background 0.3s; }
+        [data-theme="dark"] .tarjeta { box-shadow: 0 6px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* EFECTO TAP EN BOTONES */
+        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: background 0.3s, transform 0.1s; }
+        .btn:active, .btn-chico:active, .btn-basura:active { transform: scale(0.96); }
         
-        .btn { border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1rem; cursor: pointer; color: var(--texto); transition: background 0.3s; }
         .btn-turquesa { background: var(--btn_turquesa); }
         .btn-wa { background: var(--verde_btn); }
         .btn-verde { background: var(--verde_btn); }
         .btn-rojo { background: var(--rojo_btn); color: white; }
         .btn-gris { background: var(--borde_lineas); } 
         .btn-naranja { background: var(--naranja); color: white; }
-        
         .btn-calculo { background: transparent; border: 2px solid var(--naranja); color: var(--naranja); }
 
         .opcion-chequeo { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--borde_lineas); }
         .opcion-chequeo label { font-size: 0.8rem; font-weight: bold; color: var(--texto); flex: 1; text-align: left; }
-        .check-box { width: 18px; height: 18px; accent-color: var(--turquesa); margin-right: 12px; }
         
+        /* INTERRUPTORES MODERNOS (En vez de cuadritos) */
+        .check-box { 
+            appearance: none; -webkit-appearance: none; 
+            width: 44px; height: 24px; background: var(--borde_lineas); 
+            border-radius: 20px; position: relative; cursor: pointer; 
+            outline: none; transition: background 0.3s; margin-right: 0;
+            flex-shrink: 0;
+        }
+        .check-box::after { 
+            content: ''; position: absolute; top: 2px; left: 2px; 
+            width: 20px; height: 20px; background: white; border-radius: 50%; 
+            transition: transform 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+        }
+        .check-box:checked { background: var(--turquesa); }
+        .check-box:checked::after { transform: translateX(20px); }
+        .check-box:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        /* ETIQUETAS DE RUTAS (Pills) */
+        .pill { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: #fff; display: inline-block; margin-left: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .pill-indios { background: #27AE60; }
+        .pill-paseos { background: #2980B9; }
+        .pill-reyes { background: #8E44AD; }
+
         .input-variable { width: 100px !important; background: var(--input_bg); border: 1px solid var(--turquesa); color: var(--texto); padding: 6px !important; border-radius: 6px; text-align: right !important; font-weight: bold; font-size: 1rem !important; transition: background 0.3s, color 0.3s; }
         .input-rojo { border-color: var(--rojo_suave) !important; color: var(--rojo_suave) !important; }
 
@@ -95,7 +121,7 @@
         .dia-datos { font-size: 0.85rem; color: var(--azul_historial); }
         .dia-total { font-size: 1.2rem; font-weight: bold; color: var(--azul_historial); text-align: right; }
         
-        .btn-chico { padding: 6px 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); }
+        .btn-chico { padding: 6px 15px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; background: var(--verde_btn); color: var(--texto); transition: transform 0.1s; }
         
         .btn-basura { background: transparent; border: none; color: var(--rojo_suave); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s; }
         .btn-basura:active { background: rgba(227, 136, 136, 0.2); }
@@ -110,10 +136,10 @@
 
     <div id="splash-screen">
         <svg viewBox="0 0 100 100" width="130" height="130">
-            <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#5FA8A3"/>
+            <path d="M 60 10 A 40 40 0 1 0 90 70 A 35 35 0 1 1 60 10" fill="#3A8891"/>
         </svg>
         <div style="font-size: 1.8rem; font-weight: bold; margin-top: 20px; letter-spacing: 2px; color: var(--turquesa);">LÍNEA TURQUESA</div>
-        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.5</div>
+        <div style="font-size: 0.9rem; color: var(--texto_claro); margin-top: 5px;">PROYECTO APOLO 11 v1.6</div>
     </div>
 
     <div id="pantalla-cierre">
@@ -154,9 +180,7 @@
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="bol55" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $50</label><input type="number" class="input-variable" id="bol50" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $47</label><input type="number" class="input-variable" id="bol47" oninput="v2(this); sumar()" placeholder="0"></div>
-            
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $42</label><input type="number" class="input-variable" id="bol42" oninput="v2(this); sumar()" placeholder="0"></div>
-            
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $37</label><input type="number" class="input-variable" id="bol37" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="bol35" oninput="v2(this); sumar()" placeholder="0"></div>
             <div class="opcion-chequeo"><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="bol14" oninput="v2(this); sumar()" placeholder="0"></div>
@@ -185,8 +209,8 @@
             </div>
         </div>
         
-        <button class="btn btn-turquesa" onclick="finalizarVuelta()">FINALIZAR VUELTA</button>
-        <button class="btn btn-gris" onclick="irA('p-lib')">VER LIBRO DE RUTA</button>
+        <button class="btn btn-turquesa" onclick="finalizarVuelta()">🏁 FINALIZAR VUELTA</button>
+        <button class="btn btn-gris" onclick="irA('p-lib')">📄 VER LIBRO DE RUTA</button>
     </div>
 
     <div id="p-lib" class="pantalla">
@@ -226,15 +250,15 @@
                 <input type="checkbox" class="check-box" id="g-inc3" onchange="sumarIncentivoAlSueldo(this, 50)">
             </div>
 
-            <button class="btn btn-calculo" style="margin-top: 15px;" onclick="irA('p-calc')">CALCULAR EFECTIVO ENTREGAR</button>
+            <button class="btn btn-calculo" style="margin-top: 15px;" onclick="irA('p-calc')">🧮 CALCULAR EFECTIVO ENTREGAR</button>
         </div>
         
-        <button class="btn btn-turquesa" onclick="irA('p-reg')">VOLVER A COBRAR</button>
+        <button class="btn btn-turquesa" onclick="irA('p-reg')">💵 VOLVER A COBRAR</button>
         <button class="btn btn-wa" onclick="enviarWhatsApp()">✅ REPORTE GENERAL WHATSAPP</button>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn btn-naranja" style="font-size: 0.85rem;" onclick="irA('p-hist')">VER HISTORIAL</button>
-            <button class="btn btn-rojo" style="font-size: 0.85rem;" onclick="borrarYGuardarDia()">CERRAR Y GUARDAR</button>
+            <button class="btn btn-naranja" style="font-size: 0.85rem;" onclick="irA('p-hist')">📅 VER HISTORIAL</button>
+            <button class="btn btn-rojo" style="font-size: 0.85rem;" onclick="borrarYGuardarDia()">🔒 CERRAR Y GUARDAR</button>
         </div>
     </div>
 
@@ -244,11 +268,11 @@
             <div style="margin-top: 5px; font-weight: bold; color: var(--texto); font-size: 1.1rem;">CUENTA: $<span id="cuenta-base">0</span></div>
         </div>
         <div class="tarjeta">
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-mut" checked disabled><label>MUTUALIDAD ($20)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-seg" checked disabled><label>SEGURIDAD ($20)</label></div>
+            <div class="opcion-chequeo"><label>MUTUALIDAD ($20)</label><input type="checkbox" class="check-box" id="c-mut" checked disabled></div>
+            <div class="opcion-chequeo"><label>SEGURIDAD ($20)</label><input type="checkbox" class="check-box" id="c-seg" checked disabled></div>
             
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"><label>OPERACIÓN DIESEL ($50)</label></div>
-            <div class="opcion-chequeo"><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"><label>PENSIÓN / COBRO ($40)</label></div>
+            <div class="opcion-chequeo"><label>OPERACIÓN DIESEL ($50)</label><input type="checkbox" class="check-box" id="c-opd" onchange="recalcularLiquidacion()"></div>
+            <div class="opcion-chequeo"><label>PENSIÓN / COBRO ($40)</label><input type="checkbox" class="check-box" id="c-pen" onchange="recalcularLiquidacion()"></div>
             
             <div class="opcion-chequeo"><label>FIANZA</label><input type="number" class="input-variable" id="v-fia" oninput="recalcularLiquidacion()" placeholder="0"></div>
             <div class="opcion-chequeo"><label>BASES</label><input type="number" class="input-variable" id="v-bas" oninput="recalcularLiquidacion()" placeholder="0"></div>
@@ -264,14 +288,14 @@
             <div id="final-entrega" style="font-size: 3.5rem; color:var(--verde_balance); font-weight:bold; margin-top: 5px;">$0</div>
         </div>
         <button class="btn btn-wa" style="margin-bottom: 10px;" onclick="enviarWhatsAppLiquidacion()">✅ ENVIAR POR WHATSAPP</button>
-        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">🔙 REGRESAR AL BALANCE</button>
     </div>
 
     <div id="p-hist" class="pantalla">
         <div class="tarjeta"><h2 style="color:var(--turquesa); margin:0; font-size: 1.1rem; text-transform: uppercase;">Historial de 7 Días</h2></div>
-        <button class="btn btn-rojo" style="margin-bottom: 10px;" onclick="borrarTodoHistorial()">BORRAR TODO EL HISTORIAL</button>
+        <button class="btn btn-rojo" style="margin-bottom: 10px;" onclick="borrarTodoHistorial()">🗑️ BORRAR TODO EL HISTORIAL</button>
         <div id="contenedor-dias" style="padding: 0;"></div>
-        <button class="btn btn-turquesa" onclick="irA('p-lib')">REGRESAR AL BALANCE</button>
+        <button class="btn btn-turquesa" onclick="irA('p-lib')">🔙 REGRESAR AL BALANCE</button>
     </div>
 
     <div id="p-detalle" class="pantalla">
@@ -311,10 +335,10 @@
                     </div>
                 </div>
                 
-                <button class="btn btn-naranja" onclick="guardarEdicion()">GUARDAR CAMBIOS</button>
+                <button class="btn btn-naranja" onclick="guardarEdicion()">💾 GUARDAR CAMBIOS</button>
             </div>
         </div>
-        <button class="btn btn-turquesa" onclick="volverDeDetalle()">VOLVER</button>
+        <button class="btn btn-turquesa" onclick="volverDeDetalle()">🔙 VOLVER</button>
     </div>
 
     <script>
@@ -363,6 +387,14 @@
             contenedor.appendChild(aviso);
             setTimeout(function() { aviso.style.opacity = '0'; }, 2500);
             setTimeout(function() { contenedor.removeChild(aviso); }, 3000);
+        }
+
+        // GENERADOR DE ETIQUETAS DE COLOR (PILLS) PARA RUTAS
+        function getPillHTML(r) {
+            if(r === "INDIOS VERDES") return '<span class="pill pill-indios">INDIOS VERDES</span>';
+            if(r === "NUEVOS PASEOS") return '<span class="pill pill-paseos">NUEVOS PASEOS</span>';
+            if(r === "REYES") return '<span class="pill pill-reyes">REYES</span>';
+            return '<span class="pill" style="background:var(--turquesa)">' + r + '</span>';
         }
 
         function sumar() {
@@ -436,7 +468,6 @@
             historial.forEach(function(v) { 
                 if (v.m < 800) todasMayores = false; 
                 
-                // CÁLCULO INTELIGENTE DE CASETAS
                 if (v.d === "REYES") {
                     totalCasetas += 69;
                 } else if (v.d === "INDIOS VERDES" || v.d === "NUEVOS PASEOS") {
@@ -486,7 +517,7 @@
             var detalleObj = { b55: b55, b50: b50, b47: b47, b42: b42, b37: b37, b35: b35, b14: b14, ext: [...listaExtras], cor: [...listaCortesias] };
 
             document.getElementById('cierre-vuelta').innerText = nVuelta + "ª MEDIA VUELTA";
-            document.getElementById('cierre-dir').innerText = d;
+            document.getElementById('cierre-dir').innerHTML = getPillHTML(d);
             document.getElementById('cierre-monto').innerText = "$" + m;
             document.getElementById('cierre-desglose').innerHTML = generarHTMLDesglose(detalleObj);
             document.getElementById('pantalla-cierre').style.display = 'flex';
@@ -615,7 +646,7 @@
                 pantallaAnterior = 'p-lib';
                 var v = historial[index];
                 titulo = "Editar Vuelta " + v.n;
-                subtitulo = v.d + " | Total actual: $" + v.m;
+                subtitulo = getPillHTML(v.d) + " | Total actual: $" + v.m;
                 
                 document.getElementById('det-contenido').style.display = 'none';
                 document.getElementById('det-edicion').style.display = 'block';
@@ -647,8 +678,11 @@
 
                 if(d.vueltas && d.vueltas.length > 0) {
                     d.vueltas.forEach(function(vu) {
-                        html += "<div style='background:var(--input_bg); padding:15px; border-radius:10px; margin-bottom:15px;'>";
-                        html += "<div style='color:var(--turquesa); font-weight:bold; font-size:1.2rem; margin-bottom:8px; border-bottom:2px solid var(--turquesa); padding-bottom:5px; text-transform:uppercase;'>" + vu.n + "ª " + vu.d + " - $" + vu.m + "</div>";
+                        html += "<div style='background:var(--input_bg); padding:15px; border-radius:10px; margin-bottom:15px; box-shadow:0 2px 5px rgba(0,0,0,0.05);'>";
+                        html += "<div style='display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--turquesa); padding-bottom:5px; margin-bottom:8px;'>";
+                        html += "<span style='color:var(--turquesa); font-weight:bold; font-size:1.1rem;'>" + vu.n + "ª " + getPillHTML(vu.d) + "</span>";
+                        html += "<span style='font-weight:bold; color:var(--verde_balance); font-size:1.1rem;'>$" + vu.m + "</span>";
+                        html += "</div>";
                         html += generarHTMLDesglose(vu.det);
                         html += "</div>";
                     });
@@ -658,7 +692,7 @@
             }
 
             document.getElementById('det-titulo').innerText = titulo;
-            document.getElementById('det-subtitulo').innerText = subtitulo;
+            document.getElementById('det-subtitulo').innerHTML = subtitulo;
             if(tipo === 'dia') document.getElementById('det-contenido').innerHTML = html;
             irA('p-detalle');
         }
@@ -673,7 +707,7 @@
             historial.forEach(function(v, index) {
                 h += '<div style="border-bottom: 1px solid var(--borde_lineas); padding: 10px 0;">';
                 h += '<div class="fila-historial" style="padding: 0;">';
-                h += '<span><b>' + v.n + 'ª</b> ' + v.d + '</span>';
+                h += '<div style="display:flex; align-items:center;"><b>' + v.n + 'ª</b> ' + getPillHTML(v.d) + '</div>';
                 h += '<div style="display:flex; align-items:center; gap:10px;">';
                 h += '<span class="monto-texto">' + v.p + ' Pax - $' + v.m + '</span>';
                 h += '<span onclick="abrirDetalle(\'vuelta\', ' + index + ')" style="cursor:pointer; padding:6px; margin-left:5px;"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
@@ -693,7 +727,7 @@
             } else {
                 for(var i = histDias.length - 1; i >= 0; i--) {
                     var d = histDias[i];
-                    html += '<div class="tarjeta" style="text-align: left; padding: 15px; margin-bottom: 12px; border: 1px solid var(--borde_lineas);">';
+                    html += '<div class="tarjeta" style="text-align: left; padding: 15px; margin-bottom: 12px;">';
                     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">';
                     html += '<div class="dia-fecha" style="display:flex; align-items:center; color:var(--azul_historial);">';
                     html += d.f;
