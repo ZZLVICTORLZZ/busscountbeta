@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Línea Turquesa - v1.2</title>
+    <title>Línea Turquesa - v1.3</title>
     <style>
         :root { 
             /* MODO CLARO */
@@ -102,6 +102,9 @@
 
         .fila-desglose { display: flex; justify-content: space-between; border-bottom: 1px solid var(--borde_lineas); padding: 6px 0; font-size: 1.05rem; }
         .val-desglose { color: var(--turquesa); font-weight: bold; }
+        
+        /* Estilos para etiquetas borrables en la edición */
+        .etiqueta-borrable { display: inline-flex; align-items: center; background: var(--rojo_suave); color: white; padding: 4px 10px; border-radius: 8px; margin: 4px 4px 0 0; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body onload="iniciarApp()">
@@ -273,9 +276,42 @@
         <div class="tarjeta">
             <h2 id="det-titulo" style="color:var(--turquesa); margin:0; font-size: 1.5rem; text-transform: uppercase;">Detalle</h2>
             <div id="det-subtitulo" style="color:var(--texto_claro); font-size:1rem; margin-top:5px; margin-bottom: 15px; font-weight:bold;"></div>
+            
             <div id="det-contenido" style="font-size: 1.1rem; text-align: left; color: var(--texto);"></div>
+            
+            <div id="det-edicion" style="display:none; text-align: left;">
+                <div class="cuadricula" style="margin-bottom: 10px;">
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $55</label><input type="number" class="input-variable" id="e-bol55" oninput="v2(this)"></div>
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $50</label><input type="number" class="input-variable" id="e-bol50" oninput="v2(this)"></div>
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $47</label><input type="number" class="input-variable" id="e-bol47" oninput="v2(this)"></div>
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $37</label><input type="number" class="input-variable" id="e-bol37" oninput="v2(this)"></div>
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $35</label><input type="number" class="input-variable" id="e-bol35" oninput="v2(this)"></div>
+                    <div><label style="color:var(--turquesa); font-size:1.1rem;">Boleto $14</label><input type="number" class="input-variable" id="e-bol14" oninput="v2(this)"></div>
+                </div>
+                
+                <div style="border-top: 1px solid var(--borde_lineas); padding-top: 10px; margin-bottom: 10px;">
+                    <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">CORTESÍAS (Toque para borrar)</label>
+                    <div id="e-lista-cor" style="margin-bottom: 5px;"></div>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <input type="text" id="e-nom-cor" placeholder="Agregar Nombre..." style="flex:1; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:0.9rem; text-align:center;">
+                        <button class="btn-chico" onclick="agregarCorEdit()">+</button>
+                    </div>
+                </div>
+                
+                <div style="border-top: 1px solid var(--borde_lineas); padding-top: 10px; margin-bottom: 15px;">
+                    <label style="color: var(--turquesa); font-size: 0.9rem; font-weight: bold;">EXTRAS (Toque para borrar)</label>
+                    <div id="e-lista-ext" style="margin-bottom: 5px;"></div>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <input type="number" id="e-pre-ext" placeholder="$ Monto" style="width: 80px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
+                        <input type="number" id="e-can-ext" placeholder="# Cant" oninput="v2(this);" style="width: 70px; padding: 6px; border-radius: 6px; border: 1px solid var(--turquesa); background: var(--input_bg); color: var(--texto); font-size:1rem; text-align:center;">
+                        <button class="btn-chico" onclick="agregarExtEdit()">+</button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-naranja" onclick="guardarEdicion()">GUARDAR CAMBIOS</button>
+            </div>
         </div>
-        <button class="btn btn-turquesa" onclick="volverDeDetalle()">REGRESAR</button>
+        <button class="btn btn-turquesa" onclick="volverDeDetalle()">VOLVER</button>
     </div>
 
     <script>
@@ -283,6 +319,11 @@
         var historial = JSON.parse(localStorage.getItem('b_hist')) || [];
         var listaExtras = [], listaCortesias = [], brutoGlobal = 0, netoRuta = 0;
         var pantallaAnterior = 'p-lib';
+        
+        // Variables para la edición de vuelta
+        var editIndex = -1;
+        var editExtrasTmp = [];
+        var editCortesiasTmp = [];
 
         function iniciarApp() { 
             setTimeout(function() {
@@ -340,10 +381,7 @@
                 listaExtras.push({p: p, c: c}); sumar(); 
                 var msj = c === 1 ? "Se agregó 1 pasajero de $" + p : "Se agregaron " + c + " pasajeros de $" + p;
                 mostrarAviso(msj);
-                
-                // FEEDBACK VISUAL MINIMALISTA
                 document.getElementById('lista-extras-visual').innerHTML += "<div>+ " + c + " extra(s) de $" + p + "</div>";
-                
                 document.getElementById('extra-precio').value = ""; document.getElementById('extra-cantidad').value = ""; 
             }
         }
@@ -354,10 +392,7 @@
                 var nomMayus = n.toUpperCase();
                 listaCortesias.push(nomMayus); 
                 mostrarAviso("Se agregó la cortesía " + nomMayus);
-                
-                // FEEDBACK VISUAL MINIMALISTA
                 document.getElementById('lista-cortesias-visual').innerHTML += "<div>+ " + nomMayus + "</div>";
-                
                 document.getElementById('nombre-cortesia').value = ""; 
             }
         }
@@ -387,15 +422,13 @@
             return html || "<div style='text-align:center;'>Vuelta Vacía</div>";
         }
 
-        // LÓGICA DE AUTO-SUGERENCIA DE GASTOS Y BONO $150
         function calcularGastosSugeridos() {
             if (historial.length === 0) return;
             var cantVueltas = historial.length;
             
-            // Verificar si TODAS las vueltas registradas generaron 800 o más
             var todasMayores = true;
             historial.forEach(function(v) { if (v.m < 800) todasMayores = false; });
-            var bono = (todasMayores) ? 150 : 0; // Un solo bono general
+            var bono = (todasMayores) ? 150 : 0; 
 
             var i1 = document.getElementById('g-inc1').checked ? 50 : 0;
             var i2 = document.getElementById('g-inc2').checked ? 50 : 0;
@@ -404,12 +437,10 @@
             document.getElementById('g-despachadores').value = cantVueltas * 30;
             document.getElementById('g-pension').value = 40;
             
-            // Sueldo base + bono 150 + incentivos activos
             document.getElementById('g-sueldo').value = (cantVueltas * 75) + bono + i1 + i2 + i3;
             actualizarBalance();
         }
 
-        // SUMA DIRECTA DE INCENTIVOS A LA CASILLA DE SUELDO
         function sumarIncentivoAlSueldo(cb, monto) {
             var sInput = document.getElementById('g-sueldo');
             var valActual = parseFloat(sInput.value) || 0;
@@ -447,14 +478,11 @@
             localStorage.setItem('b_hist', JSON.stringify(historial));
             nVuelta++; localStorage.setItem('b_nv', nVuelta);
             
-            // Auto calcular gastos y bonos después de la vuelta
             calcularGastosSugeridos();
 
-            // Limpiar inputs y listas visuales
             document.querySelectorAll('#p-reg input').forEach(i => i.value="");
             document.getElementById('lista-cortesias-visual').innerHTML = "";
             document.getElementById('lista-extras-visual').innerHTML = "";
-            
             listaExtras = []; 
             listaCortesias = []; 
             sumar(); 
@@ -470,7 +498,7 @@
                     (parseFloat(document.getElementById('g-caseta').value) || 0) + 
                     (parseFloat(document.getElementById('g-despachadores').value) || 0) + 
                     (parseFloat(document.getElementById('g-pension').value) || 0) + 
-                    (parseFloat(document.getElementById('g-sueldo').value) || 0); // Los incentivos ya están absorbidos aquí
+                    (parseFloat(document.getElementById('g-sueldo').value) || 0); 
             
             if(document.getElementById('g-opd').checked) g += 50;
 
@@ -481,14 +509,11 @@
             recalcularLiquidacion();
         }
 
-        // LÓGICA DE COBRO LIBRE AUTOMÁTICA (Sin Checkboxes)
         function recalcularLiquidacion() {
-            var ajuste = 20 + 20; // Mutualidad y Seguridad (Fijos)
-            
+            var ajuste = 20 + 20; 
             if(document.getElementById('c-opd').checked) ajuste += 50;
             if(document.getElementById('c-pen').checked) ajuste += 40;
             
-            // Automáticamente lee lo que escriban sin necesidad de palomita
             ajuste += parseFloat(document.getElementById('v-fia').value) || 0;
             ajuste += parseFloat(document.getElementById('v-bas').value) || 0;
             ajuste += parseFloat(document.getElementById('v-tag').value) || 0;
@@ -499,6 +524,71 @@
             document.getElementById('final-entrega').innerText = "$" + (netoRuta + ajuste - restaBoletos);
         }
 
+        // FUNCIONES PARA LA EDICIÓN DE MEDIAS VUELTAS
+        function renderEditCor() {
+            var html = "";
+            editCortesiasTmp.forEach(function(c, i) {
+                html += '<span class="etiqueta-borrable" onclick="quitarCorEdit('+i+')">' + c + ' &times;</span>';
+            });
+            document.getElementById('e-lista-cor').innerHTML = html;
+        }
+
+        function renderEditExt() {
+            var html = "";
+            editExtrasTmp.forEach(function(e, i) {
+                html += '<span class="etiqueta-borrable" onclick="quitarExtEdit('+i+')">' + e.c + ' de $' + e.p + ' &times;</span>';
+            });
+            document.getElementById('e-lista-ext').innerHTML = html;
+        }
+
+        function agregarCorEdit() {
+            var val = document.getElementById('e-nom-cor').value.trim();
+            if(val) {
+                editCortesiasTmp.push(val.toUpperCase());
+                document.getElementById('e-nom-cor').value = "";
+                renderEditCor();
+            }
+        }
+        function quitarCorEdit(i) { editCortesiasTmp.splice(i, 1); renderEditCor(); }
+
+        function agregarExtEdit() {
+            var p = parseFloat(document.getElementById('e-pre-ext').value)||0;
+            var c = parseInt(document.getElementById('e-can-ext').value)||0;
+            if(p>0 && c>0) {
+                editExtrasTmp.push({p:p, c:c});
+                document.getElementById('e-pre-ext').value = "";
+                document.getElementById('e-can-ext').value = "";
+                renderEditExt();
+            }
+        }
+        function quitarExtEdit(i) { editExtrasTmp.splice(i, 1); renderEditExt(); }
+
+        function guardarEdicion() {
+            if(editIndex < 0) return;
+            var b55 = parseInt(document.getElementById('e-bol55').value)||0;
+            var b50 = parseInt(document.getElementById('e-bol50').value)||0;
+            var b47 = parseInt(document.getElementById('e-bol47').value)||0;
+            var b37 = parseInt(document.getElementById('e-bol37').value)||0;
+            var b35 = parseInt(document.getElementById('e-bol35').value)||0;
+            var b14 = parseInt(document.getElementById('e-bol14').value)||0;
+            
+            var nPas = b55 + b50 + b47 + b37 + b35 + b14 + editCortesiasTmp.length;
+            var nMonto = (b55*55) + (b50*50) + (b47*47) + (b37*37) + (b35*35) + (b14*14);
+            
+            editExtrasTmp.forEach(function(e) { nPas += e.c; nMonto += (e.c * e.p); });
+            
+            historial[editIndex].det = { b55:b55, b50:b50, b47:b47, b37:b37, b35:b35, b14:b14, ext:[...editExtrasTmp], cor:[...editCortesiasTmp] };
+            historial[editIndex].p = nPas;
+            historial[editIndex].m = nMonto;
+            
+            localStorage.setItem('b_hist', JSON.stringify(historial));
+            
+            calcularGastosSugeridos(); 
+            mostrarAviso("Vuelta Actualizada Correctamente");
+            volverDeDetalle();
+            dibujarHistorial();
+        }
+
         function abrirDetalle(tipo, index) {
             var html = "";
             var titulo = "";
@@ -507,9 +597,26 @@
             if (tipo === 'vuelta') {
                 pantallaAnterior = 'p-lib';
                 var v = historial[index];
-                titulo = "Detalle de Vuelta";
-                subtitulo = v.n + "ª " + v.d + " | Total: $" + v.m;
-                html = generarHTMLDesglose(v.det);
+                titulo = "Editar Vuelta " + v.n;
+                subtitulo = v.d + " | Total actual: $" + v.m;
+                
+                document.getElementById('det-contenido').style.display = 'none';
+                document.getElementById('det-edicion').style.display = 'block';
+                
+                editIndex = index;
+                editExtrasTmp = [...(v.det.ext || [])];
+                editCortesiasTmp = [...(v.det.cor || [])];
+                
+                document.getElementById('e-bol55').value = v.det.b55 || "";
+                document.getElementById('e-bol50').value = v.det.b50 || "";
+                document.getElementById('e-bol47').value = v.det.b47 || "";
+                document.getElementById('e-bol37').value = v.det.b37 || "";
+                document.getElementById('e-bol35').value = v.det.b35 || "";
+                document.getElementById('e-bol14').value = v.det.b14 || "";
+                
+                renderEditCor();
+                renderEditExt();
+
             } else if (tipo === 'dia') {
                 pantallaAnterior = 'p-hist';
                 var histDias = JSON.parse(localStorage.getItem('b_hist_dias')) || [];
@@ -517,6 +624,9 @@
                 titulo = "Detalle del Día";
                 subtitulo = d.f + " | Cuenta: $" + d.n;
                 
+                document.getElementById('det-contenido').style.display = 'block';
+                document.getElementById('det-edicion').style.display = 'none';
+
                 if(d.vueltas && d.vueltas.length > 0) {
                     d.vueltas.forEach(function(vu) {
                         html += "<div style='background:var(--input_bg); padding:15px; border-radius:10px; margin-bottom:15px;'>";
@@ -531,7 +641,7 @@
 
             document.getElementById('det-titulo').innerText = titulo;
             document.getElementById('det-subtitulo').innerText = subtitulo;
-            document.getElementById('det-contenido').innerHTML = html;
+            if(tipo === 'dia') document.getElementById('det-contenido').innerHTML = html;
             irA('p-detalle');
         }
 
@@ -548,7 +658,7 @@
                 h += '<span><b>' + v.n + 'ª</b> ' + v.d + '</span>';
                 h += '<div style="display:flex; align-items:center; gap:10px;">';
                 h += '<span class="monto-texto">' + v.p + ' Pax - $' + v.m + '</span>';
-                h += '<span onclick="abrirDetalle(\'vuelta\', ' + index + ')" style="cursor:pointer; padding:6px; margin-left:5px;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
+                h += '<span onclick="abrirDetalle(\'vuelta\', ' + index + ')" style="cursor:pointer; padding:6px; margin-left:5px;"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
                 h += '</div></div></div>';
                 brutoGlobal += v.m;
             });
@@ -569,7 +679,7 @@
                     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">';
                     html += '<div class="dia-fecha" style="display:flex; align-items:center; color:var(--azul_historial);">';
                     html += d.f;
-                    html += '<span onclick="abrirDetalle(\'dia\', ' + i + ')" style="cursor:pointer; padding:6px; margin-left:12px;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
+                    html += '<span onclick="abrirDetalle(\'dia\', ' + i + ')" style="cursor:pointer; padding:6px; margin-left:12px;"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--verde_balance)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>';
                     html += '</div>';
                     html += '<button class="btn-basura" onclick="borrarDiaIndividual(' + i + ')"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>';
                     html += '</div>';
@@ -652,7 +762,7 @@
             var d_caseta = parseFloat(document.getElementById('g-caseta').value) || 0;
             var d_desp = parseFloat(document.getElementById('g-despachadores').value) || 0;
             var d_pen = parseFloat(document.getElementById('g-pension').value) || 0;
-            var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0; // Ya incluye incentivos si se marcaron
+            var d_sue = parseFloat(document.getElementById('g-sueldo').value) || 0; 
             var d_opd = document.getElementById('g-opd').checked ? 50 : 0;
             
             var totalGastos = d_diesel + d_caseta + d_desp + d_pen + d_sue + d_opd;
@@ -702,7 +812,7 @@
         }
 
         function enviarWhatsAppLiquidacion() {
-            var ajuste = 20 + 20; // Mut y Seg fijos
+            var ajuste = 20 + 20; 
             var mensaje = "*BALANCE DE EFECTIVO*%0A";
             mensaje += "----------------------------%0A";
             mensaje += "Cuenta: *$" + netoRuta + "*%0A";
